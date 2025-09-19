@@ -5,250 +5,172 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sena Booth Pro Max</title>
 
-<!-- ฟอนต์หลัก -->
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<!-- ฟอนต์ -->
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Itim&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --bg:#fffafc;
-  --tomato:#ff6347;
-  --mint:#a8d5ba;
+  --green:#a8d5ba;
   --blue:#cbe8ff;
   --pink:#ffd6e8;
   --yellow:#fff6b7;
   --text:#333;
-  --shadow:0 8px 24px rgba(0,0,0,0.15);
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--bg);font-family:'Sarabun',sans-serif;}
-body{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:12px;}
-
-header{
-  text-align:center;margin:20px 0;
+html,body{
+  height:100%;background:var(--bg);
+  font-family:"Itim", cursive;
+  display:flex;align-items:center;justify-content:center;
+  padding:10px;
 }
-header h1{
-  font-family:'Fredoka One',cursive;
-  font-size:3rem;
-  color:var(--tomato);
-  text-shadow:2px 2px 0 #fff,4px 4px 0 rgba(0,0,0,0.15);
-  text-transform:uppercase;
+.container{
+  width:100%;max-width:1000px;
+  background:var(--blue);
+  border-radius:20px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.12);
+  padding:18px;
+  border:6px solid var(--pink);
+  position:relative;
+  overflow:hidden;
+}
+.header{text-align:center;margin-bottom:10px;}
+.header .brand{
+  font-family:"Fredoka One", cursive;
+  font-size:48px;color:var(--text);
+  text-shadow:2px 2px 0 var(--pink);
   letter-spacing:2px;
 }
-nav{
-  margin:12px 0;
-  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
-}
-nav button{
-  padding:8px 14px;
-  border-radius:20px;
-  border:none;
-  font-weight:700;
-  cursor:pointer;
-  background:var(--tomato);
-  color:#fff;
-  box-shadow:var(--shadow);
-  transition:all 0.2s;
-}
-nav button:hover{background:#ff826d}
-
-/* layout หลัก */
-.container{
-  display:flex;flex-wrap:wrap;gap:20px;justify-content:center;width:100%;max-width:1200px;
-}
-
-/* กล้อง */
-.camera-wrap{
-  flex:1 1 420px;min-width:320px;
-  background:#fff;border-radius:20px;
-  box-shadow:var(--shadow);padding:14px;
-  display:flex;flex-direction:column;align-items:center;gap:10px;
-}
+.main{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+.camera-wrap{flex:1 1 360px;min-width:320px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .preview{
-  position:relative;
-  width:100%;aspect-ratio:3/4;
-  border-radius:20px;overflow:hidden;
-  border:6px solid var(--tomato);
-  background:#eee;
+  width:100%;border-radius:20px;overflow:hidden;
+  background:var(--bg);border:6px dashed var(--pink);
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  position:relative;aspect-ratio:3/4;
 }
-#video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
+#video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
 .countdown{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:5rem;font-weight:700;color:#fff;text-shadow:0 0 10px #000;
+  font-size:4rem;color:var(--pink);text-shadow:0 4px 12px rgba(0,0,0,0.3);
 }
-.flash{
-  position:absolute;inset:0;background:#fff;opacity:0;transition:opacity 0.2s;
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.18s}
+.flash.show{opacity:0.85}
+.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.btn{
+  padding:8px 14px;border-radius:12px;border:2px solid var(--green);
+  background:var(--pink);color:var(--text);font-weight:700;cursor:pointer;
+  font-family:sans-serif;font-size:14px;
+  box-shadow:0 4px 10px rgba(16,24,40,0.05);transition:all 0.2s;
 }
-.flash.show{opacity:0.9}
-
-.controls{
-  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:6px;
-}
-.btn,.shutter{
-  font-family:'Sarabun',sans-serif;
-  padding:10px 14px;border-radius:14px;border:none;cursor:pointer;font-weight:700;
-  transition:all .2s;
-}
-.btn{background:var(--pink);color:var(--text);box-shadow:var(--shadow);}
-.btn:hover{background:var(--yellow);}
-.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:hover:not(:disabled){background:var(--yellow);}
+.btn:disabled{opacity:0.55;cursor:not-allowed}
 .shutter{
-  width:80px;height:80px;border-radius:50%;background:#fff;border:6px solid var(--tomato);
-  box-shadow:var(--shadow);
+  width:72px;height:72px;border-radius:50%;background:#fff;border:6px solid var(--pink);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:all 0.2s;
 }
-.shutter:hover{background:var(--yellow)}
-
-/* แกลเลอรี่ */
-.gallery{
-  flex:0 0 300px;
-  background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:14px;
-  display:flex;flex-direction:column;align-items:center;gap:10px;
-}
-.gallery h2{font-size:1.2rem;font-weight:700;color:var(--tomato)}
-.thumbs{display:flex;gap:8px;width:100%;justify-content:space-between}
+.shutter:hover{background:var(--yellow);}
+.gallery{width:300px;min-width:260px;flex:0 0 300px;display:flex;flex-direction:column;gap:10px;align-items:center;}
+.thumbs{display:flex;gap:6px;width:100%;justify-content:space-between}
 .thumb{
-  width:32%;aspect-ratio:3/4;border-radius:12px;overflow:hidden;
-  border:3px dashed var(--mint);display:flex;align-items:center;justify-content:center;
-  background:#f8f8f8;
+  width:32%;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:#fff;
+  border:3px dashed var(--green);display:flex;align-items:center;justify-content:center;
 }
-.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
+.note{font-family:sans-serif;font-size:13px;color:var(--text);text-align:center;margin-top:6px}
 
-/* เลือกกรอบ */
-.frames{
-  margin-top:12px;
-  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+/* 🎨 Panel ตกแต่ง */
+.editor{
+  margin-top:12px;padding:10px;background:#fff;border-radius:14px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  font-family:sans-serif;font-size:14px;
 }
-.frame-card{
-  flex:1 1 120px;min-width:120px;max-width:150px;
-  border-radius:16px;overflow:hidden;cursor:pointer;
-  box-shadow:var(--shadow);position:relative;text-align:center;
-  background:#fafafa;border:4px solid transparent;
+.editor h3{margin-bottom:6px;font-family:"Fredoka One",cursive;color:#444;text-align:center;}
+.editor section{margin-bottom:10px;text-align:center;}
+.editor label{margin:0 6px;cursor:pointer;}
+#stickerPanel img{
+  width:48px;height:48px;cursor:grab;margin:4px;transition:transform 0.2s;
 }
-.frame-card img{width:100%;height:120px;object-fit:cover}
-.frame-card span{
-  display:block;padding:6px;font-weight:700;color:var(--text);
-}
-.frame-card.active{border-color:var(--tomato)}
+#stickerPanel img:hover{transform:scale(1.2);}
+#textInput{padding:4px 6px;border:1px solid #ccc;border-radius:6px;}
 
-/* เลือกฟิลเตอร์ */
-.filters{
-  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px;
-}
-.filters button{
-  padding:6px 12px;border-radius:14px;border:none;cursor:pointer;
-  font-weight:600;background:var(--blue);box-shadow:var(--shadow);
-}
-.filters button.active{background:var(--tomato);color:#fff}
-
-/* สติกเกอร์ */
-.sticker-panel{
-  margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
-}
+/* draggable stickers */
 .sticker{
-  font-size:28px;cursor:grab;
-  transition:transform .2s;
+  position:absolute;cursor:move;user-select:none;
+  max-width:100px;max-height:100px;
 }
-.sticker:active{transform:scale(1.4)}
 
-/* พื้นที่ export */
-.export-controls{
-  margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
-}
-.export-controls button{
-  padding:10px 14px;border-radius:14px;border:none;cursor:pointer;font-weight:700;
-  background:var(--mint);box-shadow:var(--shadow);
-}
-.export-controls button:hover{background:var(--yellow)}
-
-.canvas-output{display:none}
 </style>
 </head>
 <body>
-<header>
-  <h1>Sena Booth</h1>
-  <nav>
-    <button id="cameraMode">📷 กล้อง</button>
-    <button id="uploadMode">📂 อัปโหลด</button>
-  </nav>
-</header>
-
-<div class="container">
-  <div class="camera-wrap">
-    <div class="preview" id="preview">
-      <video id="video" autoplay playsinline></video>
-      <div class="countdown" id="countdown"></div>
-      <div class="flash" id="flash"></div>
+<div class="container" role="application" aria-label="SENA Photobooth">
+  <div class="header"><div class="brand">SENA BOOTH</div></div>
+  <div class="main">
+    <div class="camera-wrap">
+      <div class="preview" id="preview">
+        <video id="video" autoplay playsinline></video>
+        <div class="countdown" id="countdown"></div>
+        <div class="flash" id="flash"></div>
+      </div>
+      <div class="controls">
+        <div class="shutter" id="shutter" title="ถ่ายภาพ"></div>
+        <button class="btn" id="retake" disabled>ถ่ายใหม่</button>
+        <button class="btn" id="switch">สลับกล้อง</button>
+        <button class="btn" id="upload">อัปโหลด</button>
+        <button class="btn" id="download" disabled>ดาวน์โหลด</button>
+        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+      </div>
+      <div class="note">กดถ่าย → ได้ 3 ช็อต | หรืออัปโหลด 3 รูป</div>
     </div>
 
-    <div class="controls">
-      <div class="shutter" id="shutter" title="ถ่ายภาพ"></div>
-      <button class="btn" id="retake" disabled>ถ่ายใหม่</button>
-      <button class="btn" id="switch">สลับกล้อง</button>
-      <button class="btn" id="upload">อัปโหลด</button>
-      <button class="btn" id="download" disabled>ดาวน์โหลด</button>
-      <input type="file" id="fileInput" accept="image/*" multiple hidden>
-    </div>
-
-    <div class="filters" id="filters">
-      <button data-filter="none" class="active">ปกติ</button>
-      <button data-filter="grayscale(100%)">ขาวดำ</button>
-      <button data-filter="sepia(90%)">ซีเปีย</button>
-      <button data-filter="contrast(120%) brightness(110%) saturate(120%)">สดใส</button>
-      <button data-filter="hue-rotate(300deg) saturate(150%)">พาสเทลชมพู</button>
-    </div>
-
-    <div class="sticker-panel">
-      <div class="sticker">⭐</div>
-      <div class="sticker">💖</div>
-      <div class="sticker">🍀</div>
-      <div class="sticker">🌸</div>
-      <div class="sticker">✨</div>
-      <div class="sticker">🎉</div>
-    </div>
-
-    <div class="export-controls">
-      <button id="downloadPNG">⬇️ PNG</button>
-      <button id="downloadPDF">⬇️ PDF</button>
+    <div class="gallery">
+      <div style="font-weight:700;color:var(--text);font-family:sans-serif">ตัวอย่าง</div>
+      <div class="thumbs" id="thumbs">
+        <div class="thumb" id="t1"><span style="opacity:.4">1</span></div>
+        <div class="thumb" id="t2"><span style="opacity:.4">2</span></div>
+        <div class="thumb" id="t3"><span style="opacity:.4">3</span></div>
+      </div>
     </div>
   </div>
 
-  <div class="gallery">
-    <h2>ตัวอย่าง 3 ภาพ</h2>
-    <div class="thumbs" id="thumbs">
-      <div class="thumb" id="t1"><span>1</span></div>
-      <div class="thumb" id="t2"><span>2</span></div>
-      <div class="thumb" id="t3"><span>3</span></div>
-    </div>
-    <div class="frames">
-      <div class="frame-card active" data-frame="polaroid">
-        <img src="https://i.ibb.co/DY6k7J3/polaroid.jpg" alt="">
-        <span>Polaroid</span>
-      </div>
-      <div class="frame-card" data-frame="clover">
-        <img src="https://i.ibb.co/wc9vh8V/clover.jpg" alt="">
-        <span>Clover</span>
-      </div>
-      <div class="frame-card" data-frame="retro">
-        <img src="https://i.ibb.co/smKdd6x/retro.jpg" alt="">
-        <span>Retro</span>
-      </div>
-      <div class="frame-card" data-frame="cute">
-        <img src="https://i.ibb.co/M2VfMWG/cute.jpg" alt="">
-        <span>Cute</span>
-      </div>
-    </div>
+  <!-- 🎨 Editor -->
+  <div class="editor" id="editor">
+    <h3>ตกแต่งภาพ</h3>
+    <section>
+      <strong>กรอบ:</strong>
+      <label><input type="radio" name="frame" value="plain" checked> Plain</label>
+      <label><input type="radio" name="frame" value="polaroid"> Polaroid</label>
+      <label><input type="radio" name="frame" value="retro"> Retro</label>
+      <label><input type="radio" name="frame" value="cute"> Cute</label>
+      <label><input type="radio" name="frame" value="neon"> Neon</label>
+    </section>
+    <section>
+      <strong>ฟิลเตอร์:</strong>
+      <label><input type="radio" name="filter" value="normal" checked> Normal</label>
+      <label><input type="radio" name="filter" value="bw"> B&W</label>
+      <label><input type="radio" name="filter" value="sepia"> Sepia</label>
+      <label><input type="radio" name="filter" value="pink"> Pink</label>
+      <label><input type="radio" name="filter" value="vintage"> Vintage</label>
+    </section>
+    <section>
+      <strong>ข้อความ:</strong>
+      <input id="textInput" type="text" placeholder="ใส่ข้อความ...">
+    </section>
+    <section id="stickerPanel">
+      <strong>สติกเกอร์:</strong><br>
+      <img src="https://cdn-icons-png.flaticon.com/512/210/210545.png">
+      <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png">
+      <img src="https://cdn-icons-png.flaticon.com/512/148/148836.png">
+      <img src="https://cdn-icons-png.flaticon.com/512/2583/2583383.png">
+    </section>
   </div>
 </div>
 
 <audio id="snap" src="https://cdn.jsdelivr.net/gh/naptha/talkdemo/snap.mp3" preload="auto"></audio>
 
-<canvas id="canvasOutput" class="canvas-output"></canvas>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 (async()=>{
-// DOM refs
 const video=document.getElementById('video');
 const shutter=document.getElementById('shutter');
 const retakeBtn=document.getElementById('retake');
@@ -260,165 +182,129 @@ const countdownEl=document.getElementById('countdown');
 const flash=document.getElementById('flash');
 const snap=document.getElementById('snap');
 const thumbs=[document.getElementById('t1'),document.getElementById('t2'),document.getElementById('t3')];
-const filters=document.querySelectorAll('#filters button');
-const frameCards=document.querySelectorAll('.frame-card');
-const canvasOutput=document.getElementById('canvasOutput');
 
 let stream=null,useFront=true,captures=[null,null,null];
-let currentFilter='none';
-let currentFrame='polaroid';
+
+if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+  alert('เบราว์เซอร์นี้ไม่รองรับการเปิดกล้อง');
+  throw new Error('getUserMedia not supported');
+}
 
 async function startCamera(){
-  if(stream){stream.getTracks().forEach(t=>t.stop()); stream=null;}
+  if(stream){stream.getTracks().forEach(t=>t.stop());}
   try{
     stream=await navigator.mediaDevices.getUserMedia({
       video:{facingMode:useFront?'user':'environment'},audio:false});
-    video.srcObject=stream; await video.play();
+    video.srcObject=stream;
   }catch(e){alert('เปิดกล้องไม่ได้: '+e.message);}
 }
-if(navigator.mediaDevices) await startCamera();
-
-// Switch cam
+await startCamera();
 switchBtn.addEventListener('click',async()=>{useFront=!useFront;await startCamera();});
-
-// Filter
-filters.forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    filters.forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    currentFilter=btn.dataset.filter;
-  });
-});
-
-// Frame select
-frameCards.forEach(c=>{
-  c.addEventListener('click',()=>{
-    frameCards.forEach(x=>x.classList.remove('active'));
-    c.classList.add('active');
-    currentFrame=c.dataset.frame;
-  });
-});
 
 function captureFrame(){
   const vw=video.videoWidth,vh=video.videoHeight;
   const c=document.createElement('canvas'); c.width=vw; c.height=vh;
   const ctx=c.getContext('2d');
   ctx.translate(c.width,0); ctx.scale(-1,1);
-  ctx.filter=currentFilter;
   ctx.drawImage(video,0,0,vw,vh);
   return c.toDataURL('image/png');
 }
-
 function showCount(num){countdownEl.textContent=num;}
 function hideCount(){countdownEl.textContent='';}
-function doFlash(){flash.classList.add('show');setTimeout(()=>flash.classList.remove('show'),180);snap.play().catch(()=>{});}
+function doFlash(){snap.currentTime=0;snap.play();flash.classList.add('show');setTimeout(()=>flash.classList.remove('show'),170);}
 
 async function takeSequence(){
   captures=[null,null,null];
-  thumbs.forEach((t,i)=> t.innerHTML=`<span>${i+1}</span>`);
-  retakeBtn.disabled=true; downloadBtn.disabled=true; shutter.style.pointerEvents='none';
+  thumbs.forEach((t,i)=>t.innerHTML=`<span style="opacity:.4">${i+1}</span>`);
+  retakeBtn.disabled=true;downloadBtn.disabled=true;shutter.style.pointerEvents='none';
   for(let i=0;i<3;i++){
     for(let s=3;s>=1;s--){showCount(s);await new Promise(r=>setTimeout(r,1000));}
-    hideCount(); doFlash();
-    const data=captureFrame();
-    captures[i]=data;
+    hideCount();doFlash();
+    const data=captureFrame();captures[i]=data;
     thumbs[i].innerHTML=`<img src="${data}">`;
     if(i<2) await new Promise(r=>setTimeout(r,1000));
   }
-  retakeBtn.disabled=false; downloadBtn.disabled=false; shutter.style.pointerEvents='';
+  retakeBtn.disabled=false;downloadBtn.disabled=false;shutter.style.pointerEvents='';
 }
 shutter.addEventListener('click',takeSequence);
-
-retakeBtn.addEventListener('click',()=>{
-  captures=[null,null,null];
-  thumbs.forEach((t,i)=> t.innerHTML=`<span>${i+1}</span>`);
-  downloadBtn.disabled=true;
-});
-
+retakeBtn.addEventListener('click',()=>{captures=[null,null,null];thumbs.forEach((t,i)=>t.innerHTML=`<span style="opacity:.4">${i+1}</span>`);downloadBtn.disabled=true;});
 uploadBtn.addEventListener('click',()=>fileInput.click());
 fileInput.addEventListener('change',async(e)=>{
   const files=[...e.target.files].slice(0,3);
-  if(files.length<3){alert('เลือกอย่างน้อย 3 รูป');return;}
+  if(files.length<3)return alert('เลือก 3 รูป');
   captures=[null,null,null];
   for(let i=0;i<3;i++){
-    const file=files[i];
-    const reader=new FileReader();
+    const file=files[i];const reader=new FileReader();
     await new Promise((res,rej)=>{
       reader.onload=()=>{captures[i]=reader.result;thumbs[i].innerHTML=`<img src="${reader.result}">`;res();};
-      reader.onerror=rej;
-      reader.readAsDataURL(file);
+      reader.onerror=rej;reader.readAsDataURL(file);
     });
   }
-  retakeBtn.disabled=false; downloadBtn.disabled=false;
+  retakeBtn.disabled=false;downloadBtn.disabled=false;
 });
 
-async function buildFinalCanvas(){
+// ⭐ สร้างรูป 4x6 พร้อมกรอบ ฟิลเตอร์ ข้อความ สติกเกอร์
+function loadImage(src){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
+downloadBtn.addEventListener('click',async()=>{
+  if(!captures[0])return alert('ยังไม่มีรูป');
   const W=1200,H=1800;
-  canvasOutput.width=W;canvasOutput.height=H;
-  const ctx=canvasOutput.getContext('2d');
+  const c=document.createElement('canvas');c.width=W;c.height=H;
+  const ctx=c.getContext('2d');
   ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
 
-  ctx.fillStyle='#ff6347';ctx.font='72px Fredoka One';ctx.textAlign='center';
-  ctx.fillText('SENA BOOTH',W/2,90);
+  const frame=document.querySelector('input[name="frame"]:checked').value;
+  const filter=document.querySelector('input[name="filter"]:checked').value;
+  const text=document.getElementById('textInput').value;
 
-  const marginX=100,gap=30,topY=160;
+  const marginX=80,gap=20,topY=160;
   const innerW=W-marginX*2;
-  const availableH=H-topY-120;
-  const boxH=Math.floor((availableH-gap*2)/3);
+  const boxH=Math.floor((H-topY-120-gap*2)/3),boxW=innerW;
 
   for(let i=0;i<3;i++){
-    if(!captures[i]) continue;
-    const img=new Image();await new Promise(r=>{img.onload=r;img.src=captures[i];});
-    const scale=Math.min(innerW/img.width, boxH/img.height);
+    const y=topY+i*(boxH+gap);
+    const img=await loadImage(captures[i]);
+    const scale=Math.min(boxW/img.width,boxH/img.height);
     const iw=img.width*scale,ih=img.height*scale;
-    const dx=marginX+(innerW-iw)/2,dy=topY+i*(boxH+gap)+(boxH-ih)/2;
-
-    ctx.save();ctx.filter=currentFilter;
-    ctx.drawImage(img,dx,dy,iw,ih);ctx.restore();
-
-    // กรอบแต่ละ theme
-    ctx.lineWidth=10;
-    if(currentFrame==='polaroid'){
-      ctx.strokeStyle='#eee';ctx.strokeRect(dx-10,dy-10,iw+20,ih+60);
-      ctx.fillStyle='#333';ctx.font='20px Sarabun';ctx.textAlign='center';
-      ctx.fillText('Sena Booth',dx+iw/2,dy+ih+30);
-    }
-    else if(currentFrame==='clover'){
-      ctx.strokeStyle='#6cc48d';ctx.strokeRect(dx-8,dy-8,iw+16,ih+16);
-      ctx.fillText('🍀',dx-20,dy+20);
-    }
-    else if(currentFrame==='retro'){
-      ctx.strokeStyle='#ff00ff';ctx.shadowColor='#0ff';ctx.shadowBlur=20;
-      ctx.strokeRect(dx-8,dy-8,iw+16,ih+16);ctx.shadowBlur=0;
-    }
-    else if(currentFrame==='cute'){
-      ctx.strokeStyle='#ff9acb';ctx.strokeRect(dx-8,dy-8,iw+16,ih+16);
-      ctx.fillText('💖',dx+iw-10,dy+ih+20);
-    }
+    const dx=marginX+(boxW-iw)/2,dy=y+(boxH-ih)/2;
+    ctx.save();
+    if(filter==="bw")ctx.filter="grayscale(100%)";
+    if(filter==="sepia")ctx.filter="sepia(100%)";
+    if(filter==="pink")ctx.filter="contrast(1.1) saturate(1.2) hue-rotate(330deg)";
+    if(filter==="vintage")ctx.filter="sepia(0.5) contrast(1.1) brightness(1.1)";
+    ctx.drawImage(img,dx,dy,iw,ih);
+    ctx.restore();
+    // กรอบแต่ละภาพ
+    ctx.lineWidth=8;
+    if(frame==="polaroid"){ctx.strokeStyle="#fff";ctx.strokeRect(dx-6,dy-6,iw+12,ih+60);}
+    if(frame==="retro"){ctx.strokeStyle="#222";ctx.setLineDash([10,5]);ctx.strokeRect(dx-6,dy-6,iw+12,ih+12);ctx.setLineDash([]);}
+    if(frame==="cute"){ctx.strokeStyle="#ff99cc";ctx.strokeRect(dx-8,dy-8,iw+16,ih+16);}
+    if(frame==="neon"){ctx.shadowColor="#0ff";ctx.shadowBlur=15;ctx.strokeStyle="#0ff";ctx.strokeRect(dx-8,dy-8,iw+16,ih+16);ctx.shadowBlur=0;}
   }
 
-  ctx.fillStyle='#444';ctx.font='24px Sarabun';
-  ctx.fillText('@sena-booth',W/2,H-40);
-  return canvasOutput;
+  ctx.fillStyle="#333";ctx.font='32px "Fredoka One"';ctx.textAlign='center';
+  ctx.fillText(text,W/2,H-50);
+
+  const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='SenaBooth_4x6.png';a.click();
+});
+
+// 🎀 Sticker drag/drop
+const preview=document.getElementById('preview');
+document.querySelectorAll('#stickerPanel img').forEach(st=>{
+  st.addEventListener('click',()=>{
+    const img=document.createElement('img');
+    img.src=st.src;img.className='sticker';
+    img.style.left="40px";img.style.top="40px";
+    preview.appendChild(img);
+    dragElement(img);
+  });
+});
+function dragElement(el){
+  let pos1=0,pos2=0,pos3=0,pos4=0;
+  el.onmousedown=dragMouseDown;
+  function dragMouseDown(e){e.preventDefault();pos3=e.clientX;pos4=e.clientY;document.onmouseup=closeDrag;document.onmousemove=elementDrag;}
+  function elementDrag(e){e.preventDefault();pos1=pos3-e.clientX;pos2=pos4-e.clientY;pos3=e.clientX;pos4=e.clientY;el.style.top=(el.offsetTop-pos2)+"px";el.style.left=(el.offsetLeft-pos1)+"px";}
+  function closeDrag(){document.onmouseup=null;document.onmousemove=null;}
 }
-
-// Download PNG
-document.getElementById('downloadPNG').addEventListener('click',async()=>{
-  const c=await buildFinalCanvas();
-  const a=document.createElement('a');
-  a.href=c.toDataURL('image/png');
-  a.download='sena_booth.png';
-  a.click();
-});
-
-// Download PDF
-document.getElementById('downloadPDF').addEventListener('click',async()=>{
-  const c=await buildFinalCanvas();
-  const {jsPDF}=window.jspdf;
-  const pdf=new jsPDF({orientation:'portrait',unit:'px',format:[c.width,c.height]});
-  pdf.addImage(c.toDataURL('image/png'),'PNG',0,0,c.width,c.height);
-  pdf.save('sena_booth.pdf');
-});
 })();
 </script>
 </body>

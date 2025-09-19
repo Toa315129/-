@@ -5,153 +5,109 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sena booth</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<!-- ฟอนต์ -->
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#fff;
-  --tomato:#ff6347;
-  --muted:#fafafa;
+  --red:tomato;
+  --yellow:#ffe066;
+  --blue:#a5d8ff;
+  --pink:#ffafcc;
+  --purple:#cdb4db;
+  --bg:#fffdf8;
   --text:#333;
 }
 *{box-sizing:border-box}
 html,body{
   height:100%;margin:0;
   background:var(--bg);
-  font-family:"Poppins",sans-serif;
+  font-family:"Patrick Hand",cursive;
   display:flex;align-items:center;justify-content:center;padding:18px;
 }
 .container{
   width:100%;max-width:960px;
-  background:var(--muted);
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-  padding:18px;
-  border:4px solid var(--tomato);
+  background:var(--bg);
+  border-radius:20px;
+  padding:20px;
   position:relative;
   overflow:hidden;
+  border:6px dashed var(--red);
+  box-shadow:0 0 0 6px var(--yellow), 0 0 0 12px var(--blue);
 }
 .header{text-align:center;margin-bottom:20px;}
 .header .brand{
-  font-weight:600;font-size:42px;color:var(--text);
+  font-weight:700;font-size:56px;
+  color:var(--text);
+  background:var(--yellow);
+  display:inline-block;
+  padding:10px 24px;
+  border:4px solid var(--blue);
+  box-shadow:4px 4px 0 var(--pink);
 }
 .main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
 .camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .preview{
-  width:100%;border-radius:14px;overflow:hidden;
-  background:var(--muted);border:3px solid var(--tomato);
-  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+  width:100%;border-radius:20px;overflow:hidden;
+  background:#fff;border:6px dashed var(--purple);
+  box-shadow:4px 4px 0 var(--pink);
   position:relative;aspect-ratio:3/4;
 }
 #video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
 .countdown{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:3rem;color:var(--tomato);font-weight:600;
+  font-size:4.2rem;color:var(--red);text-shadow:2px 2px #fff;
   pointer-events:none;
 }
 .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.18s}
 .flash.show{opacity:0.85}
 .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .btn{
-  padding:8px 14px;border-radius:10px;border:2px solid var(--tomato);
-  background:#fff;color:var(--tomato);font-weight:600;cursor:pointer;
-  box-shadow:0 2px 6px rgba(0,0,0,0.05);transition:all 0.2s ease;
-  font-family:"Poppins",sans-serif;
+  padding:10px 14px;border-radius:14px;border:3px dashed var(--blue);
+  background:var(--pink);color:var(--text);font-weight:700;cursor:pointer;
+  box-shadow:3px 3px 0 var(--yellow);
+  transition:all 0.2s ease;
 }
-.btn:hover:not(:disabled){background:var(--tomato);color:#fff;}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
+.btn:hover:not(:disabled){background:var(--yellow);}
+.btn:disabled{opacity:0.55;cursor:not-allowed}
 .shutter{
-  width:70px;height:70px;border-radius:50%;background:#fff;border:4px solid var(--tomato);
-  box-shadow:0 6px 14px rgba(0,0,0,0.1);
+  width:84px;height:84px;border-radius:50%;background:var(--red);border:4px dashed var(--yellow);
+  box-shadow:4px 4px 0 var(--blue);
   display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
   transition:all 0.2s;
 }
-.shutter:hover{background:var(--tomato);color:#fff;}
+.shutter:hover{background:var(--pink);}
 .gallery{width:300px;min-width:260px;flex:0 0 300px;display:flex;flex-direction:column;gap:12px;align-items:center;}
 .thumbs{display:flex;gap:8px;width:100%;justify-content:space-between}
 .thumb{
-  width:32%;
-  aspect-ratio:3/4;
-  border-radius:12px;
-  overflow:hidden;
-  background:#fff;
-  border:3px solid transparent;
-  position:relative;
-  display:flex;align-items:center;justify-content:center;
-  font-weight:600;
-  color:var(--text);
+  width:32%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:#fff;
+  border:3px dashed var(--red);display:flex;align-items:center;justify-content:center;
+  box-shadow:2px 2px 0 var(--blue);
 }
-.thumb::before{
-  content:"";
-  position:absolute;inset:0;
-  border-radius:12px;
-  padding:3px;
-  background:radial-gradient(circle at 30% 30%, #ff7b5a, #ff6347);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;
-  mask-composite:exclude;
-}
-.thumb::after{
-  content:"";
-  position:absolute;inset:0;
-  border-radius:12px;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.5) 10%, transparent 11%),
-    radial-gradient(circle, rgba(255,255,255,0.35) 8%, transparent 10%),
-    radial-gradient(circle, rgba(255,255,255,0.25) 6%, transparent 8%);
-  background-size:18px 18px, 24px 24px, 32px 32px;
-  background-position:0 0, 8px 8px, 12px 12px;
-  opacity:0.25;
-  pointer-events:none;
-}
-.thumb img{
-  width:100%;height:100%;object-fit:cover;border-radius:10px;
-  position:relative;z-index:1;
-  animation:bounceIn 0.5s ease;
-}
-@keyframes bounceIn{
-  0%{transform:scale(0.8);opacity:0;}
-  60%{transform:scale(1.05);opacity:1;}
-  100%{transform:scale(1);}
-}
+.thumb img{width:100%;height:100%;object-fit:cover;border-radius:12px;}
 @media(min-width:900px){
   .camera-wrap{flex:1 1 60%}
   .gallery{flex:0 0 36%;}
 }
-.note{font-family:"Poppins",sans-serif;font-size:13px;color:var(--text);text-align:center;margin-top:6px}
+.note{font-size:15px;color:var(--text);text-align:center;margin-top:6px}
 
-/* 🔴 วงกลม tomato ตกแต่ง */
+/* doodle star */
 .decoration{
   position:absolute;z-index:0;
-  width:80px;height:80px;
-  background:radial-gradient(circle at 30% 30%, #ff7b5a 0%, #ff6347 70%);
-  border-radius:50%;
-  opacity:0.2;
-  overflow:hidden;
+  color:var(--yellow);
+  font-size:60px;
+  pointer-events:none;
 }
-.decoration::after{
-  content:"";
-  position:absolute;inset:0;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.5) 10%, transparent 11%),
-    radial-gradient(circle, rgba(255,255,255,0.35) 8%, transparent 10%),
-    radial-gradient(circle, rgba(255,255,255,0.25) 6%, transparent 8%);
-  background-size:18px 18px, 24px 24px, 32px 32px;
-  background-position:0 0, 8px 8px, 12px 12px;
-  border-radius:50%;
-}
-.dec1{top:-20px;left:-20px;}
-.dec2{bottom:-30px;right:-30px;}
-.dec3{top:20px;right:50px;}
+.dec1{top:10px;left:20px;}
+.dec2{bottom:20px;right:40px;}
+.dec3{top:30px;right:100px;}
 </style>
 </head>
 <body>
 <div class="container" role="application" aria-label="SENA Photobooth">
-  <div class="decoration dec1"></div>
-  <div class="decoration dec2"></div>
-  <div class="decoration dec3"></div>
+  <div class="decoration dec1">✦</div>
+  <div class="decoration dec2">✦</div>
+  <div class="decoration dec3">✦</div>
   
   <div class="header"><div class="brand">Sena booth</div></div>
   <div class="main">
@@ -170,11 +126,11 @@ html,body{
         <button class="btn" id="download" disabled>ดาวน์โหลด</button>
         <input type="file" id="fileInput" accept="image/*" multiple hidden>
       </div>
-      <div class="note">กดชัตเตอร์ครั้งเดียว → ถ่าย 3 ช็อต (3 วินาที) หรืออัปโหลด 3 รูป</div>
+      <div class="note">กดชัตเตอร์ครั้งเดียว → ถ่าย 3 ช็อต หรืออัปโหลด 3 รูป</div>
     </div>
 
     <div class="gallery" aria-live="polite">
-      <div style="font-weight:700;color:var(--text);font-family:Poppins,sans-serif">ตัวอย่าง 3 ภาพ</div>
+      <div style="font-weight:700;color:var(--text);font-family:'Patrick Hand',cursive">ตัวอย่าง 3 ภาพ</div>
       <div class="thumbs" id="thumbs">
         <div class="thumb" id="t1"><span style="opacity:.4;color:var(--text)">1</span></div>
         <div class="thumb" id="t2"><span style="opacity:.4;color:var(--text)">2</span></div>
@@ -285,7 +241,7 @@ fileInput.addEventListener('change',async(e)=>{
     });
   }
   retakeBtn.disabled=false;
-  downloadBtn.disabled=false;
+  downloadBtn.disabled=false?false:true;
 });
 
 downloadBtn.addEventListener('click',async()=>{
@@ -293,9 +249,9 @@ downloadBtn.addEventListener('click',async()=>{
   const W=1200,H=1800;
   const c=document.createElement('canvas'); c.width=W; c.height=H;
   const ctx=c.getContext('2d');
-  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#fffdf8'; ctx.fillRect(0,0,W,H);
 
-  // ⭐ ตกแต่งดาวรอบกรอบ
+  // ดาว doodle
   function drawStar(x,y,r,color){
     ctx.fillStyle=color;
     ctx.beginPath();
@@ -307,17 +263,17 @@ downloadBtn.addEventListener('click',async()=>{
     }
     ctx.closePath(); ctx.fill();
   }
-  for(let i=0;i<40;i++){
-    drawStar(Math.random()*W,Math.random()*H,8+Math.random()*10,
-      ['#ffd6e8','#a8d5ba','#cbe8ff','#fff6b7'][Math.floor(Math.random()*4)]);
+  for(let i=0;i<30;i++){
+    drawStar(Math.random()*W,Math.random()*H,6+Math.random()*8,
+      ['tomato','#ffe066','#a5d8ff','#ffafcc','#cdb4db'][Math.floor(Math.random()*5)]);
   }
 
-  ctx.fillStyle='#355c7d'; 
-  ctx.font='72px "Poppins"';
+  ctx.fillStyle='tomato'; 
+  ctx.font='72px "Patrick Hand"';
   ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('Sena booth', W/2, 100);
+  ctx.fillText('Sena booth', W/2, 90);
 
-  const marginX=80, gap=36, topY=180;
+  const marginX=80, gap=36, topY=160;
   const innerW=W - marginX*2;
   const availableH = H - topY - 140;
   const boxH = Math.floor((availableH - gap*2)/3);
@@ -332,12 +288,15 @@ downloadBtn.addEventListener('click',async()=>{
     const dy=y + (boxH - ih)/2;
     ctx.save();
     ctx.filter='contrast(100%) brightness(105%) saturate(95%)';
+    ctx.strokeStyle='tomato';
+    ctx.lineWidth=8;
+    ctx.strokeRect(dx-6,dy-6,iw+12,ih+12);
     ctx.drawImage(img,dx,dy,iw,ih);
     ctx.restore();
   }
 
-  ctx.fillStyle='#355c7d';
-  ctx.font='28px "Poppins"';
+  ctx.fillStyle='#333';
+  ctx.font='28px "Patrick Hand"';
   ctx.fillText('@saphasena68', W/2, H-50);
 
   const a=document.createElement('a');

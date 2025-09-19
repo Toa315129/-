@@ -1,271 +1,654 @@
 <!doctype html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sena booth</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sena Booth — Photobooth Pro</title>
 
-<!-- ฟอนต์ -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --cream:#f5f2e9;
-  --accent:#8ba6d8;   /* ฟ้าอมม่วง */
-  --green:#3ba776;    /* clover */
-  --text:#333;
+  --bg-cream:#f5f2e9;
+  --accent-clover:#3ba776;
+  --accent-cool:#8ba6d8;
+  --accent-retro:#f6a85f;
+  --muted:#ffffff;
+  --text:#243238;
+  --glass: rgba(255,255,255,0.6);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{
-  height:100%;background:var(--cream);
-  font-family:"Poppins",sans-serif;
-  display:flex;align-items:center;justify-content:center;
-  padding:20px;
-}
-.container{
-  width:100%;max-width:960px;
-  background:#fff;border-radius:20px;
-  box-shadow:0 12px 30px rgba(0,0,0,0.12);
-  padding:24px;position:relative;overflow:hidden;
-}
-.header{text-align:center;margin-bottom:20px;}
-.header .brand{
-  font-weight:700;font-size:42px;
-  color:var(--accent);letter-spacing:2px;
-  text-transform:uppercase;
-}
-.main{display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between;}
-.camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
-.preview{
-  width:100%;border-radius:16px;overflow:hidden;
-  background:var(--cream);border:3px solid var(--accent);
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-  position:relative;aspect-ratio:3/4;
-}
-#video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
-.countdown{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:4rem;color:var(--accent);font-weight:700;
-  text-shadow:0 4px 12px rgba(0,0,0,0.25);pointer-events:none;
-}
-.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.18s}
-.flash.show{opacity:0.85}
-.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
-.btn{
-  padding:10px 14px;border-radius:10px;border:2px solid var(--accent);
-  background:var(--cream);color:var(--accent);font-weight:600;cursor:pointer;
-  box-shadow:0 4px 10px rgba(0,0,0,0.05);transition:all 0.2s ease;
-}
-.btn:hover:not(:disabled){background:var(--accent);color:#fff;}
-.btn:disabled{opacity:0.55;cursor:not-allowed}
-.shutter{
-  width:84px;height:84px;border-radius:50%;background:#fff;border:5px solid var(--accent);
-  box-shadow:0 10px 20px rgba(0,0,0,0.12);
-  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
-  transition:all 0.2s;
-}
-.shutter:hover{background:var(--accent);}
-.gallery{width:280px;min-width:240px;flex:0 0 280px;display:flex;flex-direction:column;gap:12px;align-items:center;}
-.thumbs{display:flex;gap:8px;width:100%;justify-content:space-between}
-.thumb{
-  width:32%;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--cream);
-  border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;
-}
-.thumb img{width:100%;height:100%;object-fit:cover;}
-.note{font-size:13px;color:var(--text);text-align:center;margin-top:6px;opacity:.7}
 
-/* theme selector */
-.theme-box{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center;}
-.theme-btn{
-  padding:6px 12px;border-radius:8px;border:1px solid var(--accent);
-  background:#fff;color:var(--accent);font-size:13px;cursor:pointer;
+/* Reset */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg-cream);color:var(--text)}
+button{font-family:inherit}
+
+/* App container */
+.app{
+  max-width:1100px;margin:22px auto;padding:20px;
+  background:linear-gradient(180deg,#ffffff,#fbfbfb);
+  border-radius:18px;box-shadow:0 18px 50px rgba(16,24,40,0.12);overflow:hidden;
+  border-top:8px solid var(--accent-clover);
 }
-.theme-btn.active{background:var(--accent);color:#fff;}
+
+/* Header */
+.header{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;
+}
+.brand{
+  font-weight:700;font-size:28px;color:var(--accent-cool);text-transform:lowercase;
+  padding:8px 12px;border-radius:10px;background:transparent;
+  letter-spacing:1px;
+}
+.top-actions{display:flex;gap:8px;align-items:center}
+.select, .small-btn{padding:8px 10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:#fff}
+
+/* Layout */
+.layout{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.left{flex:1 1 66%;min-width:320px}
+.right{flex:0 0 32%;min-width:280px}
+
+/* Preview area */
+.preview-wrap{border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,0.04);background:linear-gradient(180deg,#fff,#fbfbfb);box-shadow:0 8px 30px rgba(16,24,40,0.06);position:relative;padding:12px}
+.preview{
+  width:100%;aspect-ratio:3/4;border-radius:12px;overflow:hidden;position:relative;background:#000;
+  display:flex;align-items:center;justify-content:center;
+}
+video#video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block}
+.preview .overlay-text{
+  position:absolute;left:50%;top:12%;transform:translateX(-50%);min-width:40%;
+  text-align:center;color:var(--accent-cool);font-weight:700;font-size:34px;pointer-events:auto;
+  text-transform:uppercase;user-select:text;padding:6px;border-radius:8px;}
+.preview .overlay-text[contenteditable="true"]:focus{outline:2px dashed rgba(139,166,216,0.35);background:rgba(255,255,255,0.6)}
+.sticker-layer{position:absolute;inset:0;pointer-events:none}
+.countdown{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:4.2rem;color:#fff;text-shadow:0 6px 18px rgba(0,0,0,0.5);pointer-events:none}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .16s}
+.flash.show{opacity:0.9}
+
+/* Controls */
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.shutter{
+  width:84px;height:84px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,var(--accent-cool),#6ea1d9);color:#fff;font-weight:800;border:none;cursor:pointer;
+  box-shadow:0 12px 28px rgba(139,166,216,0.2);transform:translateY(0);transition:transform .12s ease, box-shadow .12s;
+}
+.shutter:active{transform:translateY(2px);box-shadow:0 8px 18px rgba(0,0,0,0.12)}
+.btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer}
+.btn.primary{background:linear-gradient(180deg,#ff9aa2,#ff6f61);color:#fff;border:none}
+.inline-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* Right panels */
+.panel{background:#fff;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 8px 20px rgba(16,24,40,0.04)}
+.panel h4{margin:0 0 8px 0;font-size:14px;color:var(--text)}
+.thumbs{display:flex;gap:8px;justify-content:space-between}
+.thumb{width:32%;aspect-ratio:3/4;border-radius:10px;background:linear-gradient(180deg,#fff,#fafafa);display:flex;align-items:center;justify-content:center;border:2px solid rgba(0,0,0,0.04);overflow:hidden;position:relative}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* stickers */
+.sticker-btn{padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer}
+.sticker-item{position:absolute;pointer-events:auto;touch-action:none;user-select:none;font-size:28px;transform-origin:center}
+
+/* text style controls */
+.input{padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);width:100%}
+.range{width:100%}
+
+/* export row */
+.export-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.small{font-size:13px;color:rgba(0,0,0,0.6)}
+
+/* responsive */
+@media (max-width:880px){
+  .layout{flex-direction:column}
+  .left,.right{flex:1 1 100%}
+  .header{flex-direction:column;gap:8px}
+}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header"><div class="brand">sena booth</div></div>
-  <div class="main">
-    <div class="camera-wrap">
-      <div class="preview" id="preview">
-        <video id="video" autoplay playsinline></video>
-        <div class="countdown" id="countdown"></div>
-        <div class="flash" id="flash"></div>
+<div class="app" role="application" aria-label="Sena Booth Photobooth">
+  <header class="header">
+    <div class="brand">sena booth</div>
+    <div class="top-actions">
+      <select id="themeSelect" class="select" title="Select theme">
+        <option value="clover">Clover</option>
+        <option value="cute">Cute</option>
+        <option value="retro">Retro</option>
+      </select>
+      <select id="filterSelect" class="select" title="Preview filter">
+        <option value="none">Filter: None</option>
+        <option value="bw">Filter: B/W</option>
+        <option value="sepia">Filter: Sepia</option>
+        <option value="pink">Filter: Soft Pink</option>
+        <option value="warm">Filter: Warm</option>
+      </select>
+      <button id="shareBtn" class="btn">Share</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="left">
+      <div class="preview-wrap panel">
+        <div class="preview" id="preview" aria-live="polite">
+          <video id="video" autoplay playsinline></video>
+
+          <div id="overlayText" class="overlay-text" contenteditable="true" aria-label="Overlay text">I WILL GET BETTER</div>
+
+          <div id="stickerLayer" class="sticker-layer" aria-hidden="false"></div>
+
+          <div class="countdown" id="countdown" aria-hidden="true"></div>
+          <div id="flash" class="flash" aria-hidden="true"></div>
+        </div>
+
+        <div class="controls">
+          <div id="shutter" class="shutter" title="Take photos">●</div>
+          <div class="inline-row">
+            <button id="switchBtn" class="btn">Switch Camera</button>
+            <button id="retake" class="btn" disabled>Retake</button>
+            <label class="small">Upload <input id="fileInput" type="file" accept="image/*" multiple style="display:none"></label>
+            <button id="uploadBtn" class="btn">Browse</button>
+          </div>
+        </div>
+
+        <div class="inline-row" style="margin-top:10px;justify-content:space-between">
+          <div style="flex:1">
+            <div style="display:flex;gap:8px;align-items:center">
+              <label class="small">Text size</label>
+              <input id="textSize" class="range" type="range" min="18" max="56" value="34">
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+              <label class="small">Align</label>
+              <select id="textAlign" class="select small">
+                <option value="center">center</option>
+                <option value="left">left</option>
+                <option value="right">right</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="width:220px;text-align:right">
+            <div class="small">Frame style</div>
+            <select id="frameStyle" class="select" style="margin-top:6px">
+              <option value="polaroid">Polaroid</option>
+              <option value="minimal">Minimal</option>
+              <option value="gradient">Gradient</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="export-row">
+          <button id="downloadPNG" class="btn primary" disabled>Download PNG</button>
+          <button id="downloadPDF" class="btn" disabled>Save as PDF</button>
+          <button id="previewPrint" class="btn">Preview/Print</button>
+        </div>
+
+        <div style="margin-top:10px" class="small">Tip: แตะข้อความเพื่อแก้ แล้วลากสติ๊กเกอร์เพื่อจัดตำแหน่ง</div>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="panel">
+        <h4>Preview (3)</h4>
+        <div class="thumbs" id="thumbs">
+          <div class="thumb" id="t1">1</div>
+          <div class="thumb" id="t2">2</div>
+          <div class="thumb" id="t3">3</div>
+        </div>
       </div>
 
-      <div class="controls">
-        <div class="shutter" id="shutter" aria-label="Shutter button" title="ถ่ายภาพ"></div>
-        <button class="btn" id="retake" disabled>ถ่ายใหม่</button>
-        <button class="btn" id="switch">สลับกล้อง</button>
-        <button class="btn" id="upload">อัปโหลด</button>
-        <button class="btn" id="download" disabled>ดาวน์โหลด</button>
-        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+      <div class="panel">
+        <h4>Stickers</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="sticker-btn" data-sticker="⭐">⭐</button>
+          <button class="sticker-btn" data-sticker="💖">💖</button>
+          <button class="sticker-btn" data-sticker="🍀">🍀</button>
+          <button class="sticker-btn" data-sticker="✨">✨</button>
+          <button class="sticker-btn" data-sticker="⭕">⭕</button>
+          <button class="sticker-btn" data-sticker="clear">clear</button>
+        </div>
       </div>
-      <div class="theme-box">
-        <button class="theme-btn active" data-theme="clover">clover</button>
-        <button class="theme-btn" data-theme="pastel">pastel</button>
-        <button class="theme-btn" data-theme="retro">retro</button>
-      </div>
-      <div class="note">กดชัตเตอร์ครั้งเดียว → ถ่าย 3 ช็อต (3 วินาที) หรืออัปโหลด 3 รูป</div>
-    </div>
 
-    <div class="gallery">
-      <div style="font-weight:600;color:var(--accent)">ตัวอย่าง 3 ภาพ</div>
-      <div class="thumbs" id="thumbs">
-        <div class="thumb" id="t1"><span style="opacity:.4;color:var(--accent)">1</span></div>
-        <div class="thumb" id="t2"><span style="opacity:.4;color:var(--accent)">2</span></div>
-        <div class="thumb" id="t3"><span style="opacity:.4;color:var(--accent)">3</span></div>
+      <div class="panel">
+        <h4>Theme Preview</h4>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(180deg,#9be7b6,#3ba776)"></div>
+          <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(180deg,#ffd1dc,#ff9aa2)"></div>
+          <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(180deg,#f6d365,#fda085)"></div>
+        </div>
       </div>
-    </div>
-  </div>
+
+      <div class="panel">
+        <h4>Share</h4>
+        <button id="shareMobile" class="btn">Share (mobile)</button>
+      </div>
+    </aside>
+  </main>
+
+  <footer style="padding:12px 18px;text-align:center;color:rgba(0,0,0,0.5)">powered by sena booth ✨</footer>
 </div>
 
-<audio id="snap" src="https://cdn.jsdelivr.net/gh/naptha/talkdemo/snap.mp3" preload="auto"></audio>
-
 <script>
+/* Photobooth Pro — all-in-one */
 (async()=>{
-const video=document.getElementById('video');
-const shutter=document.getElementById('shutter');
-const retakeBtn=document.getElementById('retake');
-const switchBtn=document.getElementById('switch');
-const downloadBtn=document.getElementById('download');
-const uploadBtn=document.getElementById('upload');
-const fileInput=document.getElementById('fileInput');
-const countdownEl=document.getElementById('countdown');
-const flash=document.getElementById('flash');
-const snap=document.getElementById('snap');
-const thumbs=[document.getElementById('t1'),document.getElementById('t2'),document.getElementById('t3')];
-const themeBtns=document.querySelectorAll('.theme-btn');
 
-let stream=null,useFront=true,captures=[null,null,null];
-let theme="clover";
+/* Elements */
+const video = document.getElementById('video');
+const shutter = document.getElementById('shutter');
+const switchBtn = document.getElementById('switchBtn');
+const retakeBtn = document.getElementById('retake');
+const uploadBtn = document.getElementById('uploadBtn');
+const fileInput = document.getElementById('fileInput');
+const countdownEl = document.getElementById('countdown');
+const flashEl = document.getElementById('flash');
+const snapSound = new Audio('https://cdn.jsdelivr.net/gh/naptha/talkdemo/snap.mp3');
+const thumbs = [document.getElementById('t1'),document.getElementById('t2'),document.getElementById('t3')];
+const stickerLayer = document.getElementById('stickerLayer');
+const stickerBtns = document.querySelectorAll('.sticker-btn');
+const overlayText = document.getElementById('overlayText');
+const textSizeInput = document.getElementById('textSize');
+const textAlignInput = document.getElementById('textAlign');
+const themeSelect = document.getElementById('themeSelect');
+const filterSelect = document.getElementById('filterSelect');
+const frameStyle = document.getElementById('frameStyle');
+const downloadPNG = document.getElementById('downloadPNG');
+const downloadPDF = document.getElementById('downloadPDF');
+const previewPrint = document.getElementById('previewPrint');
+const shareBtn = document.getElementById('shareBtn');
+const shareMobile = document.getElementById('shareMobile');
 
-if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-  alert('เบราว์เซอร์นี้ไม่รองรับการเปิดกล้อง');
-  throw new Error('getUserMedia not supported');
-}
+/* State */
+let stream = null;
+let useFront = true;
+let captures = [null,null,null];
+let currentCameraDeviceId = null;
+let filter = 'none';
+let theme = 'clover';
+let stickers = []; // {id,el,x,y,scale}
 
-async function startCamera(){
+/* Utilities */
+function $(q){return document.querySelector(q)}
+function randId(){return 's'+Math.random().toString(36).slice(2,9)}
+
+/* Start camera */
+async function startCamera(deviceId=null){
   if(stream){stream.getTracks().forEach(t=>t.stop()); stream=null;}
   try{
-    stream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:useFront?'user':'environment'},audio:false});
-    video.srcObject=stream; await video.play();
-  }catch(e){
-    alert('ไม่สามารถเปิดกล้องได้:\n'+e.name+' - '+e.message);
+    const constraints = {
+      video: deviceId ? {deviceId:{exact:deviceId}} : {facingMode: useFront ? 'user' : 'environment'},
+      audio:false
+    };
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
+    video.srcObject = stream;
+    // save device id when available
+    const tracks = stream.getVideoTracks();
+    if(tracks && tracks[0] && tracks[0].getSettings){
+      currentCameraDeviceId = tracks[0].getSettings().deviceId || null;
+    }
+  }catch(err){
+    alert('ไม่สามารถเปิดกล้อง: '+(err.message||err));
+    console.error(err);
   }
 }
 await startCamera();
 
-switchBtn.addEventListener('click',async()=>{useFront=!useFront;await startCamera();});
+/* Switch camera (prefer device enumeration if available) */
+async function switchCamera(){
+  useFront = !useFront;
+  // try to find other camera
+  try{
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter(d=>d.kind==='videoinput');
+    if(videoDevices.length>1){
+      // pick device by facing if possible
+      const idx = videoDevices.findIndex(d=>d.deviceId!==currentCameraDeviceId);
+      const next = idx>=0 ? videoDevices[idx].deviceId : videoDevices[0].deviceId;
+      await startCamera(next);
+      return;
+    }
+  }catch(e){/* ignore */}
+  await startCamera();
+}
 
-function captureFrame(){
-  const vw=video.videoWidth,vh=video.videoHeight;
-  const c=document.createElement('canvas'); c.width=vw; c.height=vh;
-  const ctx=c.getContext('2d');
-  ctx.translate(c.width,0); ctx.scale(-1,1);
+/* Capture frame from video */
+function captureFrameFromVideo(){
+  const vw = video.videoWidth;
+  const vh = video.videoHeight;
+  const canvas = document.createElement('canvas');
+  canvas.width = vw;
+  canvas.height = vh;
+  const ctx = canvas.getContext('2d');
+  // mirror for selfie
+  ctx.translate(canvas.width,0); ctx.scale(-1,1);
   ctx.drawImage(video,0,0,vw,vh);
-  return c.toDataURL('image/png');
+  return canvas.toDataURL('image/png');
 }
-function showCount(num){countdownEl.textContent=num;}
-function hideCount(){countdownEl.textContent='';}
+
+/* Countdown UI */
+function showCount(n){ countdownEl.textContent = n; countdownEl.style.opacity = 1; }
+function hideCount(){ countdownEl.textContent=''; countdownEl.style.opacity=''; }
+
+/* Flash */
 function doFlash(){
-  snap.currentTime=0; snap.play().catch(()=>{});
-  flash.classList.add('show');
-  setTimeout(()=>flash.classList.remove('show'),170);
+  try{ snapSound.currentTime=0; snapSound.play().catch(()=>{}); }catch(e){}
+  flashEl.classList.add('show');
+  setTimeout(()=>flashEl.classList.remove('show'),160);
 }
-function loadImage(src){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
 
+/* Take 3 sequence */
 async function takeSequence(){
-  captures=[null,null,null];
-  thumbs.forEach((t,i)=> t.innerHTML=`<span style="opacity:.4;color:var(--accent)">${i+1}</span>`);
-  retakeBtn.disabled=true; downloadBtn.disabled=true; shutter.style.pointerEvents='none';
+  captures = [null,null,null];
+  thumbs.forEach((t,i)=>{ t.innerHTML = `<div style="opacity:.4">${i+1}</div>` });
+  retakeBtn.disabled = true; downloadPNG.disabled = true; downloadPDF.disabled = true;
   for(let i=0;i<3;i++){
-    for(let s=3;s>=1;s--){showCount(s);await new Promise(r=>setTimeout(r,1000));}
+    for(let s=3;s>=1;s--){ showCount(s); await new Promise(r=>setTimeout(r,1000)); }
     hideCount(); doFlash();
-    const data=captureFrame();
-    captures[i]=data;
-    thumbs[i].innerHTML=`<img src="${data}" alt="shot ${i+1}">`;
-    if(i<2) await new Promise(r=>setTimeout(r,1000));
+    const data = captureFrameFromVideo();
+    captures[i] = data;
+    thumbs[i].innerHTML = `<img src="${data}" alt="shot ${i+1}">`;
+    // animate thumb
+    thumbs[i].firstElementChild && thumbs[i].firstElementChild.animate([{transform:'scale(.9)'},{transform:'scale(1.02)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.2,.8,.2,1)'});
+    if(i<2) await new Promise(r=>setTimeout(r,700));
   }
-  retakeBtn.disabled=false; downloadBtn.disabled=false; shutter.style.pointerEvents='';
+  retakeBtn.disabled = false; downloadPNG.disabled = false; downloadPDF.disabled = false;
 }
-shutter.addEventListener('click',takeSequence);
 
+/* Event bindings */
+shutter.addEventListener('click',takeSequence);
+switchBtn.addEventListener('click',()=>switchCamera());
 retakeBtn.addEventListener('click',()=>{
   captures=[null,null,null];
-  thumbs.forEach((t,i)=> t.innerHTML=`<span style="opacity:.4;color:var(--accent)">${i+1}</span>`);
-  downloadBtn.disabled=true;
+  thumbs.forEach((t,i)=> t.innerHTML = `<div style="opacity:.4">${i+1}</div>`);
+  downloadPNG.disabled=true; downloadPDF.disabled=true;
 });
 
+/* Upload handling */
 uploadBtn.addEventListener('click',()=>fileInput.click());
-fileInput.addEventListener('change',async(e)=>{
-  const files=[...e.target.files].slice(0,3);
-  if(files.length<3){alert('กรุณาเลือก 3 รูป');return;}
-  captures=[null,null,null];
+fileInput.addEventListener('change', async (ev)=>{
+  const files = [...ev.target.files].slice(0,3);
+  if(files.length<3){ alert('กรุณาเลือก 3 รูป'); return; }
+  captures = [null,null,null];
   for(let i=0;i<3;i++){
-    const file=files[i]; const reader=new FileReader();
+    const file = files[i];
+    const reader = new FileReader();
     await new Promise((res,rej)=>{
-      reader.onload=()=>{captures[i]=reader.result; thumbs[i].innerHTML=`<img src="${reader.result}" alt="uploaded ${i+1}">`; res();};
-      reader.onerror=rej; reader.readAsDataURL(file);
+      reader.onload = ()=>{ captures[i]=reader.result; thumbs[i].innerHTML = `<img src="${reader.result}">`; res(); };
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
     });
   }
-  retakeBtn.disabled=false; downloadBtn.disabled=false;
+  retakeBtn.disabled = false; downloadPNG.disabled = false; downloadPDF.disabled = false;
 });
 
-themeBtns.forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    themeBtns.forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    theme=btn.dataset.theme;
+/* Theme & filter */
+themeSelect.addEventListener('change', (e)=>{ theme = e.target.value; applyTheme(); });
+filterSelect.addEventListener('change', (e)=>{ filter = e.target.value; applyFilter(); });
+
+function applyTheme(){
+  const t = theme;
+  if(t==='clover'){
+    document.documentElement.style.setProperty('--accent-clover','#3ba776');
+    document.documentElement.style.setProperty('--accent-cool','#8ba6d8');
+    document.documentElement.style.setProperty('--accent-retro','#f6a85f');
+    // UI accents
+    document.querySelector('.app').style.borderTopColor = '#3ba776';
+  }else if(t==='cute'){
+    document.documentElement.style.setProperty('--accent-clover','#ff6f61');
+    document.querySelector('.app').style.borderTopColor = '#ff6f61';
+  }else if(t==='retro'){
+    document.documentElement.style.setProperty('--accent-clover','#f76b1c');
+    document.querySelector('.app').style.borderTopColor = '#f76b1c';
+  }
+  // optionally change overlay text color
+  overlayText.style.color = getComputedStyle(document.documentElement).getPropertyValue('--accent-clover') || '#3ba776';
+}
+function applyFilter(){
+  let css='';
+  switch(filter){
+    case 'bw': css='grayscale(1) contrast(1.05)'; break;
+    case 'sepia': css='sepia(.45) contrast(1.05)'; break;
+    case 'pink': css='brightness(1.04) saturate(1.1) contrast(1.02)'; break;
+    case 'warm': css='contrast(1.06) sepia(.08) saturate(1.08)'; break;
+    default: css='';
+  }
+  video.style.filter = css;
+}
+
+/* Text controls */
+textSizeInput.addEventListener('input', ()=>{ overlayText.style.fontSize = textSizeInput.value + 'px'; });
+textAlignInput.addEventListener('change', ()=>{ overlayText.style.textAlign = textAlignInput.value; overlayText.style.left = textAlignInput.value==='center' ? '50%' : (textAlignInput.value==='left' ? '6%' : '94%'); overlayText.style.transform = textAlignInput.value==='center' ? 'translateX(-50%)' : (textAlignInput.value==='left' ? 'translateX(0)' : 'translateX(-100%)'); });
+
+/* Stickers: add, drag */
+stickerBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const code = btn.dataset.sticker;
+    if(code==='clear'){ // clear all stickers
+      stickers.forEach(s=>s.el.remove());
+      stickers = []; return;
+    }
+    const id = randId();
+    const el = document.createElement('div');
+    el.className = 'sticker-item';
+    el.textContent = code;
+    el.style.left = '50%'; el.style.top = '60%';
+    el.style.transform = 'translate(-50%,-50%) scale(1)';
+    el.dataset.id = id;
+    el.style.zIndex = 20 + stickers.length;
+    stickerLayer.appendChild(el);
+    // make draggable
+    makeDraggable(el);
+    stickers.push({id,el,x:0,y:0,scale:1});
   });
 });
 
-downloadBtn.addEventListener('click',async()=>{
-  if(!captures[0]) return alert('ยังไม่ได้ถ่าย/อัปโหลดรูป');
-  const W=1200,H=1800;
-  const c=document.createElement('canvas'); c.width=W; c.height=H;
-  const ctx=c.getContext('2d');
-  ctx.fillStyle='#f5f2e9'; ctx.fillRect(0,0,W,H);
+/* draggable helper */
+function makeDraggable(el){
+  el.style.pointerEvents = 'auto';
+  let startX, startY, ox, oy, dragging=false;
+  el.addEventListener('pointerdown', (e)=>{
+    e.preventDefault(); dragging=true; el.setPointerCapture(e.pointerId);
+    startX = e.clientX; startY = e.clientY;
+    const rect = el.getBoundingClientRect();
+    ox = rect.left + rect.width/2; oy = rect.top + rect.height/2;
+    el.style.transition = 'none';
+  });
+  window.addEventListener('pointermove', (e)=>{
+    if(!dragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    el.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+  });
+  el.addEventListener('pointerup', (e)=>{
+    dragging=false; try{ el.releasePointerCapture(e.pointerId); }catch(e){}
+    el.style.transition = '';
+    // normalize transform into left/top for export simplicity
+    const parentRect = stickerLayer.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const cx = elRect.left + elRect.width/2 - parentRect.left;
+    const cy = elRect.top + elRect.height/2 - parentRect.top;
+    const leftPerc = (cx / parentRect.width) * 100;
+    const topPerc = (cy / parentRect.height) * 100;
+    el.style.left = leftPerc + '%'; el.style.top = topPerc + '%';
+    el.style.transform = 'translate(-50%,-50%) scale(1)';
+  });
+}
 
-  // draw frame style
-  ctx.strokeStyle=theme==="clover"?"#3ba776":theme==="pastel"?"#8ba6d8":"#d98e5f";
-  ctx.lineWidth=20; ctx.strokeRect(40,40,W-80,H-80);
+/* Helper: load image */
+function loadImage(src){
+  return new Promise((res,rej)=>{
+    const img = new Image();
+    img.onload = ()=>res(img);
+    img.onerror = rej;
+    img.src = src;
+  });
+}
 
-  ctx.fillStyle='#8ba6d8'; 
-  ctx.font='64px Poppins'; ctx.textAlign='center';
-  ctx.fillText('sena booth', W/2, 110);
+/* Render export canvas (PNG) */
+async function renderExportCanvas(){
+  if(!captures[0]) throw new Error('No images');
+  const W = 1200; const H = 1800;
+  const canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
 
-  const marginX=100, gap=40, topY=160;
-  const innerW=W - marginX*2;
-  const availableH = H - topY - 160;
-  const boxH = Math.floor((availableH - gap*2)/3);
-  const boxW = innerW;
+  // background & outer rounded frame
+  const bgColor = theme==='cute' ? '#fff1f2' : theme==='clover' ? '#f3fff3' : '#fffaf0';
+  ctx.fillStyle = bgColor; ctx.fillRect(0,0,W,H);
 
+  // big rounded internal panel
+  ctx.fillStyle = '#ffffff';
+  roundRect(ctx, 60, 80, W-120, H-200, 26); ctx.fill();
+
+  // title
+  ctx.fillStyle = theme==='retro' ? '#d97706' : theme==='cute' ? '#ff6f61' : '#3ba776';
+  ctx.font = '64px Poppins'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('SENA BOOTH', W/2, 130);
+
+  // compute three boxes
+  const marginX = 120; const gap = 30; const topY = 180;
+  const boxW = W - marginX*2;
+  const boxH = Math.floor((H - topY - 160 - gap*2)/3);
+
+  // draw each image into box with frame style
   for(let i=0;i<3;i++){
     const y = topY + i*(boxH + gap);
-    const img=await loadImage(captures[i]);
-    const scale=Math.min(boxW/img.width, boxH/img.height);
-    const iw=img.width*scale, ih=img.height*scale;
-    const dx=marginX + (boxW - iw)/2;
-    const dy=y + (boxH - ih)/2;
-    ctx.save();
-    if(theme==="retro") ctx.filter='sepia(0.6) contrast(1.1)';
-    if(theme==="pastel") ctx.filter='brightness(1.05) saturate(0.9)';
-    ctx.drawImage(img,dx,dy,iw,ih);
-    ctx.restore();
+    // white inner background with rounded corners
+    roundRect(ctx, marginX, y, boxW, boxH, 18);
+    ctx.fillStyle = '#fff'; ctx.fill();
+    // draw image
+    const img = await loadImage(captures[i]);
+    const scale = Math.min((boxW-20)/img.width, (boxH-20)/img.height);
+    const iw = img.width*scale, ih = img.height*scale;
+    const dx = marginX + (boxW - iw)/2, dy = y + (boxH - ih)/2;
+    // optional frame style filters
+    if(frameStyle.value === 'polaroid'){
+      // add small polaroid bottom margin
+      ctx.drawImage(img, dx, dy, iw, ih);
+      // polaroid caption area (light)
+      ctx.fillStyle = 'rgba(0,0,0,0.03)'; ctx.fillRect(dx, y + boxH - 46, iw, 40);
+    } else if(frameStyle.value === 'gradient'){
+      ctx.save();
+      ctx.filter = 'brightness(1.03) saturate(1.05)';
+      ctx.drawImage(img, dx, dy, iw, ih);
+      ctx.restore();
+      // gradient border
+      const grad = ctx.createLinearGradient(dx, dy, dx+iw, dy+ih);
+      grad.addColorStop(0, 'rgba(255,255,255,0.0)');
+      grad.addColorStop(1, 'rgba(0,0,0,0.04)');
+      ctx.strokeStyle = grad; ctx.lineWidth=6;
+      roundRectStroke(ctx, dx-6, dy-6, iw+12, ih+12, 14);
+    } else {
+      // minimal
+      ctx.drawImage(img, dx, dy, iw, ih);
+      ctx.strokeStyle = 'rgba(0,0,0,0.04)'; ctx.lineWidth = 4;
+      roundRectStroke(ctx, dx-6, dy-6, iw+12, ih+12, 12);
+    }
   }
 
-  ctx.fillStyle='#8ba6d8';
-  ctx.font='24px Poppins'; ctx.fillText('@sena booth', W/2, H-50);
+  // compose overlay text & stickers from preview onto final canvas (top area)
+  // draw overlay text at relative position
+  const previewRect = document.getElementById('preview').getBoundingClientRect();
+  const overlayEl = overlayText;
+  const otStyle = getComputedStyle(overlayEl);
+  const fontSize = parseFloat(otStyle.fontSize) || 36;
+  const overlayX = previewRect.width/2; // center reference
+  // draw overlay near top (matched to where preview shows)
+  ctx.fillStyle = overlayEl.style.color || (theme==='cute' ? '#ff6f61' : (theme==='clover' ? '#3ba776' : '#f76b1c'));
+  ctx.font = `${fontSize * (W/previewRect.width)}px Poppins`;
+  ctx.textAlign = overlayEl.style.textAlign === 'left' ? 'left' : overlayEl.style.textAlign === 'right' ? 'right' : 'center';
+  let textX = overlayEl.style.textAlign === 'left' ? marginX + 20 : overlayEl.style.textAlign === 'right' ? W - marginX - 20 : W/2;
+  ctx.fillText(overlayEl.textContent.trim(), textX, 160);
 
-  const a=document.createElement('a');
-  a.href=c.toDataURL('image/png');
-  a.download='sena_booth.png';
-  a.click();
+  // draw stickers from stickerLayer
+  const stickerNodes = [...stickerLayer.children];
+  for(const s of stickerNodes){
+    const rect = s.getBoundingClientRect();
+    const parent = stickerLayer.getBoundingClientRect();
+    const cx = rect.left + rect.width/2 - parent.left;
+    const cy = rect.top + rect.height/2 - parent.top;
+    const rx = marginX + (cx/parent.width) * (boxW); // approximate mapping across whole area
+    const ry = topY + (cy/parent.height) * (H - topY - 200);
+    const fontSz = parseFloat(getComputedStyle(s).fontSize) || 28;
+    ctx.font = `${fontSz * (W/previewRect.width)}px Poppins`;
+    ctx.fillText(s.textContent, rx, ry);
+  }
+
+  return canvas;
+}
+
+/* Download PNG */
+downloadPNG.addEventListener('click', async ()=>{
+  try{
+    const c = await renderExportCanvas();
+    const a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download = 'sena_booth_3shots.png'; a.click();
+  }catch(e){ alert('ต้องถ่ายหรืออัปโหลด 3 รูปก่อน'); }
 });
-})();
+
+/* Preview for print / Save as PDF (open new window with image & print) */
+previewPrint.addEventListener('click', async ()=>{
+  try{
+    const c = await renderExportCanvas();
+    const dataUrl = c.toDataURL('image/png');
+    // open new window with A4 printable layout
+    const w = window.open('','_blank');
+    w.document.write(`<html><head><title>Print - Sena Booth</title>
+      <style>body{margin:0;background:#fff;display:flex;align-items:center;justify-content:center;height:100vh}
+      img{max-width:100%;height:auto;display:block;margin:auto}
+      @media print{@page{size:A4 portrait;margin:10mm}}</style></head><body>
+      <img src="${dataUrl}" alt="Sena Booth print">
+      <script>setTimeout(()=>{window.print();},500)</script>
+      </body></html>`);
+    w.document.close();
+  }catch(e){ alert('ต้องมี 3 รูปก่อน'); }
+});
+
+/* Save as PDF: simply call previewPrint and let user print->save as PDF, because generating a proper PDF without libraries is heavy */
+downloadPDF.addEventListener('click', ()=> previewPrint.click());
+
+/* Web Share */
+shareBtn.addEventListener('click', async ()=>{
+  if(!captures[0]) return alert('ต้องมี 3 รูปก่อนแชร์');
+  try{
+    const c = await renderExportCanvas();
+    const blob = await (await fetch(c.toDataURL())).blob();
+    const file = new File([blob], 'sena_booth.png', {type: 'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:'Sena Booth',text:'My Sena Booth photos'});
+    } else {
+      // fallback: download
+      const a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download='sena_booth.png'; a.click();
+      alert('แชร์ไม่รองรับบนอุปกรณ์นี้ — ดาวน์โหลดแทนแล้ว');
+    }
+  }catch(e){ console.error(e); alert('แชร์ไม่สำเร็จ'); }
+});
+
+/* Mobile share button */
+shareMobile.addEventListener('click', ()=> shareBtn.click());
+
+/* helper: rounded rect stroke/fill */
+function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+r,r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.arcTo(x,y+h,x,y+h-r,r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath(); }
+function roundRectStroke(ctx,x,y,w,h,r){ roundRect(ctx,x,y,w,h,r); ctx.stroke(); }
+
+/* random sticker decoration (initial) */
+function seedStickers(){
+  // place a few decorative stickers around preview but non-interactive (background)
+  // (we already support interactive stickers via panel)
+}
+seedStickers();
+
+/* Small accessibility: focus overlay on click to edit text */
+overlayText.addEventListener('click', ()=> overlayText.focus());
+
+/* Make overlay text editable limitations: on blur, remove empty */
+overlayText.addEventListener('blur', ()=>{ if(!overlayText.textContent.trim()) overlayText.textContent = 'I WILL GET BETTER'; });
+
+/* initial UI values */
+applyTheme(); applyFilter();
+
+/* Utility: convert dataURL to blob (for share) */
+async function dataURLToBlob(dataurl){
+  const res = await fetch(dataurl); return await res.blob();
+}
+
+/* End of IIFE */
+})().catch(e=>console.error(e));
 </script>
 </body>
 </html>

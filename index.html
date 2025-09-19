@@ -5,99 +5,94 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sena booth</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<!-- ฟอนต์น่ารัก -->
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#fffafc;
-  --green:#88c999;
+  --bg:#fffdfd;
+  --green:#a8d5ba;
   --blue:#cbe8ff;
   --pink:#ffd6e8;
   --yellow:#fff6b7;
-  --muted:#ffffff;
-  --text:#355c7d;
+  --text:#444b6e;
 }
 *{box-sizing:border-box}
 html,body{
   height:100%;margin:0;
   background:var(--bg);
-  font-family:"Great Vibes",cursive;
+  font-family:"Fredoka",sans-serif;
   display:flex;align-items:center;justify-content:center;padding:18px;
 }
 .container{
   width:100%;max-width:960px;
-  background:var(--muted);
-  border-radius:20px;
-  box-shadow:0 12px 30px rgba(0,0,0,0.12);
-  padding:18px;
-  border:8px solid var(--green);
+  background:#fff;
+  border-radius:24px;
+  box-shadow:0 6px 14px rgba(0,0,0,0.08);
+  padding:20px;
+  border:6px solid var(--green);
   position:relative;
   overflow:hidden;
 }
-.header{text-align:center;margin-bottom:20px;}
+.header{text-align:center;margin-bottom:18px;}
 .header .brand{
-  font-weight:400;font-size:56px;color:var(--text);
-  text-shadow:2px 2px 0 var(--pink);
+  font-weight:600;font-size:40px;color:var(--text);
 }
 .main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
 .camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .preview{
-  width:100%;border-radius:20px;overflow:hidden;
-  background:var(--muted);border:6px dashed var(--pink);
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  width:100%;border-radius:18px;overflow:hidden;
+  background:#fafafa;border:4px dashed var(--pink);
   position:relative;aspect-ratio:3/4;
 }
 #video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
 .countdown{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:4.2rem;color:var(--pink);text-shadow:0 4px 12px rgba(0,0,0,0.3);
-  pointer-events:none;
+  font-size:3.5rem;color:var(--pink);font-weight:600;
 }
 .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.18s}
 .flash.show{opacity:0.85}
 .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .btn{
-  padding:10px 14px;border-radius:14px;border:2px solid var(--green);
-  background:var(--pink);color:var(--text);font-weight:700;cursor:pointer;
-  box-shadow:0 4px 10px rgba(16,24,40,0.05);transition:all 0.2s ease;
-  font-family:sans-serif;
+  padding:10px 16px;border-radius:12px;border:none;
+  background:var(--blue);color:var(--text);font-weight:600;cursor:pointer;
+  transition:all 0.2s ease;font-size:15px;
 }
-.btn:hover:not(:disabled){background:var(--yellow);color:#444;}
-.btn:disabled{opacity:0.55;cursor:not-allowed}
+.btn:hover:not(:disabled){background:var(--yellow);}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
 .shutter{
-  width:84px;height:84px;border-radius:50%;background:#fff;border:6px solid var(--pink);
-  box-shadow:0 10px 20px rgba(0,0,0,0.12);
+  width:74px;height:74px;border-radius:50%;background:var(--pink);border:4px solid var(--green);
   display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
   transition:all 0.2s;
 }
 .shutter:hover{background:var(--yellow);}
-.gallery{width:300px;min-width:260px;flex:0 0 300px;display:flex;flex-direction:column;gap:12px;align-items:center;}
+.gallery{width:280px;min-width:260px;flex:0 0 280px;display:flex;flex-direction:column;gap:12px;align-items:center;}
 .thumbs{display:flex;gap:8px;width:100%;justify-content:space-between}
 .thumb{
-  width:32%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:#fff;
-  border:3px dashed var(--green);display:flex;align-items:center;justify-content:center;
+  width:32%;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:#fefefe;
+  border:2px dashed var(--green);display:flex;align-items:center;justify-content:center;
 }
-.thumb img{width:100%;height:100%;object-fit:cover;border-radius:12px;}
+.thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
 @media(min-width:900px){
   .camera-wrap{flex:1 1 60%}
   .gallery{flex:0 0 36%;}
 }
-.note{font-family:sans-serif;font-size:14px;color:var(--text);text-align:center;margin-top:6px}
+.note{font-size:13px;color:var(--text);text-align:center;margin-top:6px}
 
 /* ⭐ ดาวรอบกรอบ */
 .decoration{
   position:absolute;z-index:0;
   background:var(--yellow);
   clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-  width:20px;height:20px;
+  width:18px;height:18px;
   opacity:0.7;
 }
-.dec1{top:10px;left:20px;background:var(--pink);}
+.dec1{top:12px;left:20px;background:var(--pink);}
 .dec2{top:30px;right:40px;background:var(--blue);}
-.dec3{bottom:20px;left:60px;background:var(--yellow);}
-.dec4{bottom:30px;right:20px;background:var(--green);}
-.dec5{top:50%;left:-10px;background:var(--blue);}
-.dec6{top:50%;right:-10px;background:var(--pink);}
+.dec3{bottom:22px;left:60px;background:var(--yellow);}
+.dec4{bottom:35px;right:25px;background:var(--green);}
+.dec5{top:50%;left:-12px;background:var(--blue);}
+.dec6{top:50%;right:-12px;background:var(--pink);}
 </style>
 </head>
 <body>
@@ -130,7 +125,7 @@ html,body{
     </div>
 
     <div class="gallery" aria-live="polite">
-      <div style="font-weight:700;color:var(--text);font-family:sans-serif">ตัวอย่าง 3 ภาพ</div>
+      <div style="font-weight:600;color:var(--text)">ตัวอย่าง 3 ภาพ</div>
       <div class="thumbs" id="thumbs">
         <div class="thumb" id="t1"><span style="opacity:.4;color:var(--text)">1</span></div>
         <div class="thumb" id="t2"><span style="opacity:.4;color:var(--text)">2</span></div>
@@ -263,19 +258,19 @@ downloadBtn.addEventListener('click',async()=>{
     }
     ctx.closePath(); ctx.fill();
   }
-  for(let i=0;i<40;i++){
-    drawStar(Math.random()*W,Math.random()*H,8+Math.random()*10,
-      ['#ffd6e8','#88c999','#cbe8ff','#fff6b7'][Math.floor(Math.random()*4)]);
+  for(let i=0;i<30;i++){
+    drawStar(Math.random()*W,Math.random()*H,6+Math.random()*8,
+      ['#ffd6e8','#a8d5ba','#cbe8ff','#fff6b7'][Math.floor(Math.random()*4)]);
   }
 
-  ctx.fillStyle='#355c7d'; 
-  ctx.font='72px "Great Vibes"';
+  ctx.fillStyle='#444b6e'; 
+  ctx.font='48px Fredoka';
   ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('Sena booth', W/2, 100);
+  ctx.fillText('Sena booth', W/2, 80);
 
-  const marginX=80, gap=36, topY=180;
+  const marginX=80, gap=36, topY=150;
   const innerW=W - marginX*2;
-  const availableH = H - topY - 140;
+  const availableH = H - topY - 120;
   const boxH = Math.floor((availableH - gap*2)/3);
   const boxW = innerW;
 
@@ -292,9 +287,9 @@ downloadBtn.addEventListener('click',async()=>{
     ctx.restore();
   }
 
-  ctx.fillStyle='#355c7d';
-  ctx.font='28px "Great Vibes"';
-  ctx.fillText('@saphasena68', W/2, H-50);
+  ctx.fillStyle='#444b6e';
+  ctx.font='22px Fredoka';
+  ctx.fillText('@saphasena68', W/2, H-40);
 
   const a=document.createElement('a');
   a.href=c.toDataURL('image/png');

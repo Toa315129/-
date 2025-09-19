@@ -3,29 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sena Booth Pro Max</title>
+<title>Sena Booth</title>
 
-<!-- ฟอนต์ -->
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Itim&display=swap" rel="stylesheet">
+<!-- ฟอนต์น่ารัก -->
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --bg:#fffafc;
-  --green:#a8d5ba;
-  --blue:#cbe8ff;
   --pink:#ffd6e8;
+  --blue:#cbe8ff;
   --yellow:#fff6b7;
-  --text:#333;
+  --green:#a8d5ba;
+  --text:#444b6e;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
 html,body{
-  height:100%;background:var(--bg);
-  font-family:"Itim", cursive;
-  display:flex;align-items:center;justify-content:center;
-  padding:10px;
+  height:100%;margin:0;
+  background:var(--bg);
+  font-family:"Fredoka One", cursive;
+  display:flex;align-items:center;justify-content:center;padding:18px;
 }
 .container{
-  width:100%;max-width:1000px;
+  width:100%;max-width:960px;
   background:var(--blue);
   border-radius:20px;
   box-shadow:0 12px 30px rgba(0,0,0,0.12);
@@ -34,78 +34,56 @@ html,body{
   position:relative;
   overflow:hidden;
 }
-.header{text-align:center;margin-bottom:10px;}
+.header{text-align:center;margin-bottom:14px;}
 .header .brand{
-  font-family:"Fredoka One", cursive;
-  font-size:48px;color:var(--text);
+  font-weight:400;font-size:52px;color:var(--text);
   text-shadow:2px 2px 0 var(--pink);
-  letter-spacing:2px;
 }
-.main{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
-.camera-wrap{flex:1 1 360px;min-width:320px;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
+.camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .preview{
   width:100%;border-radius:20px;overflow:hidden;
-  background:var(--bg);border:6px dashed var(--pink);
+  background:#fff;border:6px dashed var(--pink);
   box-shadow:0 6px 18px rgba(0,0,0,0.08);
   position:relative;aspect-ratio:3/4;
 }
 #video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
 .countdown{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:4rem;color:var(--pink);text-shadow:0 4px 12px rgba(0,0,0,0.3);
+  font-size:4.2rem;color:var(--pink);text-shadow:0 4px 12px rgba(0,0,0,0.3);
+  pointer-events:none;
 }
 .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.18s}
 .flash.show{opacity:0.85}
-.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .btn{
-  padding:8px 14px;border-radius:12px;border:2px solid var(--green);
+  padding:10px 14px;border-radius:14px;border:2px solid var(--green);
   background:var(--pink);color:var(--text);font-weight:700;cursor:pointer;
+  box-shadow:0 4px 10px rgba(16,24,40,0.05);transition:all 0.2s ease;
   font-family:sans-serif;font-size:14px;
-  box-shadow:0 4px 10px rgba(16,24,40,0.05);transition:all 0.2s;
 }
-.btn:hover:not(:disabled){background:var(--yellow);}
+.btn:hover:not(:disabled){background:var(--yellow);color:#444;}
 .btn:disabled{opacity:0.55;cursor:not-allowed}
 .shutter{
-  width:72px;height:72px;border-radius:50%;background:#fff;border:6px solid var(--pink);
-  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  width:84px;height:84px;border-radius:50%;background:#fff;border:6px solid var(--pink);
+  box-shadow:0 10px 20px rgba(0,0,0,0.12);
+  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
   transition:all 0.2s;
 }
 .shutter:hover{background:var(--yellow);}
-.gallery{width:300px;min-width:260px;flex:0 0 300px;display:flex;flex-direction:column;gap:10px;align-items:center;}
-.thumbs{display:flex;gap:6px;width:100%;justify-content:space-between}
+.gallery{width:300px;min-width:260px;flex:0 0 300px;display:flex;flex-direction:column;gap:12px;align-items:center;}
+.thumbs{display:flex;gap:8px;width:100%;justify-content:space-between}
 .thumb{
-  width:32%;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:#fff;
+  width:32%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:#fff;
   border:3px dashed var(--green);display:flex;align-items:center;justify-content:center;
 }
-.thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
-.note{font-family:sans-serif;font-size:13px;color:var(--text);text-align:center;margin-top:6px}
-
-/* 🎨 Panel ตกแต่ง */
-.editor{
-  margin-top:12px;padding:10px;background:#fff;border-radius:14px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);
-  font-family:sans-serif;font-size:14px;
-}
-.editor h3{margin-bottom:6px;font-family:"Fredoka One",cursive;color:#444;text-align:center;}
-.editor section{margin-bottom:10px;text-align:center;}
-.editor label{margin:0 6px;cursor:pointer;}
-#stickerPanel img{
-  width:48px;height:48px;cursor:grab;margin:4px;transition:transform 0.2s;
-}
-#stickerPanel img:hover{transform:scale(1.2);}
-#textInput{padding:4px 6px;border:1px solid #ccc;border-radius:6px;}
-
-/* draggable stickers */
-.sticker{
-  position:absolute;cursor:move;user-select:none;
-  max-width:100px;max-height:100px;
-}
-
+.thumb img{width:100%;height:100%;object-fit:cover;border-radius:12px;}
+.note{font-family:sans-serif;font-size:13px;color:var(--text);text-align:center;margin-top:4px}
 </style>
 </head>
 <body>
 <div class="container" role="application" aria-label="SENA Photobooth">
-  <div class="header"><div class="brand">SENA BOOTH</div></div>
+  <div class="header"><div class="brand">Sena Booth</div></div>
   <div class="main">
     <div class="camera-wrap">
       <div class="preview" id="preview">
@@ -113,57 +91,31 @@ html,body{
         <div class="countdown" id="countdown"></div>
         <div class="flash" id="flash"></div>
       </div>
+
       <div class="controls">
-        <div class="shutter" id="shutter" title="ถ่ายภาพ"></div>
+        <div class="shutter" id="shutter" aria-label="Shutter button" title="ถ่ายภาพ"></div>
         <button class="btn" id="retake" disabled>ถ่ายใหม่</button>
         <button class="btn" id="switch">สลับกล้อง</button>
         <button class="btn" id="upload">อัปโหลด</button>
         <button class="btn" id="download" disabled>ดาวน์โหลด</button>
+        <select class="btn" id="frameSelect">
+          <option value="cloud">☁️ Cloud</option>
+          <option value="rainbow">🌈 Rainbow</option>
+          <option value="polaroid">📷 Polaroid</option>
+        </select>
         <input type="file" id="fileInput" accept="image/*" multiple hidden>
       </div>
-      <div class="note">กดถ่าย → ได้ 3 ช็อต | หรืออัปโหลด 3 รูป</div>
+      <div class="note">กดชัตเตอร์ → ถ่าย 3 ช็อต (3 วินาที) หรืออัปโหลด 3 รูป</div>
     </div>
 
-    <div class="gallery">
-      <div style="font-weight:700;color:var(--text);font-family:sans-serif">ตัวอย่าง</div>
+    <div class="gallery" aria-live="polite">
+      <div style="font-weight:700;color:var(--text);font-family:sans-serif">ตัวอย่าง 3 ภาพ</div>
       <div class="thumbs" id="thumbs">
-        <div class="thumb" id="t1"><span style="opacity:.4">1</span></div>
-        <div class="thumb" id="t2"><span style="opacity:.4">2</span></div>
-        <div class="thumb" id="t3"><span style="opacity:.4">3</span></div>
+        <div class="thumb" id="t1"><span style="opacity:.4;color:var(--text)">1</span></div>
+        <div class="thumb" id="t2"><span style="opacity:.4;color:var(--text)">2</span></div>
+        <div class="thumb" id="t3"><span style="opacity:.4;color:var(--text)">3</span></div>
       </div>
     </div>
-  </div>
-
-  <!-- 🎨 Editor -->
-  <div class="editor" id="editor">
-    <h3>ตกแต่งภาพ</h3>
-    <section>
-      <strong>กรอบ:</strong>
-      <label><input type="radio" name="frame" value="plain" checked> Plain</label>
-      <label><input type="radio" name="frame" value="polaroid"> Polaroid</label>
-      <label><input type="radio" name="frame" value="retro"> Retro</label>
-      <label><input type="radio" name="frame" value="cute"> Cute</label>
-      <label><input type="radio" name="frame" value="neon"> Neon</label>
-    </section>
-    <section>
-      <strong>ฟิลเตอร์:</strong>
-      <label><input type="radio" name="filter" value="normal" checked> Normal</label>
-      <label><input type="radio" name="filter" value="bw"> B&W</label>
-      <label><input type="radio" name="filter" value="sepia"> Sepia</label>
-      <label><input type="radio" name="filter" value="pink"> Pink</label>
-      <label><input type="radio" name="filter" value="vintage"> Vintage</label>
-    </section>
-    <section>
-      <strong>ข้อความ:</strong>
-      <input id="textInput" type="text" placeholder="ใส่ข้อความ...">
-    </section>
-    <section id="stickerPanel">
-      <strong>สติกเกอร์:</strong><br>
-      <img src="https://cdn-icons-png.flaticon.com/512/210/210545.png">
-      <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png">
-      <img src="https://cdn-icons-png.flaticon.com/512/148/148836.png">
-      <img src="https://cdn-icons-png.flaticon.com/512/2583/2583383.png">
-    </section>
   </div>
 </div>
 
@@ -181,6 +133,7 @@ const fileInput=document.getElementById('fileInput');
 const countdownEl=document.getElementById('countdown');
 const flash=document.getElementById('flash');
 const snap=document.getElementById('snap');
+const frameSelect=document.getElementById('frameSelect');
 const thumbs=[document.getElementById('t1'),document.getElementById('t2'),document.getElementById('t3')];
 
 let stream=null,useFront=true,captures=[null,null,null];
@@ -191,14 +144,18 @@ if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
 }
 
 async function startCamera(){
-  if(stream){stream.getTracks().forEach(t=>t.stop());}
+  if(stream){stream.getTracks().forEach(t=>t.stop()); stream=null;}
   try{
     stream=await navigator.mediaDevices.getUserMedia({
       video:{facingMode:useFront?'user':'environment'},audio:false});
-    video.srcObject=stream;
-  }catch(e){alert('เปิดกล้องไม่ได้: '+e.message);}
+    video.srcObject=stream; await video.play();
+  }catch(e){
+    console.error('Camera error:', e);
+    alert('ไม่สามารถเปิดกล้องได้:\n'+e.name+' - '+e.message);
+  }
 }
 await startCamera();
+
 switchBtn.addEventListener('click',async()=>{useFront=!useFront;await startCamera();});
 
 function captureFrame(){
@@ -209,102 +166,133 @@ function captureFrame(){
   ctx.drawImage(video,0,0,vw,vh);
   return c.toDataURL('image/png');
 }
+
 function showCount(num){countdownEl.textContent=num;}
 function hideCount(){countdownEl.textContent='';}
-function doFlash(){snap.currentTime=0;snap.play();flash.classList.add('show');setTimeout(()=>flash.classList.remove('show'),170);}
+function doFlash(){
+  snap.currentTime=0; snap.play().catch(()=>{});
+  flash.classList.add('show');
+  setTimeout(()=>flash.classList.remove('show'),170);
+}
+function loadImage(src){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
 
 async function takeSequence(){
   captures=[null,null,null];
-  thumbs.forEach((t,i)=>t.innerHTML=`<span style="opacity:.4">${i+1}</span>`);
-  retakeBtn.disabled=true;downloadBtn.disabled=true;shutter.style.pointerEvents='none';
+  thumbs.forEach((t,i)=> t.innerHTML=`<span style="opacity:.4;color:var(--text)">${i+1}</span>`);
+  retakeBtn.disabled=true; downloadBtn.disabled=true; shutter.style.pointerEvents='none';
   for(let i=0;i<3;i++){
     for(let s=3;s>=1;s--){showCount(s);await new Promise(r=>setTimeout(r,1000));}
-    hideCount();doFlash();
-    const data=captureFrame();captures[i]=data;
-    thumbs[i].innerHTML=`<img src="${data}">`;
+    hideCount(); doFlash();
+    const data=captureFrame();
+    captures[i]=data;
+    thumbs[i].innerHTML=`<img src="${data}" alt="shot ${i+1}">`;
     if(i<2) await new Promise(r=>setTimeout(r,1000));
   }
-  retakeBtn.disabled=false;downloadBtn.disabled=false;shutter.style.pointerEvents='';
+  retakeBtn.disabled=false; downloadBtn.disabled=false; shutter.style.pointerEvents='';
 }
 shutter.addEventListener('click',takeSequence);
-retakeBtn.addEventListener('click',()=>{captures=[null,null,null];thumbs.forEach((t,i)=>t.innerHTML=`<span style="opacity:.4">${i+1}</span>`);downloadBtn.disabled=true;});
+retakeBtn.addEventListener('click',()=>{
+  captures=[null,null,null];
+  thumbs.forEach((t,i)=> t.innerHTML=`<span style="opacity:.4;color:var(--text)">${i+1}</span>`);
+  downloadBtn.disabled=true;
+});
+
 uploadBtn.addEventListener('click',()=>fileInput.click());
+
 fileInput.addEventListener('change',async(e)=>{
   const files=[...e.target.files].slice(0,3);
-  if(files.length<3)return alert('เลือก 3 รูป');
+  if(files.length<3){
+    alert('กรุณาเลือก 3 รูป');
+    return;
+  }
   captures=[null,null,null];
   for(let i=0;i<3;i++){
-    const file=files[i];const reader=new FileReader();
+    const file=files[i];
+    const reader=new FileReader();
     await new Promise((res,rej)=>{
-      reader.onload=()=>{captures[i]=reader.result;thumbs[i].innerHTML=`<img src="${reader.result}">`;res();};
-      reader.onerror=rej;reader.readAsDataURL(file);
+      reader.onload=()=>{
+        captures[i]=reader.result;
+        thumbs[i].innerHTML=`<img src="${reader.result}" alt="uploaded ${i+1}">`;
+        res();
+      };
+      reader.onerror=rej;
+      reader.readAsDataURL(file);
     });
   }
-  retakeBtn.disabled=false;downloadBtn.disabled=false;
+  retakeBtn.disabled=false;
+  downloadBtn.disabled=false;
 });
 
-// ⭐ สร้างรูป 4x6 พร้อมกรอบ ฟิลเตอร์ ข้อความ สติกเกอร์
-function loadImage(src){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
+// วาดกรอบน่ารัก
+function drawFrame(ctx,type,W,H){
+  if(type==="cloud"){
+    ctx.strokeStyle="#cbe8ff"; ctx.lineWidth=20;
+    ctx.strokeRect(40,160,W-80,H-260);
+    ctx.fillStyle="#fff";
+    for(let i=0;i<15;i++){
+      ctx.beginPath();
+      ctx.arc(Math.random()*W,Math.random()*(H-200)+150,20+Math.random()*30,0,Math.PI*2);
+      ctx.fill();
+    }
+  }else if(type==="rainbow"){
+    const grad=ctx.createLinearGradient(0,0,W,0);
+    grad.addColorStop(0,"#ff9a9e");
+    grad.addColorStop(0.5,"#fad0c4");
+    grad.addColorStop(1,"#fbc2eb");
+    ctx.strokeStyle=grad; ctx.lineWidth=30;
+    ctx.strokeRect(40,160,W-80,H-260);
+    ctx.fillStyle="#ff99cc";
+    ctx.font="32px Fredoka One";
+    ctx.fillText("❤",80,H-60);
+    ctx.fillText("★",W-100,H-80);
+  }else if(type==="polaroid"){
+    ctx.fillStyle="#fff"; ctx.fillRect(40,160,W-80,H-260);
+    ctx.strokeStyle="#444"; ctx.lineWidth=4;
+    ctx.strokeRect(40,160,W-80,H-260);
+    ctx.fillStyle="#444";
+    ctx.font="28px Fredoka One";
+    ctx.fillText("Sena Booth",W/2,H-40);
+  }
+}
+
 downloadBtn.addEventListener('click',async()=>{
-  if(!captures[0])return alert('ยังไม่มีรูป');
-  const W=1200,H=1800;
-  const c=document.createElement('canvas');c.width=W;c.height=H;
+  if(!captures[0]) return alert('ยังไม่ได้ถ่าย/อัปโหลดรูป');
+  const W=1200,H=1800; // 4x6 นิ้วที่ 300dpi
+  const c=document.createElement('canvas'); c.width=W; c.height=H;
   const ctx=c.getContext('2d');
-  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,W,H);
 
-  const frame=document.querySelector('input[name="frame"]:checked').value;
-  const filter=document.querySelector('input[name="filter"]:checked').value;
-  const text=document.getElementById('textInput').value;
+  ctx.fillStyle='#355c7d'; 
+  ctx.font='64px Fredoka One';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('Sena Booth', W/2, 90);
 
-  const marginX=80,gap=20,topY=160;
-  const innerW=W-marginX*2;
-  const boxH=Math.floor((H-topY-120-gap*2)/3),boxW=innerW;
+  const marginX=100, gap=36, topY=180;
+  const innerW=W - marginX*2;
+  const availableH = H - topY - 160;
+  const boxH = Math.floor((availableH - gap*2)/3);
+  const boxW = innerW;
 
   for(let i=0;i<3;i++){
-    const y=topY+i*(boxH+gap);
+    const y = topY + i*(boxH + gap);
     const img=await loadImage(captures[i]);
-    const scale=Math.min(boxW/img.width,boxH/img.height);
-    const iw=img.width*scale,ih=img.height*scale;
-    const dx=marginX+(boxW-iw)/2,dy=y+(boxH-ih)/2;
+    const scale=Math.min(boxW/img.width, boxH/img.height);
+    const iw=img.width*scale, ih=img.height*scale;
+    const dx=marginX + (boxW - iw)/2;
+    const dy=y + (boxH - ih)/2;
     ctx.save();
-    if(filter==="bw")ctx.filter="grayscale(100%)";
-    if(filter==="sepia")ctx.filter="sepia(100%)";
-    if(filter==="pink")ctx.filter="contrast(1.1) saturate(1.2) hue-rotate(330deg)";
-    if(filter==="vintage")ctx.filter="sepia(0.5) contrast(1.1) brightness(1.1)";
     ctx.drawImage(img,dx,dy,iw,ih);
     ctx.restore();
-    // กรอบแต่ละภาพ
-    ctx.lineWidth=8;
-    if(frame==="polaroid"){ctx.strokeStyle="#fff";ctx.strokeRect(dx-6,dy-6,iw+12,ih+60);}
-    if(frame==="retro"){ctx.strokeStyle="#222";ctx.setLineDash([10,5]);ctx.strokeRect(dx-6,dy-6,iw+12,ih+12);ctx.setLineDash([]);}
-    if(frame==="cute"){ctx.strokeStyle="#ff99cc";ctx.strokeRect(dx-8,dy-8,iw+16,ih+16);}
-    if(frame==="neon"){ctx.shadowColor="#0ff";ctx.shadowBlur=15;ctx.strokeStyle="#0ff";ctx.strokeRect(dx-8,dy-8,iw+16,ih+16);ctx.shadowBlur=0;}
   }
 
-  ctx.fillStyle="#333";ctx.font='32px "Fredoka One"';ctx.textAlign='center';
-  ctx.fillText(text,W/2,H-50);
+  // ใส่กรอบที่เลือก
+  drawFrame(ctx,frameSelect.value,W,H);
 
-  const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='SenaBooth_4x6.png';a.click();
+  const a=document.createElement('a');
+  a.href=c.toDataURL('image/png');
+  a.download='Sena_booth_3shots.png';
+  a.click();
 });
-
-// 🎀 Sticker drag/drop
-const preview=document.getElementById('preview');
-document.querySelectorAll('#stickerPanel img').forEach(st=>{
-  st.addEventListener('click',()=>{
-    const img=document.createElement('img');
-    img.src=st.src;img.className='sticker';
-    img.style.left="40px";img.style.top="40px";
-    preview.appendChild(img);
-    dragElement(img);
-  });
-});
-function dragElement(el){
-  let pos1=0,pos2=0,pos3=0,pos4=0;
-  el.onmousedown=dragMouseDown;
-  function dragMouseDown(e){e.preventDefault();pos3=e.clientX;pos4=e.clientY;document.onmouseup=closeDrag;document.onmousemove=elementDrag;}
-  function elementDrag(e){e.preventDefault();pos1=pos3-e.clientX;pos2=pos4-e.clientY;pos3=e.clientX;pos4=e.clientY;el.style.top=(el.offsetTop-pos2)+"px";el.style.left=(el.offsetLeft-pos1)+"px";}
-  function closeDrag(){document.onmouseup=null;document.onmousemove=null;}
-}
 })();
 </script>
 </body>

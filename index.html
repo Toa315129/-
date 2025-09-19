@@ -24,6 +24,7 @@ html,body{
   background:var(--bg);
   font-family:"Patrick Hand",cursive;
   display:flex;align-items:center;justify-content:center;padding:18px;
+  text-transform:uppercase;
 }
 .container{
   width:100%;max-width:960px;
@@ -37,33 +38,33 @@ html,body{
 }
 .header{text-align:center;margin-bottom:20px;}
 .header .brand{
-  font-weight:700;font-size:56px;
+  font-weight:700;font-size:48px;
   color:var(--text);
   background:var(--yellow);
   display:inline-block;
-  padding:10px 24px;
+  padding:8px 22px;
   border:4px solid var(--blue);
   box-shadow:4px 4px 0 var(--pink);
 }
 .main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
 .camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .preview{
-  width:100%;border-radius:20px;overflow:hidden;
-  background:#fff;border:6px dashed var(--purple);
-  box-shadow:4px 4px 0 var(--pink);
+  width:100%;border-radius:16px;overflow:hidden;
+  background:#fff;border:5px dashed var(--purple);
+  box-shadow:3px 3px 0 var(--pink);
   position:relative;aspect-ratio:3/4;
 }
 #video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
 .countdown{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:4.2rem;color:var(--red);text-shadow:2px 2px #fff;
+  font-size:4rem;color:var(--red);text-shadow:2px 2px #fff;
   pointer-events:none;
 }
 .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.18s}
 .flash.show{opacity:0.85}
 .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .btn{
-  padding:10px 14px;border-radius:14px;border:3px dashed var(--blue);
+  padding:10px 14px;border-radius:10px;border:3px dashed var(--blue);
   background:var(--pink);color:var(--text);font-weight:700;cursor:pointer;
   box-shadow:3px 3px 0 var(--yellow);
   transition:all 0.2s ease;
@@ -71,44 +72,29 @@ html,body{
 .btn:hover:not(:disabled){background:var(--yellow);}
 .btn:disabled{opacity:0.55;cursor:not-allowed}
 .shutter{
-  width:84px;height:84px;border-radius:50%;background:var(--red);border:4px dashed var(--yellow);
-  box-shadow:4px 4px 0 var(--blue);
+  width:78px;height:78px;border-radius:50%;background:var(--red);border:4px dashed var(--yellow);
+  box-shadow:3px 3px 0 var(--blue);
   display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
   transition:all 0.2s;
 }
 .shutter:hover{background:var(--pink);}
-.gallery{width:300px;min-width:260px;flex:0 0 300px;display:flex;flex-direction:column;gap:12px;align-items:center;}
+.gallery{width:280px;min-width:260px;flex:0 0 280px;display:flex;flex-direction:column;gap:12px;align-items:center;}
 .thumbs{display:flex;gap:8px;width:100%;justify-content:space-between}
 .thumb{
-  width:32%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:#fff;
+  width:32%;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:#fff;
   border:3px dashed var(--red);display:flex;align-items:center;justify-content:center;
   box-shadow:2px 2px 0 var(--blue);
 }
-.thumb img{width:100%;height:100%;object-fit:cover;border-radius:12px;}
+.thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
 @media(min-width:900px){
   .camera-wrap{flex:1 1 60%}
-  .gallery{flex:0 0 36%;}
+  .gallery{flex:0 0 34%;}
 }
-.note{font-size:15px;color:var(--text);text-align:center;margin-top:6px}
-
-/* doodle star */
-.decoration{
-  position:absolute;z-index:0;
-  color:var(--yellow);
-  font-size:60px;
-  pointer-events:none;
-}
-.dec1{top:10px;left:20px;}
-.dec2{bottom:20px;right:40px;}
-.dec3{top:30px;right:100px;}
+.note{font-size:14px;color:var(--text);text-align:center;margin-top:4px}
 </style>
 </head>
 <body>
 <div class="container" role="application" aria-label="SENA Photobooth">
-  <div class="decoration dec1">✦</div>
-  <div class="decoration dec2">✦</div>
-  <div class="decoration dec3">✦</div>
-  
   <div class="header"><div class="brand">Sena booth</div></div>
   <div class="main">
     <div class="camera-wrap">
@@ -130,7 +116,7 @@ html,body{
     </div>
 
     <div class="gallery" aria-live="polite">
-      <div style="font-weight:700;color:var(--text);font-family:'Patrick Hand',cursive">ตัวอย่าง 3 ภาพ</div>
+      <div style="font-weight:700;color:var(--text)">ตัวอย่าง 3 ภาพ</div>
       <div class="thumbs" id="thumbs">
         <div class="thumb" id="t1"><span style="opacity:.4;color:var(--text)">1</span></div>
         <div class="thumb" id="t2"><span style="opacity:.4;color:var(--text)">2</span></div>
@@ -241,7 +227,7 @@ fileInput.addEventListener('change',async(e)=>{
     });
   }
   retakeBtn.disabled=false;
-  downloadBtn.disabled=false?false:true;
+  downloadBtn.disabled=false;
 });
 
 downloadBtn.addEventListener('click',async()=>{
@@ -251,29 +237,21 @@ downloadBtn.addEventListener('click',async()=>{
   const ctx=c.getContext('2d');
   ctx.fillStyle='#fffdf8'; ctx.fillRect(0,0,W,H);
 
-  // ดาว doodle
-  function drawStar(x,y,r,color){
-    ctx.fillStyle=color;
-    ctx.beginPath();
-    for(let i=0;i<5;i++){
-      ctx.lineTo(x + r*Math.cos((18+i*72)*Math.PI/180),
-                 y - r*Math.sin((18+i*72)*Math.PI/180));
-      ctx.lineTo(x + r/2*Math.cos((54+i*72)*Math.PI/180),
-                 y - r/2*Math.sin((54+i*72)*Math.PI/180));
-    }
-    ctx.closePath(); ctx.fill();
-  }
-  for(let i=0;i<30;i++){
-    drawStar(Math.random()*W,Math.random()*H,6+Math.random()*8,
-      ['tomato','#ffe066','#a5d8ff','#ffafcc','#cdb4db'][Math.floor(Math.random()*5)]);
+  // ⭐ กรอบสีสุ่ม crayon
+  function drawBorder(x,y,w,h,color){
+    ctx.strokeStyle=color;
+    ctx.lineWidth=12;
+    ctx.setLineDash([15,8]);
+    ctx.strokeRect(x,y,w,h);
+    ctx.setLineDash([]);
   }
 
-  ctx.fillStyle='tomato'; 
+  ctx.fillStyle=varColors(); 
   ctx.font='72px "Patrick Hand"';
   ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('Sena booth', W/2, 90);
+  ctx.fillText('SENA BOOTH', W/2, 80);
 
-  const marginX=80, gap=36, topY=160;
+  const marginX=100, gap=36, topY=160;
   const innerW=W - marginX*2;
   const availableH = H - topY - 140;
   const boxH = Math.floor((availableH - gap*2)/3);
@@ -287,12 +265,10 @@ downloadBtn.addEventListener('click',async()=>{
     const dx=marginX + (boxW - iw)/2;
     const dy=y + (boxH - ih)/2;
     ctx.save();
-    ctx.filter='contrast(100%) brightness(105%) saturate(95%)';
-    ctx.strokeStyle='tomato';
-    ctx.lineWidth=8;
-    ctx.strokeRect(dx-6,dy-6,iw+12,ih+12);
+    ctx.filter='contrast(105%) brightness(105%) saturate(110%)';
     ctx.drawImage(img,dx,dy,iw,ih);
     ctx.restore();
+    drawBorder(dx-8,dy-8,iw+16,ih+16,varColors());
   }
 
   ctx.fillStyle='#333';
@@ -303,6 +279,10 @@ downloadBtn.addEventListener('click',async()=>{
   a.href=c.toDataURL('image/png');
   a.download='Sena_booth_3shots.png';
   a.click();
+
+  function varColors(){
+    return ['tomato','#ffe066','#a5d8ff','#ffafcc','#cdb4db'][Math.floor(Math.random()*5)];
+  }
 });
 })();
 </script>

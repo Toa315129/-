@@ -77,12 +77,15 @@ html,body{
   background:#fff;
   border:3px solid transparent;
   position:relative;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:600;
+  color:var(--text);
 }
 .thumb::before{
   content:"";
   position:absolute;inset:0;
   border-radius:12px;
-  padding:3px; /* ความหนาขอบ */
+  padding:3px;
   background:radial-gradient(circle at 30% 30%, #ff7b5a, #ff6347);
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
@@ -106,6 +109,12 @@ html,body{
 .thumb img{
   width:100%;height:100%;object-fit:cover;border-radius:10px;
   position:relative;z-index:1;
+  animation:bounceIn 0.5s ease;
+}
+@keyframes bounceIn{
+  0%{transform:scale(0.8);opacity:0;}
+  60%{transform:scale(1.05);opacity:1;}
+  100%{transform:scale(1);}
 }
 @media(min-width:900px){
   .camera-wrap{flex:1 1 60%}
@@ -178,7 +187,6 @@ html,body{
 <audio id="snap" src="https://cdn.jsdelivr.net/gh/naptha/talkdemo/snap.mp3" preload="auto"></audio>
 
 <script>
-/* ⛔️ JavaScript ด้านในคงเดิม ไม่แก้ไข */
 (async()=>{
 const video=document.getElementById('video');
 const shutter=document.getElementById('shutter');
@@ -287,6 +295,7 @@ downloadBtn.addEventListener('click',async()=>{
   const ctx=c.getContext('2d');
   ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,W,H);
 
+  // ⭐ ตกแต่งดาวรอบกรอบ
   function drawStar(x,y,r,color){
     ctx.fillStyle=color;
     ctx.beginPath();
@@ -300,10 +309,10 @@ downloadBtn.addEventListener('click',async()=>{
   }
   for(let i=0;i<40;i++){
     drawStar(Math.random()*W,Math.random()*H,8+Math.random()*10,
-      ['#ff6347','#ff7b5a','#ff9682','#ffb3a0'][Math.floor(Math.random()*4)]);
+      ['#ffd6e8','#a8d5ba','#cbe8ff','#fff6b7'][Math.floor(Math.random()*4)]);
   }
 
-  ctx.fillStyle='#333'; 
+  ctx.fillStyle='#355c7d'; 
   ctx.font='72px "Poppins"';
   ctx.textAlign='center'; ctx.textBaseline='middle';
   ctx.fillText('Sena booth', W/2, 100);
@@ -327,7 +336,7 @@ downloadBtn.addEventListener('click',async()=>{
     ctx.restore();
   }
 
-  ctx.fillStyle='#555';
+  ctx.fillStyle='#355c7d';
   ctx.font='28px "Poppins"';
   ctx.fillText('@saphasena68', W/2, H-50);
 

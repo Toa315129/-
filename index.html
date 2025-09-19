@@ -6,96 +6,86 @@
 <title>Sena booth</title>
 
 <!-- ฟอนต์ -->
-<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --red:tomato;
-  --yellow:#ffe066;
-  --blue:#a5d8ff;
-  --pink:#ffafcc;
-  --purple:#cdb4db;
-  --bg:#fffdf8;
+  --cream:#f5f2e9;
+  --accent:#8ba6d8;   /* ฟ้าอมม่วง */
+  --green:#3ba776;    /* clover */
   --text:#333;
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 html,body{
-  height:100%;margin:0;
-  background:var(--bg);
-  font-family:"Patrick Hand",cursive;
-  display:flex;align-items:center;justify-content:center;padding:18px;
-  text-transform:uppercase;
+  height:100%;background:var(--cream);
+  font-family:"Poppins",sans-serif;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
 }
 .container{
   width:100%;max-width:960px;
-  background:var(--bg);
-  border-radius:20px;
-  padding:20px;
-  position:relative;
-  overflow:hidden;
-  border:6px dashed var(--red);
-  box-shadow:0 0 0 6px var(--yellow), 0 0 0 12px var(--blue);
+  background:#fff;border-radius:20px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.12);
+  padding:24px;position:relative;overflow:hidden;
 }
 .header{text-align:center;margin-bottom:20px;}
 .header .brand{
-  font-weight:700;font-size:48px;
-  color:var(--text);
-  background:var(--yellow);
-  display:inline-block;
-  padding:8px 22px;
-  border:4px solid var(--blue);
-  box-shadow:4px 4px 0 var(--pink);
+  font-weight:700;font-size:42px;
+  color:var(--accent);letter-spacing:2px;
+  text-transform:uppercase;
 }
-.main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
+.main{display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between;}
 .camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .preview{
   width:100%;border-radius:16px;overflow:hidden;
-  background:#fff;border:5px dashed var(--purple);
-  box-shadow:3px 3px 0 var(--pink);
+  background:var(--cream);border:3px solid var(--accent);
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
   position:relative;aspect-ratio:3/4;
 }
 #video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
 .countdown{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:4rem;color:var(--red);text-shadow:2px 2px #fff;
-  pointer-events:none;
+  font-size:4rem;color:var(--accent);font-weight:700;
+  text-shadow:0 4px 12px rgba(0,0,0,0.25);pointer-events:none;
 }
 .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.18s}
 .flash.show{opacity:0.85}
 .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .btn{
-  padding:10px 14px;border-radius:10px;border:3px dashed var(--blue);
-  background:var(--pink);color:var(--text);font-weight:700;cursor:pointer;
-  box-shadow:3px 3px 0 var(--yellow);
-  transition:all 0.2s ease;
+  padding:10px 14px;border-radius:10px;border:2px solid var(--accent);
+  background:var(--cream);color:var(--accent);font-weight:600;cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,0.05);transition:all 0.2s ease;
 }
-.btn:hover:not(:disabled){background:var(--yellow);}
+.btn:hover:not(:disabled){background:var(--accent);color:#fff;}
 .btn:disabled{opacity:0.55;cursor:not-allowed}
 .shutter{
-  width:78px;height:78px;border-radius:50%;background:var(--red);border:4px dashed var(--yellow);
-  box-shadow:3px 3px 0 var(--blue);
+  width:84px;height:84px;border-radius:50%;background:#fff;border:5px solid var(--accent);
+  box-shadow:0 10px 20px rgba(0,0,0,0.12);
   display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
   transition:all 0.2s;
 }
-.shutter:hover{background:var(--pink);}
-.gallery{width:280px;min-width:260px;flex:0 0 280px;display:flex;flex-direction:column;gap:12px;align-items:center;}
+.shutter:hover{background:var(--accent);}
+.gallery{width:280px;min-width:240px;flex:0 0 280px;display:flex;flex-direction:column;gap:12px;align-items:center;}
 .thumbs{display:flex;gap:8px;width:100%;justify-content:space-between}
 .thumb{
-  width:32%;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:#fff;
-  border:3px dashed var(--red);display:flex;align-items:center;justify-content:center;
-  box-shadow:2px 2px 0 var(--blue);
+  width:32%;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--cream);
+  border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;
 }
-.thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
-@media(min-width:900px){
-  .camera-wrap{flex:1 1 60%}
-  .gallery{flex:0 0 34%;}
+.thumb img{width:100%;height:100%;object-fit:cover;}
+.note{font-size:13px;color:var(--text);text-align:center;margin-top:6px;opacity:.7}
+
+/* theme selector */
+.theme-box{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center;}
+.theme-btn{
+  padding:6px 12px;border-radius:8px;border:1px solid var(--accent);
+  background:#fff;color:var(--accent);font-size:13px;cursor:pointer;
 }
-.note{font-size:14px;color:var(--text);text-align:center;margin-top:4px}
+.theme-btn.active{background:var(--accent);color:#fff;}
 </style>
 </head>
 <body>
-<div class="container" role="application" aria-label="SENA Photobooth">
-  <div class="header"><div class="brand">Sena booth</div></div>
+<div class="container">
+  <div class="header"><div class="brand">sena booth</div></div>
   <div class="main">
     <div class="camera-wrap">
       <div class="preview" id="preview">
@@ -112,15 +102,20 @@ html,body{
         <button class="btn" id="download" disabled>ดาวน์โหลด</button>
         <input type="file" id="fileInput" accept="image/*" multiple hidden>
       </div>
-      <div class="note">กดชัตเตอร์ครั้งเดียว → ถ่าย 3 ช็อต หรืออัปโหลด 3 รูป</div>
+      <div class="theme-box">
+        <button class="theme-btn active" data-theme="clover">clover</button>
+        <button class="theme-btn" data-theme="pastel">pastel</button>
+        <button class="theme-btn" data-theme="retro">retro</button>
+      </div>
+      <div class="note">กดชัตเตอร์ครั้งเดียว → ถ่าย 3 ช็อต (3 วินาที) หรืออัปโหลด 3 รูป</div>
     </div>
 
-    <div class="gallery" aria-live="polite">
-      <div style="font-weight:700;color:var(--text)">ตัวอย่าง 3 ภาพ</div>
+    <div class="gallery">
+      <div style="font-weight:600;color:var(--accent)">ตัวอย่าง 3 ภาพ</div>
       <div class="thumbs" id="thumbs">
-        <div class="thumb" id="t1"><span style="opacity:.4;color:var(--text)">1</span></div>
-        <div class="thumb" id="t2"><span style="opacity:.4;color:var(--text)">2</span></div>
-        <div class="thumb" id="t3"><span style="opacity:.4;color:var(--text)">3</span></div>
+        <div class="thumb" id="t1"><span style="opacity:.4;color:var(--accent)">1</span></div>
+        <div class="thumb" id="t2"><span style="opacity:.4;color:var(--accent)">2</span></div>
+        <div class="thumb" id="t3"><span style="opacity:.4;color:var(--accent)">3</span></div>
       </div>
     </div>
   </div>
@@ -141,8 +136,10 @@ const countdownEl=document.getElementById('countdown');
 const flash=document.getElementById('flash');
 const snap=document.getElementById('snap');
 const thumbs=[document.getElementById('t1'),document.getElementById('t2'),document.getElementById('t3')];
+const themeBtns=document.querySelectorAll('.theme-btn');
 
 let stream=null,useFront=true,captures=[null,null,null];
+let theme="clover";
 
 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
   alert('เบราว์เซอร์นี้ไม่รองรับการเปิดกล้อง');
@@ -156,9 +153,7 @@ async function startCamera(){
       video:{facingMode:useFront?'user':'environment'},audio:false});
     video.srcObject=stream; await video.play();
   }catch(e){
-    console.error('Camera error:', e);
-    alert('ไม่สามารถเปิดกล้องได้:\n'+e.name+' - '+e.message+
-          '\n\nต้องรันบน HTTPS หรือ localhost และอนุญาตกล้อง');
+    alert('ไม่สามารถเปิดกล้องได้:\n'+e.name+' - '+e.message);
   }
 }
 await startCamera();
@@ -173,7 +168,6 @@ function captureFrame(){
   ctx.drawImage(video,0,0,vw,vh);
   return c.toDataURL('image/png');
 }
-
 function showCount(num){countdownEl.textContent=num;}
 function hideCount(){countdownEl.textContent='';}
 function doFlash(){
@@ -185,7 +179,7 @@ function loadImage(src){return new Promise((res,rej)=>{const i=new Image();i.onl
 
 async function takeSequence(){
   captures=[null,null,null];
-  thumbs.forEach((t,i)=> t.innerHTML=`<span style="opacity:.4;color:var(--text)">${i+1}</span>`);
+  thumbs.forEach((t,i)=> t.innerHTML=`<span style="opacity:.4;color:var(--accent)">${i+1}</span>`);
   retakeBtn.disabled=true; downloadBtn.disabled=true; shutter.style.pointerEvents='none';
   for(let i=0;i<3;i++){
     for(let s=3;s>=1;s--){showCount(s);await new Promise(r=>setTimeout(r,1000));}
@@ -198,36 +192,34 @@ async function takeSequence(){
   retakeBtn.disabled=false; downloadBtn.disabled=false; shutter.style.pointerEvents='';
 }
 shutter.addEventListener('click',takeSequence);
+
 retakeBtn.addEventListener('click',()=>{
   captures=[null,null,null];
-  thumbs.forEach((t,i)=> t.innerHTML=`<span style="opacity:.4;color:var(--text)">${i+1}</span>`);
+  thumbs.forEach((t,i)=> t.innerHTML=`<span style="opacity:.4;color:var(--accent)">${i+1}</span>`);
   downloadBtn.disabled=true;
 });
 
 uploadBtn.addEventListener('click',()=>fileInput.click());
-
 fileInput.addEventListener('change',async(e)=>{
   const files=[...e.target.files].slice(0,3);
-  if(files.length<3){
-    alert('กรุณาเลือก 3 รูป');
-    return;
-  }
+  if(files.length<3){alert('กรุณาเลือก 3 รูป');return;}
   captures=[null,null,null];
   for(let i=0;i<3;i++){
-    const file=files[i];
-    const reader=new FileReader();
+    const file=files[i]; const reader=new FileReader();
     await new Promise((res,rej)=>{
-      reader.onload=()=>{
-        captures[i]=reader.result;
-        thumbs[i].innerHTML=`<img src="${reader.result}" alt="uploaded ${i+1}">`;
-        res();
-      };
-      reader.onerror=rej;
-      reader.readAsDataURL(file);
+      reader.onload=()=>{captures[i]=reader.result; thumbs[i].innerHTML=`<img src="${reader.result}" alt="uploaded ${i+1}">`; res();};
+      reader.onerror=rej; reader.readAsDataURL(file);
     });
   }
-  retakeBtn.disabled=false;
-  downloadBtn.disabled=false;
+  retakeBtn.disabled=false; downloadBtn.disabled=false;
+});
+
+themeBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    themeBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    theme=btn.dataset.theme;
+  });
 });
 
 downloadBtn.addEventListener('click',async()=>{
@@ -235,25 +227,19 @@ downloadBtn.addEventListener('click',async()=>{
   const W=1200,H=1800;
   const c=document.createElement('canvas'); c.width=W; c.height=H;
   const ctx=c.getContext('2d');
-  ctx.fillStyle='#fffdf8'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#f5f2e9'; ctx.fillRect(0,0,W,H);
 
-  // ⭐ กรอบสีสุ่ม crayon
-  function drawBorder(x,y,w,h,color){
-    ctx.strokeStyle=color;
-    ctx.lineWidth=12;
-    ctx.setLineDash([15,8]);
-    ctx.strokeRect(x,y,w,h);
-    ctx.setLineDash([]);
-  }
+  // draw frame style
+  ctx.strokeStyle=theme==="clover"?"#3ba776":theme==="pastel"?"#8ba6d8":"#d98e5f";
+  ctx.lineWidth=20; ctx.strokeRect(40,40,W-80,H-80);
 
-  ctx.fillStyle=varColors(); 
-  ctx.font='72px "Patrick Hand"';
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('SENA BOOTH', W/2, 80);
+  ctx.fillStyle='#8ba6d8'; 
+  ctx.font='64px Poppins'; ctx.textAlign='center';
+  ctx.fillText('sena booth', W/2, 110);
 
-  const marginX=100, gap=36, topY=160;
+  const marginX=100, gap=40, topY=160;
   const innerW=W - marginX*2;
-  const availableH = H - topY - 140;
+  const availableH = H - topY - 160;
   const boxH = Math.floor((availableH - gap*2)/3);
   const boxW = innerW;
 
@@ -265,24 +251,19 @@ downloadBtn.addEventListener('click',async()=>{
     const dx=marginX + (boxW - iw)/2;
     const dy=y + (boxH - ih)/2;
     ctx.save();
-    ctx.filter='contrast(105%) brightness(105%) saturate(110%)';
+    if(theme==="retro") ctx.filter='sepia(0.6) contrast(1.1)';
+    if(theme==="pastel") ctx.filter='brightness(1.05) saturate(0.9)';
     ctx.drawImage(img,dx,dy,iw,ih);
     ctx.restore();
-    drawBorder(dx-8,dy-8,iw+16,ih+16,varColors());
   }
 
-  ctx.fillStyle='#333';
-  ctx.font='28px "Patrick Hand"';
-  ctx.fillText('@saphasena68', W/2, H-50);
+  ctx.fillStyle='#8ba6d8';
+  ctx.font='24px Poppins'; ctx.fillText('@sena booth', W/2, H-50);
 
   const a=document.createElement('a');
   a.href=c.toDataURL('image/png');
-  a.download='Sena_booth_3shots.png';
+  a.download='sena_booth.png';
   a.click();
-
-  function varColors(){
-    return ['tomato','#ffe066','#a5d8ff','#ffafcc','#cdb4db'][Math.floor(Math.random()*5)];
-  }
 });
 })();
 </script>

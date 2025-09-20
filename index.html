@@ -5,103 +5,87 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sena Photobooth</title>
 
-<!-- ฟอนต์สวยยาว (Great Vibes) -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<!-- ฟอนต์ใหม่: Dancing Script + Quicksand -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@500&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#fdf6ec;        /* ครีม */
-  --green:#9ccbaa;     /* เขียวพาสเทล */
-  --blue:#cbe8ff;      /* ฟ้า */
-  --pink:#ffd6e8;      /* ชมพู */
-  --yellow:#fff6b7;    /* เหลือง */
+  --bg:#fdf6ec;       /* ครีม */
+  --green:#a8d5ba;    /* เขียวพาสเทล */
+  --blue:#cbe8ff;     /* ฟ้า */
+  --pink:#ffd6e8;     /* ชมพู */
+  --yellow:#fff6b7;   /* เหลือง */
   --text:#444b6e;
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 html,body{
   height:100%;margin:0;
   background:var(--bg);
-  font-family:"Great Vibes",cursive;
+  font-family:"Quicksand",sans-serif;
   display:flex;align-items:center;justify-content:center;padding:18px;
 }
 .container{
   width:100%;max-width:960px;
   background:var(--bg);
-  border-radius:20px;
-  box-shadow:0 12px 30px rgba(0,0,0,0.12);
+  border-radius:16px;
+  border:4px solid var(--green);
   padding:18px;
-  border:6px solid var(--green);
   position:relative;
-  overflow:hidden;
 }
 .header{text-align:center;margin-bottom:20px;}
 .header .brand{
-  font-weight:400;font-size:64px;color:var(--text);
-  text-shadow:2px 2px 0 var(--pink);
+  font-family:"Dancing Script",cursive;
+  font-size:64px;color:var(--text);
 }
 .main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
 .camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .preview{
-  width:100%;border-radius:20px;overflow:hidden;
-  background:var(--muted);border:6px solid var(--blue);
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  width:100%;border-radius:12px;overflow:hidden;
+  background:#fff;border:3px solid var(--blue);
   position:relative;aspect-ratio:3/4;
 }
 #video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
 .countdown{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:4.2rem;color:var(--pink);text-shadow:0 4px 12px rgba(0,0,0,0.3);
+  font-size:4rem;color:var(--pink);
   pointer-events:none;
 }
 .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.18s}
 .flash.show{opacity:0.85}
 .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .btn{
-  padding:10px 14px;border-radius:14px;border:2px solid var(--green);
-  background:var(--pink);color:var(--text);font-weight:700;cursor:pointer;
-  box-shadow:0 4px 10px rgba(16,24,40,0.05);transition:all 0.2s ease;
-  font-family:sans-serif;
+  padding:8px 14px;border-radius:10px;border:2px solid var(--green);
+  background:var(--pink);color:var(--text);font-weight:600;cursor:pointer;
+  font-family:"Quicksand",sans-serif;font-size:14px;
 }
-.btn:hover:not(:disabled){background:var(--yellow);color:#444;}
+.btn:hover:not(:disabled){background:var(--yellow);}
 .btn:disabled{opacity:0.55;cursor:not-allowed}
 .shutter{
-  width:84px;height:84px;border-radius:50%;background:#fff;border:6px solid var(--pink);
-  box-shadow:0 10px 20px rgba(0,0,0,0.12);
+  width:72px;height:72px;border-radius:50%;background:#fff;border:4px solid var(--pink);
   display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
-  transition:all 0.2s;
 }
 .shutter:hover{background:var(--yellow);}
-.gallery{width:300px;min-width:260px;flex:0 0 300px;display:flex;flex-direction:column;gap:12px;align-items:center;}
+.gallery{width:280px;min-width:240px;flex:0 0 280px;display:flex;flex-direction:column;gap:12px;align-items:center;}
 .thumbs{display:flex;gap:8px;width:100%;justify-content:space-between}
 .thumb{
-  width:32%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:#fff;
-  border:3px solid var(--green);display:flex;align-items:center;justify-content:center;
+  width:32%;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:#fff;
+  border:2px solid var(--green);display:flex;align-items:center;justify-content:center;
 }
-.thumb img{width:100%;height:100%;object-fit:cover;border-radius:12px;}
-@media(min-width:900px){
-  .camera-wrap{flex:1 1 60%}
-  .gallery{flex:0 0 36%;}
-}
-.note{font-family:sans-serif;font-size:14px;color:var(--text);text-align:center;margin-top:6px}
+.thumb img{width:100%;height:100%;object-fit:cover;border-radius:8px;}
+.note{font-size:13px;color:var(--text);text-align:center;margin-top:6px}
 
-/* ⭐ ดาวตกแต่ง (4 แฉก) */
+/* ⭐ ดาว 4 แฉก */
 .star {
   position:absolute;
-  width:10px;height:10px;
-  background:transparent;
-  box-shadow:0 0 12px rgba(0,0,0,0.1);
+  width:10px;height:10px;color:var(--blue);
 }
 .star::before, .star::after{
   content:"";position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);
-  background:inherit;
+  background:currentColor;
 }
-.star::before{
-  width:2px;height:14px;background:currentColor;
-}
-.star::after{
-  width:14px;height:2px;background:currentColor;
-}
+.star::before{width:2px;height:14px;}
+.star::after{width:14px;height:2px;}
 </style>
 </head>
 <body>
@@ -127,7 +111,7 @@ html,body{
     </div>
 
     <div class="gallery" aria-live="polite">
-      <div style="font-weight:700;color:var(--text);font-family:sans-serif">ตัวอย่าง 3 ภาพ</div>
+      <div style="font-weight:700;color:var(--text);font-family:'Quicksand',sans-serif">ตัวอย่าง 3 ภาพ</div>
       <div class="thumbs" id="thumbs">
         <div class="thumb" id="t1"><span style="opacity:.4;color:var(--text)">1</span></div>
         <div class="thumb" id="t2"><span style="opacity:.4;color:var(--text)">2</span></div>
@@ -155,11 +139,6 @@ const thumbs=[document.getElementById('t1'),document.getElementById('t2'),docume
 
 let stream=null,useFront=true,captures=[null,null,null];
 
-if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-  alert('เบราว์เซอร์นี้ไม่รองรับการเปิดกล้อง');
-  throw new Error('getUserMedia not supported');
-}
-
 async function startCamera(){
   if(stream){stream.getTracks().forEach(t=>t.stop()); stream=null;}
   try{
@@ -168,8 +147,6 @@ async function startCamera(){
     video.srcObject=stream; await video.play();
   }catch(e){
     console.error('Camera error:', e);
-    alert('ไม่สามารถเปิดกล้องได้:\n'+e.name+' - '+e.message+
-          '\n\nต้องรันบน HTTPS หรือ localhost และอนุญาตกล้อง');
   }
 }
 await startCamera();
@@ -238,17 +215,17 @@ fileInput.addEventListener('change',async(e)=>{
     });
   }
   retakeBtn.disabled=false;
-  downloadBtn.disabled=false; // ✅
+  downloadBtn.disabled=false;
 });
 
 downloadBtn.addEventListener('click',async()=>{
   if(!captures[0]) return alert('ยังไม่ได้ถ่าย/อัปโหลดรูป');
-  const W=1200,H=1800;
+  const W=1600,H=2400;  // ✅ ขยายใหญ่ขึ้น
   const c=document.createElement('canvas'); c.width=W; c.height=H;
   const ctx=c.getContext('2d');
-  ctx.fillStyle='#fff9f3'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#fffdf9'; ctx.fillRect(0,0,W,H);
 
-  // ⭐ วาดดาว 4 แฉกหลาย ๆ ดวง
+  // ⭐ ดาว 4 แฉกหลาย ๆ ดวง
   function drawStar(x,y,size,color){
     ctx.save();
     ctx.translate(x,y);
@@ -260,19 +237,19 @@ downloadBtn.addEventListener('click',async()=>{
     ctx.stroke();
     ctx.restore();
   }
-  for(let i=0;i<80;i++){
+  for(let i=0;i<100;i++){
     drawStar(Math.random()*W,Math.random()*H,4+Math.random()*8,
-      ['#ffd6e8','#9ccbaa','#cbe8ff'][Math.floor(Math.random()*3)]);
+      ['#ffd6e8','#a8d5ba','#cbe8ff'][Math.floor(Math.random()*3)]);
   }
 
   ctx.fillStyle='#355c7d'; 
-  ctx.font='92px "Great Vibes"';
+  ctx.font='100px "Dancing Script"';
   ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('Sena Photobooth', W/2, 100);
+  ctx.fillText('Sena Photobooth', W/2, 120);
 
-  const marginX=80, gap=36, topY=180;
+  const marginX=100, gap=40, topY=200;
   const innerW=W - marginX*2;
-  const availableH = H - topY - 140;
+  const availableH = H - topY - 200;
   const boxH = Math.floor((availableH - gap*2)/3);
   const boxW = innerW;
 
@@ -289,8 +266,8 @@ downloadBtn.addEventListener('click',async()=>{
   }
 
   ctx.fillStyle='#355c7d';
-  ctx.font='36px "Great Vibes"';
-  ctx.fillText('@saphasena68', W/2, H-50);
+  ctx.font='34px "Quicksand"';
+  ctx.fillText('@saphasena68', W/2, H-60);
 
   const a=document.createElement('a');
   a.href=c.toDataURL('image/png');

@@ -34,12 +34,19 @@ html,body{
   font-size:64px;font-weight:700;color:var(--text);
   text-transform:uppercase;position:relative;z-index:1;
 }
-/* ดาว 8 แฉก */
+/* ดาว 8 แฉก (ขยายครอบข้อความทั้งหมด) */
 .starburst{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:180px;height:180px;
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:820px;   /* กว้างขึ้นครอบข้อความ */
+  height:220px;  /* สูงพอครอบตัวอักษร */
   background:var(--blue);
-  clip-path:polygon(50% 0%,61% 20%,80% 20%,65% 35%,70% 50%,65% 65%,80% 80%,61% 80%,50% 100%,39% 80%,20% 80%,35% 65%,30% 50%,35% 35%,20% 20%,39% 20%);
+  clip-path:polygon(
+    50% 0%,61% 20%,80% 20%,65% 35%,70% 50%,
+    65% 65%,80% 80%,61% 80%,50% 100%,39% 80%,
+    20% 80%,35% 65%,30% 50%,35% 35%,20% 20%,39% 20%
+  );
   z-index:0;opacity:0.6;
 }
 .main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
@@ -211,7 +218,7 @@ async function buildImage(){
     ctx.beginPath(); for(let i=0;i<16;i++){let angle=i*Math.PI/8; let radius=(i%2==0)?r:r/2; ctx.lineTo(Math.cos(angle)*radius,Math.sin(angle)*radius);}
     ctx.closePath(); ctx.fill(); ctx.restore();
   }
-  drawStarburst(ctx,W/2,120,120);
+  drawStarburst(ctx,W/2,120,420);
   ctx.fillStyle='#ffffff'; ctx.font='72px Quicksand'; ctx.textAlign='center'; ctx.fillText('SENA PHOTOBOOTH',W/2,140);
 
   // 3 ภาพ

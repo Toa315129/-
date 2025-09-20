@@ -31,23 +31,19 @@ html,body{
 }
 .header{text-align:center;margin-bottom:20px;position:relative;}
 .brand{
-  font-size:64px;font-weight:700;color:var(--text);
+  font-size:64px;font-weight:700;color:#fff;
   text-transform:uppercase;position:relative;z-index:1;
 }
-/* ดาว 8 แฉก (ขยายครอบข้อความทั้งหมด) */
+/* ดาว Starburst ครอบข้อความ */
 .starburst{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:820px;   /* กว้างขึ้นครอบข้อความ */
-  height:220px;  /* สูงพอครอบตัวอักษร */
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:820px;height:220px;
   background:var(--blue);
   clip-path:polygon(
-    50% 0%,61% 20%,80% 20%,65% 35%,70% 50%,
-    65% 65%,80% 80%,61% 80%,50% 100%,39% 80%,
-    20% 80%,35% 65%,30% 50%,35% 35%,20% 20%,39% 20%
+    50% 0%,61% 12%,75% 12%,68% 25%,80% 35%,68% 45%,75% 60%,61% 60%,
+    50% 100%,39% 60%,25% 60%,32% 45%,20% 35%,32% 25%,25% 12%,39% 12%
   );
-  z-index:0;opacity:0.6;
+  z-index:0;
 }
 .main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
 .camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
@@ -211,14 +207,15 @@ async function buildImage(){
   }
   for(let i=0;i<50;i++) drawStar(Math.random()*W,Math.random()*H,8+Math.random()*10,['#ffd6e8','#90c9a7','#a7d8f7','#fff6b7'][Math.floor(Math.random()*4)]);
 
-  // หัวข้อ + ดาว 8 แฉก
-  function drawStarburst(ctx,cx,cy,r){
+  // หัวข้อ + ดาว Starburst 16 แฉก
+  function drawStarburst(ctx,cx,cy,rX,rY){
     ctx.save(); ctx.translate(cx,cy);
     ctx.fillStyle='#a7d8f7';
-    ctx.beginPath(); for(let i=0;i<16;i++){let angle=i*Math.PI/8; let radius=(i%2==0)?r:r/2; ctx.lineTo(Math.cos(angle)*radius,Math.sin(angle)*radius);}
+    ctx.beginPath();
+    for(let i=0;i<32;i++){let angle=i*(Math.PI/16); let radius=(i%2==0)?rX:rY; ctx.lineTo(Math.cos(angle)*radius,Math.sin(angle)*radius);}
     ctx.closePath(); ctx.fill(); ctx.restore();
   }
-  drawStarburst(ctx,W/2,120,420);
+  drawStarburst(ctx,W/2,120,400,120);
   ctx.fillStyle='#ffffff'; ctx.font='72px Quicksand'; ctx.textAlign='center'; ctx.fillText('SENA PHOTOBOOTH',W/2,140);
 
   // 3 ภาพ

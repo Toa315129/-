@@ -1,4 +1,4 @@
-<!doctype html>
+<<!doctype html>
 <html lang="th">
 <head>
 <meta charset="utf-8">
@@ -32,31 +32,14 @@ html,body{
 .header{text-align:center;margin-bottom:20px;position:relative;}
 .brand-box{
   display:inline-block;
-  padding:12px 24px;
+  padding:12px 20px;
   background:var(--blue);
   border-radius:8px;
 }
 .brand{
-  font-size:64px;font-weight:700;
-  color:#fff;
+  font-size:64px;font-weight:700;color:#fff;
   text-transform:uppercase;
 }
-
-/* ดาวตกแต่ง */
-.star{
-  position:absolute;
-  width:14px;height:14px;
-  background:var(--pink);
-  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-  opacity:0.8;
-}
-.star:nth-child(1){top:20px;left:20px;}
-.star:nth-child(2){top:60px;right:40px;}
-.star:nth-child(3){bottom:30px;left:60px;}
-.star:nth-child(4){bottom:40px;right:20px;}
-.star:nth-child(5){top:50%;left:-10px;}
-.star:nth-child(6){top:50%;right:-10px;}
-
 .main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
 .camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .preview{
@@ -99,16 +82,7 @@ html,body{
 <body>
 <div class="container">
   <div class="header">
-    <div class="brand-box">
-      <div class="brand">SENA PHOTOBOOTH</div>
-    </div>
-    <!-- ดาวตกแต่ง -->
-    <div class="star"></div>
-    <div class="star"></div>
-    <div class="star"></div>
-    <div class="star"></div>
-    <div class="star"></div>
-    <div class="star"></div>
+    <div class="brand-box"><div class="brand">SENA PHOTOBOOTH</div></div>
   </div>
 
   <div class="main">
@@ -216,7 +190,7 @@ async function buildImage(){
   const W=1600,H=2400; const c=document.createElement('canvas'); c.width=W; c.height=H; const ctx=c.getContext('2d');
   ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,W,H);
 
-  // ดาวตกแต่งรอบกรอบ
+  // ⭐ ดาวสุ่มรอบกรอบ
   function drawStar(x,y,r,color){
     ctx.fillStyle=color; ctx.beginPath();
     for(let i=0;i<5;i++){
@@ -227,14 +201,9 @@ async function buildImage(){
   }
   for(let i=0;i<50;i++) drawStar(Math.random()*W,Math.random()*H,8+Math.random()*10,['#ffd6e8','#90c9a7','#a7d8f7','#fff6b7'][Math.floor(Math.random()*4)]);
 
-  // กรอบข้อความ
-  ctx.fillStyle='#a7d8f7';
-  ctx.fillRect(W/2-400,60,800,120);
-  ctx.fillStyle='#fff';
-  ctx.font='72px Quicksand';
-  ctx.textAlign='center';
-  ctx.textBaseline='middle';
-  ctx.fillText('SENA PHOTOBOOTH',W/2,120);
+  // หัวข้อ (กรอบข้อความ)
+  ctx.fillStyle='#a7d8f7'; ctx.fillRect(W/2-500,60,1000,100);
+  ctx.fillStyle='#ffffff'; ctx.font='72px Quicksand'; ctx.textAlign='center'; ctx.fillText('SENA PHOTOBOOTH',W/2,130);
 
   // 3 ภาพ
   const marginX=80, gap=36, topY=240; const innerW=W-marginX*2; const availableH=H-topY-140; const boxH=Math.floor((availableH-gap*2)/3); const boxW=innerW;
@@ -246,7 +215,18 @@ async function buildImage(){
 
 downloadBtn.addEventListener('click',async()=>{if(!captures[0]) return alert('ยังไม่ได้ถ่าย/อัปโหลดรูป');finalImage=await buildImage();const a=document.createElement('a');a.href=finalImage;a.download='Sena_booth.png';a.click();});
 
-qrBtn.addEventListener('click',async()=>{if(!captures[0]) return;finalImage=await buildImage();document.getElementById('qrcode').innerHTML='';new QRCode(document.getElementById('qrcode'),{text:finalImage,width:200,height:200});});
+// ✅ QR แก้ให้ทำงานด้วย Blob URL
+qrBtn.addEventListener('click',async()=>{
+  if(!captures[0]) return;
+  finalImage=await buildImage();
+  fetch(finalImage)
+    .then(res=>res.blob())
+    .then(blob=>{
+      const url=URL.createObjectURL(blob);
+      document.getElementById('qrcode').innerHTML='';
+      new QRCode(document.getElementById('qrcode'),{text:url,width:200,height:200});
+    });
+});
 })();
 </script>
 </body>

@@ -5,49 +5,49 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sena Photobooth</title>
 
-<!-- ฟอนต์ใหม่: Dancing Script + Quicksand -->
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#fdf6ec;       /* ครีม */
-  --green:#a8d5ba;    /* เขียวพาสเทล */
-  --blue:#cbe8ff;     /* ฟ้า */
-  --pink:#ffd6e8;     /* ชมพู */
-  --yellow:#fff6b7;   /* เหลือง */
-  --text:#444b6e;
+  --bg:#fdf8f3; /* ครีม */
+  --green:#7ecf8a; /* เขียวพาสเทล */
+  --blue:#bfe5ff; 
+  --pink:#ffd6e8;
+  --yellow:#fff6b7;
+  --text:#2f2f2f;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
 html,body{
   height:100%;margin:0;
   background:var(--bg);
-  font-family:"Quicksand",sans-serif;
+  font-family:"Quicksand", sans-serif;
   display:flex;align-items:center;justify-content:center;padding:18px;
 }
 .container{
   width:100%;max-width:960px;
-  background:var(--bg);
-  border-radius:16px;
-  border:4px solid var(--green);
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.08);
   padding:18px;
   position:relative;
 }
 .header{text-align:center;margin-bottom:20px;}
 .header .brand{
-  font-family:"Dancing Script",cursive;
-  font-size:64px;color:var(--text);
+  font-weight:700;font-size:48px;
+  color:var(--text);
+  letter-spacing:2px;
 }
 .main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
 .camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .preview{
-  width:100%;border-radius:12px;overflow:hidden;
-  background:#fff;border:3px solid var(--blue);
+  width:100%;border-radius:14px;overflow:hidden;
+  background:#fff;border:3px solid var(--green);
   position:relative;aspect-ratio:3/4;
 }
 #video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
 .countdown{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:4rem;color:var(--pink);
+  font-size:3.5rem;color:var(--pink);text-shadow:0 2px 6px rgba(0,0,0,0.25);
   pointer-events:none;
 }
 .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.18s}
@@ -55,42 +55,51 @@ html,body{
 .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .btn{
   padding:8px 14px;border-radius:10px;border:2px solid var(--green);
-  background:var(--pink);color:var(--text);font-weight:600;cursor:pointer;
-  font-family:"Quicksand",sans-serif;font-size:14px;
+  background:var(--blue);color:var(--text);font-weight:600;cursor:pointer;
+  box-shadow:0 3px 8px rgba(16,24,40,0.05);transition:all 0.2s ease;
 }
-.btn:hover:not(:disabled){background:var(--yellow);}
+.btn:hover:not(:disabled){background:var(--pink);}
 .btn:disabled{opacity:0.55;cursor:not-allowed}
 .shutter{
-  width:72px;height:72px;border-radius:50%;background:#fff;border:4px solid var(--pink);
+  width:72px;height:72px;border-radius:50%;background:#fff;border:5px solid var(--pink);
+  box-shadow:0 6px 12px rgba(0,0,0,0.1);
   display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
 }
-.shutter:hover{background:var(--yellow);}
 .gallery{width:280px;min-width:240px;flex:0 0 280px;display:flex;flex-direction:column;gap:12px;align-items:center;}
-.thumbs{display:flex;gap:8px;width:100%;justify-content:space-between}
+.thumbs{display:flex;gap:6px;width:100%;justify-content:space-between}
 .thumb{
   width:32%;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:#fff;
   border:2px solid var(--green);display:flex;align-items:center;justify-content:center;
 }
 .thumb img{width:100%;height:100%;object-fit:cover;border-radius:8px;}
-.note{font-size:13px;color:var(--text);text-align:center;margin-top:6px}
-
-/* ⭐ ดาว 4 แฉก */
-.star {
-  position:absolute;
-  width:10px;height:10px;color:var(--blue);
+@media(min-width:900px){
+  .camera-wrap{flex:1 1 60%}
+  .gallery{flex:0 0 36%;}
 }
-.star::before, .star::after{
-  content:"";position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);
+.note{font-size:13px;color:var(--text);text-align:center;margin-top:4px}
+
+/* ดาว 4 แฉก */
+.star4{
+  position:absolute;width:14px;height:14px;background:transparent;
+}
+.star4:before, .star4:after{
+  content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   background:currentColor;
 }
-.star::before{width:2px;height:14px;}
-.star::after{width:14px;height:2px;}
+.star4:before{width:2px;height:100%;}
+.star4:after{width:100%;height:2px;}
+#qrModal{
+  position:fixed;inset:0;background:rgba(0,0,0,0.5);
+  display:none;align-items:center;justify-content:center;
+}
+#qrBox{
+  background:#fff;padding:20px;border-radius:12px;text-align:center;
+}
 </style>
 </head>
 <body>
 <div class="container" role="application" aria-label="SENA Photobooth">
-  <div class="header"><div class="brand">Sena Photobooth</div></div>
+  <div class="header"><div class="brand">SENA PHOTOBOOTH</div></div>
   <div class="main">
     <div class="camera-wrap">
       <div class="preview" id="preview">
@@ -105,24 +114,33 @@ html,body{
         <button class="btn" id="switch">สลับกล้อง</button>
         <button class="btn" id="upload">อัปโหลด</button>
         <button class="btn" id="download" disabled>ดาวน์โหลด</button>
+        <button class="btn" id="genQR" disabled>Generate QR</button>
         <input type="file" id="fileInput" accept="image/*" multiple hidden>
       </div>
-      <div class="note">กดชัตเตอร์ครั้งเดียว → ถ่าย 3 ช็อต (3 วินาที) หรืออัปโหลด 3 รูป</div>
+      <div class="note">กดชัตเตอร์ครั้งเดียว → ถ่าย 3 ช็อต หรืออัปโหลด 3 รูป</div>
     </div>
 
     <div class="gallery" aria-live="polite">
-      <div style="font-weight:700;color:var(--text);font-family:'Quicksand',sans-serif">ตัวอย่าง 3 ภาพ</div>
+      <div style="font-weight:700;color:var(--text);">ตัวอย่าง 3 ภาพ</div>
       <div class="thumbs" id="thumbs">
-        <div class="thumb" id="t1"><span style="opacity:.4;color:var(--text)">1</span></div>
-        <div class="thumb" id="t2"><span style="opacity:.4;color:var(--text)">2</span></div>
-        <div class="thumb" id="t3"><span style="opacity:.4;color:var(--text)">3</span></div>
+        <div class="thumb" id="t1"><span style="opacity:.4">1</span></div>
+        <div class="thumb" id="t2"><span style="opacity:.4">2</span></div>
+        <div class="thumb" id="t3"><span style="opacity:.4">3</span></div>
       </div>
     </div>
   </div>
 </div>
 
+<div id="qrModal">
+  <div id="qrBox">
+    <div id="qrCode"></div>
+    <button class="btn" onclick="closeQR()">ปิด</button>
+  </div>
+</div>
+
 <audio id="snap" src="https://cdn.jsdelivr.net/gh/naptha/talkdemo/snap.mp3" preload="auto"></audio>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
 (async()=>{
 const video=document.getElementById('video');
@@ -136,8 +154,8 @@ const countdownEl=document.getElementById('countdown');
 const flash=document.getElementById('flash');
 const snap=document.getElementById('snap');
 const thumbs=[document.getElementById('t1'),document.getElementById('t2'),document.getElementById('t3')];
-
-let stream=null,useFront=true,captures=[null,null,null];
+const genQRBtn=document.getElementById('genQR');
+let stream=null,useFront=true,captures=[null,null,null],finalImage=null;
 
 async function startCamera(){
   if(stream){stream.getTracks().forEach(t=>t.stop()); stream=null;}
@@ -145,12 +163,9 @@ async function startCamera(){
     stream=await navigator.mediaDevices.getUserMedia({
       video:{facingMode:useFront?'user':'environment'},audio:false});
     video.srcObject=stream; await video.play();
-  }catch(e){
-    console.error('Camera error:', e);
-  }
+  }catch(e){alert('ไม่สามารถเปิดกล้องได้:'+e.message);}
 }
 await startCamera();
-
 switchBtn.addEventListener('click',async()=>{useFront=!useFront;await startCamera();});
 
 function captureFrame(){
@@ -161,120 +176,99 @@ function captureFrame(){
   ctx.drawImage(video,0,0,vw,vh);
   return c.toDataURL('image/png');
 }
-
 function showCount(num){countdownEl.textContent=num;}
 function hideCount(){countdownEl.textContent='';}
-function doFlash(){
-  snap.currentTime=0; snap.play().catch(()=>{});
-  flash.classList.add('show');
-  setTimeout(()=>flash.classList.remove('show'),170);
-}
+function doFlash(){snap.play().catch(()=>{});flash.classList.add('show');setTimeout(()=>flash.classList.remove('show'),170);}
 function loadImage(src){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
 
 async function takeSequence(){
   captures=[null,null,null];
-  thumbs.forEach((t,i)=> t.innerHTML=`<span style="opacity:.4;color:var(--text)">${i+1}</span>`);
-  retakeBtn.disabled=true; downloadBtn.disabled=true; shutter.style.pointerEvents='none';
+  thumbs.forEach((t,i)=>t.innerHTML=`<span style="opacity:.4">${i+1}</span>`);
+  retakeBtn.disabled=true; downloadBtn.disabled=true; genQRBtn.disabled=true;
+  shutter.style.pointerEvents='none';
   for(let i=0;i<3;i++){
     for(let s=3;s>=1;s--){showCount(s);await new Promise(r=>setTimeout(r,1000));}
     hideCount(); doFlash();
-    const data=captureFrame();
-    captures[i]=data;
+    const data=captureFrame(); captures[i]=data;
     thumbs[i].innerHTML=`<img src="${data}" alt="shot ${i+1}">`;
     if(i<2) await new Promise(r=>setTimeout(r,1000));
   }
-  retakeBtn.disabled=false; downloadBtn.disabled=false; shutter.style.pointerEvents='';
+  retakeBtn.disabled=false; downloadBtn.disabled=false; genQRBtn.disabled=false; shutter.style.pointerEvents='';
 }
 shutter.addEventListener('click',takeSequence);
-retakeBtn.addEventListener('click',()=>{
-  captures=[null,null,null];
-  thumbs.forEach((t,i)=> t.innerHTML=`<span style="opacity:.4;color:var(--text)">${i+1}</span>`);
-  downloadBtn.disabled=true;
-});
+retakeBtn.addEventListener('click',()=>{captures=[null,null,null];thumbs.forEach((t,i)=>t.innerHTML=`<span style="opacity:.4">${i+1}</span>`);downloadBtn.disabled=true;genQRBtn.disabled=true;});
 
 uploadBtn.addEventListener('click',()=>fileInput.click());
-
 fileInput.addEventListener('change',async(e)=>{
   const files=[...e.target.files].slice(0,3);
-  if(files.length<3){
-    alert('กรุณาเลือก 3 รูป');
-    return;
-  }
+  if(files.length<3){alert('กรุณาเลือก 3 รูป');return;}
   captures=[null,null,null];
   for(let i=0;i<3;i++){
-    const file=files[i];
-    const reader=new FileReader();
+    const file=files[i],reader=new FileReader();
     await new Promise((res,rej)=>{
-      reader.onload=()=>{
-        captures[i]=reader.result;
-        thumbs[i].innerHTML=`<img src="${reader.result}" alt="uploaded ${i+1}">`;
-        res();
-      };
-      reader.onerror=rej;
-      reader.readAsDataURL(file);
+      reader.onload=()=>{captures[i]=reader.result;thumbs[i].innerHTML=`<img src="${reader.result}" alt="uploaded ${i+1}">`;res();};
+      reader.onerror=rej; reader.readAsDataURL(file);
     });
   }
-  retakeBtn.disabled=false;
-  downloadBtn.disabled=false;
+  retakeBtn.disabled=false; downloadBtn.disabled=false; genQRBtn.disabled=false;
 });
 
-downloadBtn.addEventListener('click',async()=>{
+downloadBtn.addEventListener('click',()=>buildImage(true));
+genQRBtn.addEventListener('click',()=>buildImage(false,true));
+
+async function buildImage(download=false,makeQR=false){
   if(!captures[0]) return alert('ยังไม่ได้ถ่าย/อัปโหลดรูป');
-  const W=1600,H=2400;  // ✅ ขยายใหญ่ขึ้น
+  const W=1600,H=2400;
   const c=document.createElement('canvas'); c.width=W; c.height=H;
   const ctx=c.getContext('2d');
   ctx.fillStyle='#fffdf9'; ctx.fillRect(0,0,W,H);
 
-  // ⭐ ดาว 4 แฉกหลาย ๆ ดวง
-  function drawStar(x,y,size,color){
-    ctx.save();
-    ctx.translate(x,y);
-    ctx.strokeStyle=color;
-    ctx.lineWidth=2;
-    ctx.beginPath();
-    ctx.moveTo(-size,0); ctx.lineTo(size,0);
-    ctx.moveTo(0,-size); ctx.lineTo(0,size);
-    ctx.stroke();
-    ctx.restore();
-  }
-  for(let i=0;i<100;i++){
-    drawStar(Math.random()*W,Math.random()*H,4+Math.random()*8,
-      ['#ffd6e8','#a8d5ba','#cbe8ff'][Math.floor(Math.random()*3)]);
-  }
+  ctx.fillStyle='#2f2f2f'; ctx.font='80px Quicksand'; ctx.textAlign='center';
+  ctx.fillText('SENA PHOTOBOOTH',W/2,120);
 
-  ctx.fillStyle='#355c7d'; 
-  ctx.font='100px "Dancing Script"';
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('Sena Photobooth', W/2, 120);
-
-  const marginX=100, gap=40, topY=200;
-  const innerW=W - marginX*2;
-  const availableH = H - topY - 200;
-  const boxH = Math.floor((availableH - gap*2)/3);
-  const boxW = innerW;
+  const marginX=100, gap=50, topY=200;
+  const innerW=W-marginX*2;
+  const availableH=H-topY-180;
+  const boxH=Math.floor((availableH-gap*2)/3);
+  const boxW=innerW;
 
   for(let i=0;i<3;i++){
-    const y = topY + i*(boxH + gap);
+    const y=topY+i*(boxH+gap);
     const img=await loadImage(captures[i]);
     const scale=Math.min(boxW/img.width, boxH/img.height);
     const iw=img.width*scale, ih=img.height*scale;
-    const dx=marginX + (boxW - iw)/2;
-    const dy=y + (boxH - ih)/2;
-    ctx.save();
+    const dx=marginX+(boxW-iw)/2,dy=y+(boxH-ih)/2;
     ctx.drawImage(img,dx,dy,iw,ih);
-    ctx.restore();
   }
 
-  ctx.fillStyle='#355c7d';
-  ctx.font='34px "Quicksand"';
-  ctx.fillText('@saphasena68', W/2, H-60);
+  // ดาว 4 แฉก
+  function drawStar(x,y,r,color){
+    ctx.save();ctx.strokeStyle=color;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(x-r,y);ctx.lineTo(x+r,y);
+    ctx.moveTo(x,y-r);ctx.lineTo(x,y+r);ctx.stroke();ctx.restore();
+  }
+  for(let i=0;i<50;i++){
+    drawStar(Math.random()*W,Math.random()*H,6+Math.random()*8,
+      ['#ffd6e8','#7ecf8a','#bfe5ff','#fff6b7'][Math.floor(Math.random()*4)]);
+  }
 
-  const a=document.createElement('a');
-  a.href=c.toDataURL('image/png');
-  a.download='Sena_booth_3shots.png';
-  a.click();
-});
+  ctx.fillStyle='#2f2f2f'; ctx.font='32px Quicksand'; ctx.fillText('@saphasena68',W/2,H-50);
+
+  finalImage=c.toDataURL('image/png');
+
+  if(download){
+    const a=document.createElement('a');a.href=finalImage;a.download='Sena_booth.png';a.click();
+  }
+  if(makeQR){
+    document.getElementById('qrModal').style.display='flex';
+    document.getElementById('qrCode').innerHTML='';
+    QRCode.toCanvas(finalImage,{errorCorrectionLevel:'M',scale:6},function(err,canvas){
+      if(!err) document.getElementById('qrCode').appendChild(canvas);
+    });
+  }
+}
 })();
+function closeQR(){document.getElementById('qrModal').style.display='none';}
 </script>
 </body>
 </html>

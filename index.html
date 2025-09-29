@@ -1,233 +1,428 @@
-<<!doctype html>
+<!doctype html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sena Photobooth</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SENA Photobooth — 4x6</title>
 <style>
-:root{
-  --bg:#fdfaf4;      /* ครีม */
-  --green:#90c9a7;   /* เขียวพาสเทล */
-  --blue:#a7d8f7;    /* ฟ้าพาสเทล */
-  --pink:#ffd6e8;
-  --text:#333333;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{
-  height:100%;background:var(--bg);
-  font-family:"Quicksand",sans-serif;
-  display:flex;align-items:center;justify-content:center;padding:18px;
-}
-.container{
-  width:100%;max-width:960px;
-  background:var(--bg);
-  border-radius:18px;
-  padding:18px;
-  border:6px solid var(--green);
-  position:relative;
-}
-.header{text-align:center;margin-bottom:20px;position:relative;}
-.brand-box{
-  display:inline-block;
-  padding:12px 20px;
-  background:var(--blue);
-  border-radius:8px;
-}
-.brand{
-  font-size:64px;font-weight:700;color:#fff;
-  text-transform:uppercase;
-}
-.main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
-.camera-wrap{flex:1 1 360px;min-width:300px;display:flex;flex-direction:column;align-items:center;gap:12px;}
-.preview{
-  width:100%;border-radius:14px;overflow:hidden;
-  background:#fff;border:4px solid var(--blue);
-  aspect-ratio:3/4;position:relative;
-}
-#video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
-.countdown{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:4rem;color:var(--pink);font-weight:700;
-}
-.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.18s}
-.flash.show{opacity:0.85}
-.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
-.btn{
-  padding:10px 14px;border-radius:12px;border:2px solid var(--green);
-  background:var(--blue);color:var(--text);font-weight:600;cursor:pointer;
-  transition:all 0.2s ease;font-family:"Quicksand",sans-serif;
-}
-.btn:hover:not(:disabled){background:var(--green);color:#fff;}
-.btn:disabled{opacity:0.55;cursor:not-allowed}
-.shutter{
-  width:80px;height:80px;border-radius:50%;background:#fff;border:5px solid var(--blue);
-  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
-}
-.shutter:hover{background:var(--pink);}
-.gallery{width:280px;flex:0 0 280px;display:flex;flex-direction:column;gap:12px;align-items:center;}
-.thumbs{display:flex;gap:8px;width:100%;justify-content:space-between}
-.thumb{
-  width:32%;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:#fff;
-  border:3px solid var(--green);display:flex;align-items:center;justify-content:center;
-}
-.thumb img{width:100%;height:100%;object-fit:cover;}
-.note{font-size:14px;color:var(--text);text-align:center;margin-top:6px}
-.qr-wrap{margin-top:10px;text-align:center}
-#qrcode{margin-top:8px}
+  :root{
+    --bg:#0b0b0b; --red:#c21313; --white:#ffffff;
+  }
+  *{box-sizing:border-box;font-family: "Helvetica Neue", Arial, sans-serif}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--white);display:flex;align-items:center;justify-content:center}
+  .app{width:100%;max-width:1100px;padding:20px}
+  .screen{display:none}
+  .screen.active{display:block}
+  /* Landing */
+  .landing{display:flex;flex-direction:column;align-items:center;gap:18px}
+  .logo{font-size:44px;font-weight:800;letter-spacing:2px}
+  .logo .star{color:var(--red);margin-left:6px}
+  .big-btn{background:var(--red);border:none;color:white;padding:16px 36px;border-radius:36px;font-size:20px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,0.5)}
+  .hint{opacity:0.9}
+  /* Booth layout */
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px}
+  .toolbar{display:flex;gap:8px;align-items:center}
+  select,button,input{font-size:16px}
+  .booth-main{display:flex;gap:18px}
+  .left{flex:2}
+  .right{flex:1;max-width:320px}
+  .stage{position:relative;background:#000;border-radius:12px;min-height:480px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  video{width:100%;height:100%;object-fit:cover;display:block}
+  .overlay-svg{position:absolute;inset:0;pointer-events:none}
+  .countdown{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:120px;font-weight:900;color:var(--white);text-shadow:0 4px 14px rgba(0,0,0,0.7);display:none;z-index:40}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;justify-content:center}
+  .control-btn{padding:10px 14px;border-radius:12px;border:none;background:var(--red);color:white;cursor:pointer;font-size:16px}
+  .frame-list{display:flex;flex-wrap:wrap;gap:8px;padding:8px;background:#0f0f0f;border-radius:8px}
+  .frame-thumb{width:72px;height:72px;border-radius:10px;background:#222;display:flex;align-items:center;justify-content:center;cursor:pointer;border:3px solid transparent}
+  .frame-thumb.selected{border-color:var(--red)}
+  .strip-preview{margin-top:12px}
+  .note{font-size:13px;color:#ddd;margin-top:8px}
+  /* modal preview */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:200}
+  .modal.hidden{display:none}
+  .modal-card{background:white;color:#000;padding:18px;border-radius:10px;max-width:90%;max-height:90%;overflow:auto;text-align:center}
+  .modal-card img{max-width:100%;height:auto;border-radius:6px}
+  /* responsive */
+  @media(max-width:900px){
+    .booth-main{flex-direction:column}
+    .right{max-width:100%}
+    .countdown{font-size:96px}
+  }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div class="brand-box"><div class="brand">SENA PHOTOBOOTH</div></div>
-  </div>
+<div class="app">
+  <!-- Landing -->
+  <section id="landing" class="screen active landing">
+    <div class="logo">SENA <span class="star">✦</span> PHOTOBOOTH</div>
+    <button id="startBtn" class="big-btn">เริ่มต้น</button>
+    <div class="hint">รองรับจอทัช — ถ้ากล้องไม่ขึ้น ให้เปิดผ่าน HTTPS หรือรันบน localhost</div>
+  </section>
 
-  <div class="main">
-    <div class="camera-wrap">
-      <div class="preview" id="preview">
-        <video id="video" autoplay playsinline></video>
-        <div class="countdown" id="countdown"></div>
-        <div class="flash" id="flash"></div>
+  <!-- Booth -->
+  <section id="booth" class="screen">
+    <div class="topbar">
+      <div class="toolbar">
+        <label>นับถอยหลัง
+          <select id="timerSel">
+            <option value="3">3 วินาที</option>
+            <option value="5">5 วินาที</option>
+            <option value="10">10 วินาที</option>
+          </select>
+        </label>
+
+        <label>ฟิลเตอร์
+          <select id="filterSel">
+            <option value="none">ไม่มี</option>
+            <option value="grayscale">ขาว-ดำ</option>
+            <option value="sepia">sepia</option>
+          </select>
+        </label>
+
+        <label>จำนวนในสกริป
+          <select id="copiesSel">
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+          </select>
+        </label>
       </div>
 
-      <div class="controls">
-        <div class="shutter" id="shutter" aria-label="Shutter button"></div>
-        <button class="btn" id="retake" disabled>ถ่ายใหม่</button>
-        <button class="btn" id="switch">สลับกล้อง</button>
-        <button class="btn" id="upload">อัปโหลด</button>
-        <button class="btn" id="download" disabled>ดาวน์โหลด</button>
-        <button class="btn" id="makeqr" disabled>สร้าง QR</button>
-        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+      <div>
+        <button id="backBtn" class="control-btn" style="background:#333">กลับ</button>
       </div>
-      <div class="note">กดชัตเตอร์ → ถ่าย 3 ช็อต (3 วินาที) หรืออัปโหลด 3 รูป</div>
-      <div class="qr-wrap"><div id="qrcode"></div></div>
     </div>
 
-    <div class="gallery">
-      <div style="font-weight:700;color:var(--text)">ตัวอย่าง 3 ภาพ</div>
-      <div class="thumbs" id="thumbs">
-        <div class="thumb" id="t1"><span style="opacity:.4">1</span></div>
-        <div class="thumb" id="t2"><span style="opacity:.4">2</span></div>
-        <div class="thumb" id="t3"><span style="opacity:.4">3</span></div>
+    <div class="booth-main">
+      <div class="left">
+        <div class="stage" id="stage">
+          <video id="video" playsinline autoplay muted></video>
+          <!-- SVG overlay styled to match your design: rounded black border + red star elements -->
+          <svg class="overlay-svg" viewBox="0 0 1000 1500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- large rounded black panel at bottom (logo area) -->
+            <rect x="40" y="1150" width="920" height="300" rx="10" fill="#000" />
+            <!-- white logo area in center top of panel -->
+            <text x="500" y="1270" text-anchor="middle" font-size="80" fill="#fff" font-family="Arial" font-weight="800">SENA</text>
+            <text x="600" y="1270" text-anchor="middle" font-size="80" fill="#c00" font-family="Arial" font-weight="800">✦</text>
+            <text x="500" y="1350" text-anchor="middle" font-size="48" fill="#fff" font-family="Arial">PHOTOBOOTH</text>
+            <!-- decorative red stars -->
+            <g fill="#c00">
+              <polygon points="150,300 160,330 190,330 165,350 175,380 150,360 125,380 135,350 110,330 140,330"/>
+              <polygon points="850,600 860,650 900,650 870,675 885,720 850,690 815,720 830,675 800,650 840,650"/>
+              <polygon points="880,1250 900,1290 940,1290 905,1310 920,1350 880,1330 840,1350 855,1310 820,1290 860,1290"/>
+            </g>
+            <!-- outer rounded frame stroke -->
+            <rect x="35" y="35" width="930" height="1430" rx="28" fill="none" stroke="#111" stroke-width="70"/>
+            <!-- inner red frame border (thin) -->
+            <rect x="60" y="60" width="880" height="1380" rx="18" fill="none" stroke="#c21313" stroke-width="24" opacity="0.95"/>
+          </svg>
+
+          <div id="countdown" class="countdown" style="display:none">3</div>
+        </div>
+
+        <div class="controls">
+          <button id="captureBtn" class="control-btn">ถ่าย</button>
+          <button id="retakeBtn" class="control-btn" style="background:#444">ถ่ายใหม่</button>
+          <button id="downloadBtn" class="control-btn">ดาวน์โหลด 4×6</button>
+          <button id="stripBtn" class="control-btn">ดาวน์โหลดสกริป</button>
+          <button id="printBtn" class="control-btn" style="background:#444">พิมพ์</button>
+        </div>
+
+        <div class="note">ไฟล์ดาวน์โหลดแต่ละภาพเป็น PNG ขนาด <strong>1200×1800 px</strong> (4×6 นิ้ว @300 DPI)</div>
       </div>
+
+      <aside class="right">
+        <h3>กรอบตัวอย่าง</h3>
+        <div class="frame-list" id="frameList" aria-hidden="false"></div>
+
+        <div class="strip-preview">
+          <h4>ตัวอย่างสกริป (แนวตั้ง)</h4>
+          <div style="background:#111;padding:10px;border-radius:8px">
+            <div style="width:160px;height:240px;background:#222;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#999">4×6</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<!-- modal preview for quick check -->
+<div id="previewModal" class="modal hidden" style="z-index:300">
+  <div class="modal-card">
+    <h3>ตัวอย่างภาพ</h3>
+    <img id="previewImg" src="" alt="preview">
+    <div style="margin-top:10px">
+      <button id="closePreview" class="control-btn">ปิด</button>
     </div>
   </div>
 </div>
 
-<audio id="snap" src="https://cdn.jsdelivr.net/gh/naptha/talkdemo/snap.mp3" preload="auto"></audio>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 <script>
-(async()=>{
-const video=document.getElementById('video');
-const shutter=document.getElementById('shutter');
-const retakeBtn=document.getElementById('retake');
-const switchBtn=document.getElementById('switch');
-const downloadBtn=document.getElementById('download');
-const uploadBtn=document.getElementById('upload');
-const qrBtn=document.getElementById('makeqr');
-const fileInput=document.getElementById('fileInput');
-const countdownEl=document.getElementById('countdown');
-const flash=document.getElementById('flash');
-const snap=document.getElementById('snap');
-const thumbs=[document.getElementById('t1'),document.getElementById('t2'),document.getElementById('t3')];
-let stream=null,useFront=true,captures=[null,null,null],finalImage=null;
+/* Photobooth single-file app
+ - exports single photo at 1200x1800 px (4x6 @300dpi)
+ - can assemble N copies into a vertical strip and download
+ - basic frames (vector overlay applied visually via SVG overlay already in DOM)
+ - filters: none, grayscale, sepia
+*/
 
-if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-  alert('เบราว์เซอร์นี้ไม่รองรับการเปิดกล้อง');
-  throw new Error('getUserMedia not supported');
-}
-async function startCamera(){
-  if(stream){stream.getTracks().forEach(t=>t.stop()); stream=null;}
-  try{
-    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:useFront?'user':'environment'},audio:false});
-    video.srcObject=stream; await video.play();
-  }catch(e){alert('ไม่สามารถเปิดกล้องได้: '+e.message);}
-}
-await startCamera();
-switchBtn.addEventListener('click',async()=>{useFront=!useFront;await startCamera();});
+const startBtn = document.getElementById('startBtn');
+const backBtn = document.getElementById('backBtn');
+const landing = document.getElementById('landing');
+const booth = document.getElementById('booth');
+const video = document.getElementById('video');
+const countdownEl = document.getElementById('countdown');
+const captureBtn = document.getElementById('captureBtn');
+const retakeBtn = document.getElementById('retakeBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const stripBtn = document.getElementById('stripBtn');
+const printBtn = document.getElementById('printBtn');
+const timerSel = document.getElementById('timerSel');
+const filterSel = document.getElementById('filterSel');
+const copiesSel = document.getElementById('copiesSel');
+const previewModal = document.getElementById('previewModal');
+const previewImg = document.getElementById('previewImg');
+const closePreview = document.getElementById('closePreview');
+const frameList = document.getElementById('frameList');
+const overlaySvg = document.querySelector('.overlay-svg');
 
-function captureFrame(){
-  const vw=video.videoWidth,vh=video.videoHeight;
-  const c=document.createElement('canvas'); c.width=vw; c.height=vh;
-  const ctx=c.getContext('2d'); ctx.translate(c.width,0); ctx.scale(-1,1);
-  ctx.drawImage(video,0,0,vw,vh);
-  return c.toDataURL('image/png');
-}
-function showCount(n){countdownEl.textContent=n;}
-function hideCount(){countdownEl.textContent='';}
-function doFlash(){snap.currentTime=0;snap.play().catch(()=>{});flash.classList.add('show');setTimeout(()=>flash.classList.remove('show'),170);}
-function loadImage(src){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
+let stream = null;
+let lastImageDataUrl = null;
+let selectedFrameId = 'default';
 
-async function takeSequence(){
-  captures=[null,null,null]; thumbs.forEach((t,i)=>t.innerHTML=`<span style="opacity:.4">${i+1}</span>`);
-  retakeBtn.disabled=true; downloadBtn.disabled=true; qrBtn.disabled=true; shutter.style.pointerEvents='none';
-  for(let i=0;i<3;i++){
-    for(let s=3;s>=1;s--){showCount(s);await new Promise(r=>setTimeout(r,1000));}
-    hideCount(); doFlash(); const data=captureFrame();
-    captures[i]=data; thumbs[i].innerHTML=`<img src="${data}">`;
-    if(i<2) await new Promise(r=>setTimeout(r,1000));
+const PHOTO_W = 1200; // px = 4in * 300dpi
+const PHOTO_H = 1800; // px = 6in * 300dpi
+
+// Start camera and show booth
+startBtn.onclick = async () => {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+    video.srcObject = stream;
+    landing.classList.remove('active');
+    booth.classList.add('active');
+  } catch (e) {
+    alert('ไม่สามารถเข้าถึงกล้องได้ — ตรวจสอบสิทธิ์หรือเปิดผ่าน HTTPS/localhost\n\n' + e);
   }
-  retakeBtn.disabled=false; downloadBtn.disabled=false; qrBtn.disabled=false; shutter.style.pointerEvents='';
-}
-shutter.addEventListener('click',takeSequence);
-retakeBtn.addEventListener('click',()=>{captures=[null,null,null];thumbs.forEach((t,i)=>t.innerHTML=`<span style="opacity:.4">${i+1}</span>`);downloadBtn.disabled=true;qrBtn.disabled=true;});
+};
 
-uploadBtn.addEventListener('click',()=>fileInput.click());
-fileInput.addEventListener('change',async(e)=>{
-  const files=[...e.target.files].slice(0,3); if(files.length<3){alert('กรุณาเลือก 3 รูป'); return;}
-  captures=[null,null,null];
-  for(let i=0;i<3;i++){const file=files[i];const reader=new FileReader();
-    await new Promise((res,rej)=>{reader.onload=()=>{captures[i]=reader.result;thumbs[i].innerHTML=`<img src="${reader.result}">`;res();};reader.onerror=rej;reader.readAsDataURL(file);});
+// Back to landing
+backBtn.onclick = () => {
+  stopCamera();
+  booth.classList.remove('active');
+  landing.classList.add('active');
+};
+
+// Stop camera helper
+function stopCamera(){
+  if(stream){
+    stream.getTracks().forEach(t => t.stop());
+    stream = null;
   }
-  retakeBtn.disabled=false;downloadBtn.disabled=false;qrBtn.disabled=false;
-});
+}
 
-async function buildImage(){
-  const W=1600,H=2400; const c=document.createElement('canvas'); c.width=W; c.height=H; const ctx=c.getContext('2d');
-  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,W,H);
+// Helper: sleep
+const wait = ms => new Promise(r => setTimeout(r, ms));
 
-  // ⭐ ดาวสุ่มรอบกรอบ
-  function drawStar(x,y,r,color){
-    ctx.fillStyle=color; ctx.beginPath();
-    for(let i=0;i<5;i++){
-      ctx.lineTo(x+r*Math.cos((18+i*72)*Math.PI/180), y-r*Math.sin((18+i*72)*Math.PI/180));
-      ctx.lineTo(x+r/2*Math.cos((54+i*72)*Math.PI/180), y-r/2*Math.sin((54+i*72)*Math.PI/180));
+// Countdown and capture
+captureBtn.onclick = async () => {
+  const secs = parseInt(timerSel.value || "3", 10);
+  countdownEl.style.display = 'block';
+  for(let i=secs;i>0;i--){
+    countdownEl.textContent = i;
+    await wait(1000);
+  }
+  countdownEl.textContent = 'Smile!';
+  await wait(600);
+  countdownEl.style.display = 'none';
+  capturePhoto();
+};
+
+// Retake hides preview
+retakeBtn.onclick = () => {
+  lastImageDataUrl = null;
+  previewModal.classList.add('hidden');
+  previewImg.src = '';
+  alert('พร้อมถ่ายใหม่');
+};
+
+// Core capture: draw video to high-res canvas (1200x1800) with cover fit
+function capturePhoto(){
+  const canvas = document.createElement('canvas');
+  canvas.width = PHOTO_W;
+  canvas.height = PHOTO_H;
+  const ctx = canvas.getContext('2d');
+
+  // Apply filter
+  let filter = 'none';
+  if(filterSel.value === 'grayscale') filter = 'grayscale(1)';
+  if(filterSel.value === 'sepia') filter = 'sepia(1)';
+  ctx.filter = filter;
+
+  // Calculate cover scaling from video element (videoWidth/Height may be 0 if not ready)
+  const vw = video.videoWidth || video.clientWidth;
+  const vh = video.videoHeight || video.clientHeight;
+  if(vw === 0 || vh === 0){
+    alert('กล้องยังไม่พร้อม ลองอีกครั้ง');
+    return;
+  }
+  // cover: scale to fill canvas, center-crop
+  const scale = Math.max(PHOTO_W / vw, PHOTO_H / vh);
+  const sw = PHOTO_W / scale;
+  const sh = PHOTO_H / scale;
+  const sx = (vw - sw) / 2;
+  const sy = (vh - sh) / 2;
+
+  // draw video frame onto high-res canvas
+  // To draw from video element with cropping, use drawImage(video, sx, sy, sw, sh, dx, dy, dw, dh)
+  ctx.drawImage(video, sx, sy, sw, sh, 0, 0, PHOTO_W, PHOTO_H);
+
+  // Optionally draw a simplified frame overlay directly onto the canvas
+  // We'll draw a semi-thin red border and some stars similar to design
+  // red border
+  ctx.strokeStyle = '#c21313';
+  ctx.lineWidth = 24;
+  ctx.strokeRect(12,12,PHOTO_W-24,PHOTO_H-24);
+
+  // decorative star (simple)
+  function drawStar(cx, cy, spikes, outerR, innerR, color){
+    let rot = Math.PI / 2 * 3;
+    let x = cx;
+    let y = cy;
+    const step = Math.PI / spikes;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - outerR);
+    for(let i=0;i<spikes;i++){
+      x = cx + Math.cos(rot) * outerR;
+      y = cy + Math.sin(rot) * outerR;
+      ctx.lineTo(x,y);
+      rot += step;
+
+      x = cx + Math.cos(rot) * innerR;
+      y = cy + Math.sin(rot) * innerR;
+      ctx.lineTo(x,y);
+      rot += step;
     }
-    ctx.closePath(); ctx.fill();
+    ctx.lineTo(cx, cy - outerR);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
   }
-  for(let i=0;i<50;i++) drawStar(Math.random()*W,Math.random()*H,8+Math.random()*10,['#ffd6e8','#90c9a7','#a7d8f7','#fff6b7'][Math.floor(Math.random()*4)]);
+  drawStar(180, 220, 8, 40, 18, '#c21313');
+  drawStar(PHOTO_W - 160, PHOTO_H - 220, 9, 48, 20, '#c21313');
+  drawStar(PHOTO_W - 200, 500, 6, 34, 14, '#c21313');
 
-  // หัวข้อ (กรอบข้อความ)
-  ctx.fillStyle='#a7d8f7'; ctx.fillRect(W/2-500,60,1000,100);
-  ctx.fillStyle='#ffffff'; ctx.font='72px Quicksand'; ctx.textAlign='center'; ctx.fillText('SENA PHOTOBOOTH',W/2,130);
+  // add logo text on bottom panel
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, PHOTO_H - 250, PHOTO_W, 250);
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 90px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('SENA', PHOTO_W/2 - 35, PHOTO_H - 120);
+  ctx.fillStyle = '#c21313';
+  ctx.fillText('✦', PHOTO_W/2 + 60, PHOTO_H - 120);
+  ctx.fillStyle = '#fff';
+  ctx.font = '36px Arial';
+  ctx.fillText('PHOTOBOOTH', PHOTO_W/2, PHOTO_H - 60);
 
-  // 3 ภาพ
-  const marginX=80, gap=36, topY=240; const innerW=W-marginX*2; const availableH=H-topY-140; const boxH=Math.floor((availableH-gap*2)/3); const boxW=innerW;
-  for(let i=0;i<3;i++){const y=topY+i*(boxH+gap); const img=await loadImage(captures[i]); const scale=Math.min(boxW/img.width, boxH/img.height); const iw=img.width*scale, ih=img.height*scale; const dx=marginX+(boxW-iw)/2; const dy=y+(boxH-ih)/2; ctx.drawImage(img,dx,dy,iw,ih);}
-
-  ctx.fillStyle='#333'; ctx.font='28px Quicksand'; ctx.fillText('@saphasena68',W/2,H-50);
-  return c.toDataURL('image/png');
+  const dataUrl = canvas.toDataURL('image/png');
+  lastImageDataUrl = dataUrl;
+  // show preview modal with scaled image for user
+  previewImg.src = dataUrl;
+  previewModal.classList.remove('hidden');
 }
 
-downloadBtn.addEventListener('click',async()=>{if(!captures[0]) return alert('ยังไม่ได้ถ่าย/อัปโหลดรูป');finalImage=await buildImage();const a=document.createElement('a');a.href=finalImage;a.download='Sena_booth.png';a.click();});
+// Download single photo at 1200x1800
+downloadBtn.onclick = () => {
+  if(!lastImageDataUrl){
+    alert('ยังไม่มีภาพ กรุณาถ่ายก่อน');
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = lastImageDataUrl;
+  a.download = 'SENA_4x6.png';
+  a.click();
+};
 
-// ✅ QR แก้ให้ทำงานด้วย Blob URL
-qrBtn.addEventListener('click',async()=>{
-  if(!captures[0]) return;
-  finalImage=await buildImage();
-  fetch(finalImage)
-    .then(res=>res.blob())
-    .then(blob=>{
-      const url=URL.createObjectURL(blob);
-      document.getElementById('qrcode').innerHTML='';
-      new QRCode(document.getElementById('qrcode'),{text:url,width:200,height:200});
-    });
+// Assemble vertical strip and download (N copies)
+stripBtn.onclick = () => {
+  if(!lastImageDataUrl){
+    alert('ยังไม่มีภาพ กรุณาถ่ายก่อน');
+    return;
+  }
+  const copies = parseInt(copiesSel.value || '3', 10);
+  // strip width same as photo width; height = copies * photo height
+  const stripW = PHOTO_W;
+  const stripH = PHOTO_H * copies;
+  const canvas = document.createElement('canvas');
+  canvas.width = stripW;
+  canvas.height = stripH;
+  const ctx = canvas.getContext('2d');
+
+  const img = new Image();
+  img.onload = () => {
+    for(let i=0;i<copies;i++){
+      ctx.drawImage(img, 0, i * PHOTO_H, PHOTO_W, PHOTO_H);
+    }
+    // Optionally overlay a thin border around whole strip
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 6;
+    ctx.strokeRect(3,3,stripW-6,stripH-6);
+
+    const url = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `SENA_strip_${copies}x4x6.png`;
+    a.click();
+  };
+  img.src = lastImageDataUrl;
+};
+
+// Print (open new window)
+printBtn.onclick = () => {
+  if(!lastImageDataUrl){
+    alert('ยังไม่มีภาพ กรุณาถ่ายก่อน');
+    return;
+  }
+  const w = window.open('');
+  w.document.write('<img src="'+lastImageDataUrl+'" style="width:100%;">');
+  w.document.close();
+  w.focus();
+  w.print();
+};
+
+// Close preview
+closePreview.onclick = () => {
+  previewModal.classList.add('hidden');
+  previewImg.src = '';
+};
+
+// Add some simple frame thumbnails (no external assets)
+const frames = [
+  { id: 'none', name: 'ไม่มีกรอบ' },
+  { id: 'red', name: 'กรอบแดง' },
+  { id: 'circle', name: 'กรอบวงกลม' }
+];
+frames.forEach(f => {
+  const div = document.createElement('div');
+  div.className = 'frame-thumb';
+  div.textContent = f.name.split('')[0];
+  div.title = f.name;
+  div.onclick = () => {
+    document.querySelectorAll('.frame-thumb').forEach(t => t.classList.remove('selected'));
+    div.classList.add('selected');
+    selectedFrameId = f.id;
+    // For advanced behavior we could toggle a specific overlay; current overlay drawn on canvas during capture.
+  };
+  frameList.appendChild(div);
 });
-})();
+
+// Graceful stop camera on page hide
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) stopCamera();
+});
+
+// Cleanup on unload
+window.addEventListener('beforeunload', () => stopCamera());
 </script>
 </body>
 </html>

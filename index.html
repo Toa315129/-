@@ -3,32 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>SENA PHOTOBOOTH | CHILDREN'S DAY</title>
+    <title>SENA 125TH | FINAL ORIENTATION</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&family=VT323&family=Prompt:wght@400;600;800&family=Fredoka:wght@300;600&family=Bangers&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Playfair+Display:wght@400;700;900&family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        @font-face {
-            font-family: 'JS Chanok';
-            src: url('https://cdn.jsdelivr.net/gh/Toa315129/Saphabooth@main/JS-Chanok-Normal.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
         :root {
-            --bg-color: #000;
+            --bg-color: #0a0a0a;
+            --gold-main: #D4AF37;
+            --gold-light: #F3E5AB;
             --text-main: #E0E0E0;
-            --accent: #00ff41;
-            --alert: #FF3333; 
+            --accent: #D4AF37;
             --font-ui: 'DM Sans', sans-serif;
-            --font-code: 'VT323', monospace;
+            --font-head: 'Playfair Display', serif; /* ฟอนต์หรูหรา */
             --font-thai: 'Prompt', sans-serif;
         }
 
@@ -46,270 +38,174 @@
             touch-action: none;
         }
 
+        /* --- Screens --- */
         #monitor {
             width: 100%; height: 100%;
             position: relative;
-            background: #050505;
+            background: radial-gradient(circle at center, #222 0%, #000 100%);
             display: flex; flex-direction: column;
-        }
-
-        .scanlines {
-            position: absolute; inset: 0; pointer-events: none; z-index: 900;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 4px; opacity: 0.6;
-        }
-        .vignette {
-            position: absolute; inset: 0; pointer-events: none; z-index: 901;
-            background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.6) 100%);
         }
 
         .screen {
             position: absolute; inset: 0;
             display: flex; flex-direction: column;
             opacity: 0; pointer-events: none;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
             z-index: 10;
             background: #000;
         }
         .screen.active { opacity: 1; pointer-events: auto; }
 
+        /* --- Home Screen --- */
         #screen-home {
             justify-content: center; align-items: center; text-align: center;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            background: url('https://www.transparenttextures.com/patterns/stardust.png'), radial-gradient(circle at center, #2a2a2a 0%, #000 100%);
         }
+        
+        .logo-text {
+            font-family: var(--font-head);
+            color: var(--gold-main);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
         .main-title {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 800; color: #fff;
-            line-height: 0.9; letter-spacing: -2px;
-            margin-bottom: 4vh;
-            text-shadow: 0 0 20px rgba(255,255,255,0.4);
-            animation: float 4s ease-in-out infinite;
-            font-family: 'JS Chanok', sans-serif; /* ใช้ฟอนต์ไทย */
+            font-family: var(--font-head);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700; 
+            background: linear-gradient(45deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1; margin-bottom: 5vh;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            animation: shimmer 3s infinite linear;
         }
-        @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
-        .btn-coin {
-            background: transparent; border: 2px solid #fff;
-            padding: 2vh 4vw; color: #fff;
-            font-family: var(--font-code); font-size: 2rem;
+        @keyframes shimmer { 0%{background-position: -200%;} 100%{background-position: 200%;} }
+
+        .btn-start {
+            background: transparent; border: 1px solid var(--gold-main);
+            padding: 1.5rem 4rem; color: var(--gold-light);
+            font-family: var(--font-ui); font-size: 1.2rem; letter-spacing: 2px;
             cursor: pointer; position: relative;
-            box-shadow: 0 0 15px rgba(255,255,255,0.2);
-            transition: 0.2s; border-radius: 4px;
+            transition: 0.3s;
+            overflow: hidden;
         }
-        .btn-coin:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
-        .blink-text { animation: blink 1.5s infinite; }
-        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+        .btn-start::before {
+            content:''; position: absolute; top:0; left:0; width:0%; height:100%;
+            background: var(--gold-main); transition: 0.3s; z-index: -1;
+        }
+        .btn-start:active::before { width: 100%; }
+        .btn-start:active { color: #000; transform: scale(0.95); }
 
-        #screen-frames {
-            justify-content: center; align-items: center; background: #080808; 
-            padding: 20px;
-        }
-        .frame-list {
-            display: flex; gap: 30px;
-            overflow-x: auto; 
-            padding: 40px 20px;
-            width: 100%;
-            justify-content: center; /* จัดกึ่งกลางเพราะเหลืออันเดียว */
-            align-items: center;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-        }
-        .frame-list::-webkit-scrollbar { display: none; }
-        
-        .mini-strip {
-            width: 160px; height: 420px; 
-            flex-shrink: 0;
-            display: flex; flex-direction: column;
-            padding: 15px 10px; cursor: pointer;
-            transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            position: relative; border-radius: 2px;
-        }
-        .mini-strip:hover, .mini-strip:active { transform: translateY(-15px) scale(1.05); z-index: 10; box-shadow: 0 20px 30px rgba(0,0,0,0.7); }
-        
-        .strip-header { text-align: center; font-weight: 800; font-size: 0.9rem; margin-bottom: 10px; line-height: 1.1; white-space: nowrap; }
-        .strip-header span { display: block; font-weight: 400; font-size: 0.6rem; }
-        .strip-photos { flex: 1; display: flex; flex-direction: column; gap: 8px; justify-content: center; align-items: center; }
-        .photo-slot { width: 100%; aspect-ratio: 4/3; background: #444; position: relative; overflow: hidden; }
-        .photo-slot::after { content: '📷'; position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size: 1.5rem; opacity: 0.2; }
-        .strip-footer { text-align: center; font-size: 0.6rem; margin-top: 10px; font-family: var(--font-code); opacity: 0.7; white-space: nowrap; }
-
-        /* Style เดียวสำหรับวันเด็ก */
-        .mini-strip.child-day { 
-            background: #E0F7FA; 
-            color: #ff6b6b; 
-            border: 4px solid #FFCC00; 
-            font-family: 'JS Chanok', 'Prompt', sans-serif;
-            box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
-        }
-
+        /* --- Camera Screen --- */
         #screen-cam { justify-content: space-between; background: #000; }
         
         .ui-top {
             height: 60px; display: flex; justify-content: space-between; align-items: center;
-            padding: 0 20px; background: #111; border-bottom: 1px solid #333;
-            font-family: var(--font-code); font-size: 1.2rem;
-            z-index: 20;
+            padding: 0 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+            font-family: var(--font-ui); font-size: 1.2rem; z-index: 20;
+            border-bottom: 1px solid #333;
         }
-        .rec-badge { color: var(--alert); display: flex; align-items: center; gap: 8px; font-weight: bold;}
-        .rec-dot { width: 10px; height: 10px; background: var(--alert); border-radius: 50%; }
 
+        .viewport { flex: 1; position: relative; overflow: hidden; background: #000; display: flex; justify-content: center; align-items: center;}
+        video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        
         .cam-sidebar {
-            position: absolute; top: 70px; right: 10px; bottom: 140px;
-            width: 60px; display: flex; flex-direction: column; gap: 15px;
-            z-index: 50; pointer-events: none;
+            position: absolute; top: 20px; right: 20px;
+            display: flex; flex-direction: column; gap: 15px; z-index: 50;
         }
         .tool-btn {
-            width: 50px; height: 50px; background: rgba(0,0,0,0.6); 
-            border: 1px solid #fff; border-radius: 50%; color: #fff;
+            width: 45px; height: 45px; background: rgba(255,255,255,0.1); 
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; cursor: pointer; pointer-events: auto;
-            backdrop-filter: blur(5px);
-        }
-        .tool-btn.active { background: #fff; color: #000; }
-
-        .viewport { flex: 1; position: relative; overflow: hidden; background: #050505; display: flex; justify-content: center; align-items: center;}
-        video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); transition: filter 0.3s; }
-        
-        .filter-beauty { filter: contrast(1.05) brightness(1.1) saturate(1.1) blur(0.5px); }
-        .filter-bw { filter: grayscale(100%) contrast(1.2); }
-        .filter-film { filter: sepia(0.3) contrast(1.1) saturate(0.8); }
-        .filter-glitch { animation: glitchAnim 0.2s infinite; }
-        @keyframes glitchAnim { 
-            0% { transform: translate(0) scaleX(-1); } 20% { transform: translate(-2px, 2px) scaleX(-1); } 
-            40% { transform: translate(-2px, -2px) scaleX(-1); } 60% { transform: translate(2px, 2px) scaleX(-1); } 
-            80% { transform: translate(2px, -2px) scaleX(-1); } 100% { transform: translate(0) scaleX(-1); } 
+            font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(4px);
         }
 
         #countdown {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            font-size: 15rem; font-weight: 800; color: #fff; display: none;
-            text-shadow: 4px 4px 0 #000; z-index: 100;
+            font-family: var(--font-head); font-size: 12rem; color: var(--gold-light); 
+            display: none; z-index: 100; text-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
         .ui-controls {
-            height: 140px; background: #111; border-top: 1px solid #333;
-            display: flex; align-items: center; justify-content: center; gap: 15px;
-            padding-bottom: 10px; z-index: 20;
+            height: 140px; background: #111;
+            display: flex; align-items: center; justify-content: center; gap: 20px;
+            padding-bottom: 10px; z-index: 20; border-top: 1px solid #333;
         }
-        .filter-scroller {
-            display: flex; gap: 10px; overflow-x: auto; padding: 0 10px;
-            max-width: 40%; scrollbar-width: none;
-        }
-        .btn-filter {
-            min-width: 60px; height: 60px; background: #222; border: 1px solid #555;
-            color: #888; border-radius: 8px; cursor: pointer;
-            font-family: var(--font-code); display: flex; align-items: center; justify-content: center; font-size: 0.8rem;
-        }
-        .btn-filter.active { background: #fff; color: #000; box-shadow: 0 0 10px #fff; }
-
         .btn-shutter {
             width: 80px; height: 80px; border: 4px solid #fff; border-radius: 50%;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
-            flex-shrink: 0; margin: 0 20px;
         }
         .shutter-inner { width: 68px; height: 68px; background: #fff; border-radius: 50%; transition: 0.1s; }
-        .btn-shutter:active .shutter-inner { transform: scale(0.9); background: #ccc; }
+        .btn-shutter:active .shutter-inner { transform: scale(0.9); background: var(--gold-main); }
 
+        /* --- Result Screen --- */
         #screen-result { 
-            justify-content: center; align-items: center; background: #0a0a0a; 
+            justify-content: center; align-items: center; background: #080808; 
             flex-direction: row; gap: 4vw; padding: 20px;
         }
         
-        .printer-wrapper { position: relative; height: 70vh; aspect-ratio: 160/420; }
-        .printer-slot {
-            width: 100%; height: 100%;
-            border: 1px solid #333; border-top: 4px solid #111;
-            background: #000; overflow: hidden; position: relative;
-            box-shadow: 0 0 40px rgba(0,0,0,0.9); border-radius: 4px;
+        .printer-wrapper { 
+            position: relative; height: 75vh; 
+            aspect-ratio: 600/1600; /* Approximate ratio of the uploaded image */
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
-        .preview-img { width: 100%; height: auto; display: block; transform: translateY(105%); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .printing-active { animation: printSlide 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-        @keyframes printSlide { 0% { transform: translateY(105%); } 100% { transform: translateY(0); } }
-
+        .printer-slot {
+            width: 100%; height: 100%; background: #222; overflow: hidden;
+            display:flex; justify-content: center; align-items: center;
+        }
+        .preview-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        
         .result-sidebar {
             display: flex; flex-direction: column; align-items: center; gap: 15px;
-            opacity: 0; transition: opacity 1s ease 4s; width: 320px;
+            width: 300px;
         }
-        .result-sidebar.show { opacity: 1; }
-
-        .server-log {
-            font-family: var(--font-code); color: var(--accent); width: 100%;
-            background: #111; padding: 10px; border: 1px solid #333;
-            font-size: 0.9rem; margin-bottom: 5px;
-            white-space: pre-wrap; line-height: 1.4;
-        }
-        .loading-bar { height: 4px; background: #333; width: 100%; margin-top: 5px; position: relative; overflow: hidden; }
-        .loading-fill { position: absolute; left:0; top:0; bottom:0; background: var(--accent); width: 0%; transition: width 0.2s; }
-
-        .qr-container { background: #fff; padding: 10px; border-radius: 8px; text-align: center; display: none; }
-        .qr-container.show { display: block; animation: popIn 0.5s ease; }
-        .email-box { width: 100%; display: flex; gap: 5px; margin-top: 5px; }
-        .email-input { flex: 1; background: #222; border: 1px solid #444; color: #fff; padding: 8px; font-family: var(--font-ui); border-radius: 4px;}
         
-        .action-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 10px; }
         .btn-action {
-            padding: 12px; font-family: var(--font-ui); font-weight: 700;
-            background: #fff; color: #000; border: none; cursor: pointer; font-size: 1rem;
-            width: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 14px; font-family: var(--font-ui); font-weight: 700;
+            background: var(--gold-main); color: #000; border: none; cursor: pointer; 
+            width: 100%; border-radius: 2px; text-transform: uppercase; letter-spacing: 1px;
+            display: flex; align-items: center; justify-content: center; gap:10px;
         }
-        .btn-action.outline { background: transparent; border: 1px solid #fff; color: #fff; }
-        .btn-magic { background: linear-gradient(45deg, #ff00cc, #3333ff); color: #fff; border:none; }
-        .btn-video { border: 2px solid #ff0055; color: #ff0055; background: rgba(255,0,85,0.1); }
-        .btn-video:hover { background: #ff0055; color: #fff; }
+        .btn-action.outline { background: transparent; border: 1px solid #555; color: #aaa; }
+        .btn-action.outline:hover { border-color: #fff; color: #fff; }
 
-        .print-control { display: flex; justify-content: space-between; align-items: center; width: 100%; background: #222; padding: 5px 15px; border-radius: 4px; margin-top: 5px;}
+        .hidden-upload { display:none; }
+        .upload-trigger { font-size: 0.7rem; color: #444; margin-top: 20px; cursor: pointer; text-decoration: underline;}
 
         #flash { position: fixed; inset: 0; background: #fff; z-index: 9999; opacity: 0; pointer-events: none; }
-        .do-flash { animation: flashAnim 0.2s linear; }
-        @keyframes flashAnim { 0%,100%{opacity:0;} 50%{opacity:1;} }
-        
+        .do-flash { animation: flashAnim 0.3s ease-out; }
+        @keyframes flashAnim { 0% {opacity: 1;} 100% {opacity: 0;} }
+
         @media (max-width: 1024px) {
             #screen-result { flex-direction: column; padding-top: 40px; justify-content: flex-start; overflow-y: auto;}
-            .printer-wrapper { height: 50vh; margin-bottom: 20px; flex-shrink: 0; }
-            .result-sidebar { width: 90%; transition-delay: 2s; padding-bottom: 40px; }
-            .action-btns { flex-direction: row; flex-wrap: wrap; }
-            .btn-action { flex: 1; min-width: 140px; }
-            .cam-sidebar { right: 20px; top: 80px; }
-            .tool-btn { width: 60px; height: 60px; font-size: 1.4rem; }
+            .printer-wrapper { height: 60vh; margin-bottom: 20px; flex-shrink: 0; }
+            .result-sidebar { width: 90%; padding-bottom: 40px; }
         }
     </style>
 </head>
 <body>
 
+    <input type="file" id="frame-uploader" class="hidden-upload" accept="image/*" onchange="OS.loadCustomFrame(this)">
+
     <div id="monitor">
-        <div class="scanlines"></div>
-        <div class="vignette"></div>
-
+        
         <div id="screen-home" class="screen active">
-            <button style="position:absolute; top:20px; right:20px; background:none; border:none; color:#333; font-size:2rem;" onclick="toggleFullscreen()">⛶</button>
-            <div class="main-title">วันเด็ก<br>๒๕๖๙</div>
-            <button class="btn-coin" onclick="OS.start()">
-                <span class="blink-text">TOUCH TO START</span>
-            </button>
-            <p style="margin-top:20px; font-family:var(--font-code); color:#666;">PHOTOBOOTH EDITION v4.0</p>
-        </div>
-
-        <div id="screen-frames" class="screen">
-            <h2 style="font-family:'JS Chanok'; color:#fff; margin-bottom:10px; text-align:center;">เลือกธีมถ่ายภาพ</h2>
+            <div class="logo-text">SENA DEVELOPMENT</div>
+            <div class="main-title">FINAL<br>ORIENTATION<br>DAY</div>
+            <div style="color: var(--gold-main); font-family: 'Prompt'; margin-bottom: 30px; font-size: 1.2rem;">5 FEBRUARY 2026</div>
             
-            <div class="frame-list">
-                <div class="mini-strip child-day" onclick="OS.selectFrame('child-day')">
-                    <div class="strip-header" style="font-size: 1rem;">วันเด็ก<br>๒๕๖๙</div>
-                    <div class="strip-photos">
-                        <div class="photo-slot" style="background:#fff; border:2px solid #FFCC00;"></div>
-                        <div class="photo-slot" style="background:#fff; border:2px solid #FFCC00;"></div>
-                        <div class="photo-slot" style="background:#fff; border:2px solid #FFCC00;"></div>
-                    </div>
-                    <div class="strip-footer">สุขสันต์วันเด็ก</div>
-                </div>
+            <button class="btn-start" onclick="OS.start()">START PHOTOBOOTH</button>
+            
+            <div class="upload-trigger" onclick="document.getElementById('frame-uploader').click()">
+                (Custom Frame: Click to load 'frame.png' manually if missing)
             </div>
-            
-            <button class="btn-action outline" style="width:200px; margin:0 auto;" onclick="location.reload()">← BACK</button>
         </div>
 
         <div id="screen-cam" class="screen">
             <div class="ui-top">
-                <div class="rec-badge"><div class="rec-dot"></div> REC</div>
+                <div style="color:var(--gold-main)">● REC</div>
                 <div id="clock">00:00</div>
             </div>
             
@@ -320,68 +216,30 @@
                 <div class="cam-sidebar">
                     <div class="tool-btn" onclick="OS.toggleCamFlip()">↻</div>
                     <div class="tool-btn" onclick="OS.toggleTimer()" id="btn-timer">3s</div>
-                    <div class="tool-btn" onclick="OS.toggleFlash()">⚡</div>
-                    <div class="tool-btn" onclick="OS.toggleMirror()">↔</div>
                     <div class="tool-btn" onclick="OS.toggleGrid()">#</div>
                 </div>
             </div>
 
             <div class="ui-controls">
-                <div class="filter-scroller">
-                    <button class="btn-filter active" onclick="OS.filter('normal', this)">NORM</button>
-                    <button class="btn-filter" onclick="OS.filter('beauty', this)">SOFT</button>
-                    <button class="btn-filter" onclick="OS.filter('bw', this)">B/W</button>
-                    <button class="btn-filter" onclick="OS.filter('film', this)">FILM</button>
-                    <button class="btn-filter" onclick="OS.filter('glitch', this)">GLITCH</button>
-                </div>
-
                 <div class="btn-shutter" onclick="OS.snap()">
                     <div class="shutter-inner"></div>
                 </div>
-                
-                <div style="width: 20px;"></div>
             </div>
         </div>
 
         <div id="screen-result" class="screen">
             <div class="printer-wrapper">
                 <div class="printer-slot">
-                    <img id="final-img" class="preview-img" alt="Print">
+                    <img id="final-img" class="preview-img" alt="Result">
                 </div>
             </div>
 
-            <div class="result-sidebar" id="res-sidebar">
+            <div class="result-sidebar">
+                <h3 style="font-family:var(--font-head); color:var(--gold-main); margin:0;">READY TO PRINT</h3>
                 
-                <div class="server-log" id="server-status">
-                    <div id="log-text">> UPLOADING...</div>
-                    <div class="loading-bar"><div class="loading-fill" id="load-fill"></div></div>
-                </div>
-
-                <div class="qr-container" id="qr-box">
-                    <div id="qrcode" style="display:flex;justify-content:center;"></div>
-                    <div style="font-size:0.8rem; color:#000; margin-top:5px; font-weight:bold;">SCAN TO DOWNLOAD</div>
-                </div>
-
-                <div class="print-control">
-                    <span style="color:#aaa; font-size:0.8rem;">COPIES</span>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <button class="tool-btn" style="width:30px; height:30px; font-size:1rem;" onclick="OS.adjCopies(-1)">-</button>
-                        <span id="copy-count" style="font-family:var(--font-code); font-size:1.2rem;">1</span>
-                        <button class="tool-btn" style="width:30px; height:30px; font-size:1rem;" onclick="OS.adjCopies(1)">+</button>
-                    </div>
-                </div>
-
-                <div class="email-box">
-                    <input type="email" placeholder="Enter Email" class="email-input">
-                    <button class="btn-action" style="width:auto; padding:0 15px;" onclick="alert('Sent!')">SEND</button>
-                </div>
-                
-                <div class="action-btns">
-                    <button class="btn-action btn-magic" onclick="OS.decorateStrip()">✨ MAGIC DECORATE</button>
-                    <button class="btn-action btn-video" onclick="OS.downloadVideo()">🎥 VIDEO (7s)</button>
-                    <button class="btn-action" onclick="OS.download()">SAVE IMAGE</button>
-                    <button class="btn-action outline" onclick="OS.restart()">HOME</button>
-                </div>
+                <button class="btn-action" onclick="OS.download()">DOWNLOAD IMAGE</button>
+                <button class="btn-action outline" style="border-color:var(--gold-main); color:var(--gold-main)" onclick="OS.downloadVideo()">🎥 DOWNLOAD VIDEO</button>
+                <button class="btn-action outline" onclick="location.reload()">HOME</button>
             </div>
         </div>
     </div>
@@ -390,43 +248,36 @@
     <canvas id="hidden-canvas" style="display:none"></canvas> 
 
     <script>
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(e=>{});
-            } else {
-                if (document.exitFullscreen) document.exitFullscreen();
-            }
-        }
-
         const OS = (function() {
             
-            const API_KEY = 'ffc90ad0bc5c7e0c056b68ef7430304a'; 
-
-            const C = {
-                w: 1280, h: 720,
-                stripW: 600,
-                shots: 3, 
-                // คำคมสำหรับวันเด็ก
-                quotes: ["เด็กเอ๋ย เด็กดี", "อนาคตของชาติ", "ทรงอย่างแบด", "รู้หน้าที่ มีวินัย", "คิดดี ทำดี"]
+            // CONFIG: Adjust coordinates here if the image changes
+            // Based on a standard width of 600px for the canvas
+            const CONFIG = {
+                stripWidth: 600,
+                shots: 3,
+                frameSrc: 'frame.png', // Default filename to look for
+                
+                // Coordinates for the 3 photo boxes (Estimated based on your image)
+                // x, y, w, h
+                layout: [
+                    { x: 38, y: 310, w: 524, h: 393 },  // Top Box
+                    { x: 38, y: 735, w: 524, h: 393 },  // Middle Box
+                    { x: 38, y: 1160, w: 524, h: 393 }  // Bottom Box
+                ]
             };
 
             let s = { 
-                filter: 'normal', 
-                frame: 'child-day', // Default frame
                 photos: [], 
                 stream: null, 
                 processing: false,
                 timer: 3,
-                flash: true,
-                facingMode: 'user',
                 mirror: true,
-                copies: 1
+                frameImage: null
             };
 
             const D = {
                 screens: {
                     home: document.getElementById('screen-home'),
-                    frames: document.getElementById('screen-frames'),
                     cam: document.getElementById('screen-cam'),
                     res: document.getElementById('screen-result')
                 },
@@ -438,431 +289,209 @@
                 btnTimer: document.getElementById('btn-timer')
             };
 
-            const Aud = {
-                ctx: null,
-                init: function() { if(!this.ctx) this.ctx = new (window.AudioContext||window.webkitAudioContext)(); },
-                play: function(type) {
-                    this.init();
-                    if(this.ctx.state === 'suspended') this.ctx.resume();
-                    const o = this.ctx.createOscillator(); const g = this.ctx.createGain();
-                    o.connect(g); g.connect(this.ctx.destination);
-                    
-                    const t = this.ctx.currentTime;
-                    if(type === 'coin') { 
-                        o.frequency.setValueAtTime(1200, t); 
-                        o.frequency.exponentialRampToValueAtTime(1800, t+0.1);
-                        g.gain.setValueAtTime(0.1, t); g.gain.exponentialRampToValueAtTime(0.01, t+0.4);
-                        o.start(t); o.stop(t+0.4); 
-                    }
-                    else if(type === 'beep') { 
-                        o.type='square'; o.frequency.value = 800; g.gain.value = 0.05; 
-                        o.start(t); o.stop(t+0.1); 
-                    }
-                    else if(type === 'count') { 
-                        o.type='sine'; o.frequency.value = 600; g.gain.value = 0.1;
-                        o.start(t); o.stop(t+0.15);
-                    }
-                    else if(type === 'shutter') { 
-                        const noise = this.ctx.createBufferSource();
-                        const buffer = this.ctx.createBuffer(1, this.ctx.sampleRate * 0.1, this.ctx.sampleRate);
-                        const data = buffer.getChannelData(0);
-                        for (let i = 0; i < buffer.length; i++) data[i] = Math.random() * 2 - 1;
-                        noise.buffer = buffer; noise.connect(g);
-                        g.gain.setValueAtTime(0.5, t); g.gain.exponentialRampToValueAtTime(0.01, t+0.1);
-                        noise.start(t);
-                    }
-                    else if(type === 'magic') {
-                        o.frequency.setValueAtTime(400, t);
-                        o.frequency.linearRampToValueAtTime(1000, t+0.1);
-                        o.frequency.linearRampToValueAtTime(600, t+0.2);
-                        g.gain.value = 0.1; o.start(t); o.stop(t+0.3);
-                    }
-                }
-            };
+            // Preload Frame
+            function initFrame() {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.src = CONFIG.frameSrc;
+                img.onload = () => { s.frameImage = img; console.log("Frame Loaded"); };
+                img.onerror = () => { console.log("Frame not found. Use custom upload."); };
+            }
 
-            window.onload = async () => {
+            window.onload = () => {
+                initFrame();
                 setInterval(() => {
                     const d = new Date();
                     document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0');
                 }, 1000);
             };
 
+            function loadCustomFrame(input) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        img.onload = () => { s.frameImage = img; alert("Custom Frame Loaded!"); };
+                        img.src = e.target.result;
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            async function start() {
+                // If no frame is loaded, warn but proceed
+                if(!s.frameImage) alert("Warning: 'frame.png' not found. You can click the text below START to upload it manually, or proceed with a plain background.");
+                await initCamera();
+                switchScreen('cam');
+            }
+
             function switchScreen(name) {
                 Object.values(D.screens).forEach(s => s.classList.remove('active'));
                 D.screens[name].classList.add('active');
             }
 
-            async function start() {
-                Aud.play('coin');
-                switchScreen('frames');
-            }
-
-            async function selectFrame(type) {
-                s.frame = type;
-                Aud.play('beep');
-                await initCamera();
-                switchScreen('cam');
-            }
-
             async function initCamera() {
-                if(s.stream) s.stream.getTracks().forEach(t=>t.stop());
+                if(s.stream) return;
                 try {
                     s.stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { facingMode: s.facingMode, width: {ideal: 1920}, height: {ideal: 1080} },
+                        video: { facingMode: 'user', width: {ideal: 1280}, height: {ideal: 720} },
                         audio: false
                     });
                     D.video.srcObject = s.stream;
-                    updateMirror();
-                } catch(e) { alert("Camera Error: " + e.message); }
+                } catch(e) { alert("Camera Error"); }
             }
 
             function toggleCamFlip() {
-                s.facingMode = (s.facingMode === 'user') ? 'environment' : 'user';
-                initCamera();
+                // Simplified for demo
+                s.mirror = !s.mirror;
+                D.video.style.transform = s.mirror ? "scaleX(-1)" : "scaleX(1)";
             }
             function toggleTimer() {
-                const timers = [3, 5, 10];
-                let idx = timers.indexOf(s.timer);
-                s.timer = timers[(idx+1) % timers.length];
+                s.timer = s.timer === 3 ? 5 : 3;
                 D.btnTimer.innerText = s.timer + "s";
-                Aud.play('beep');
             }
-            function toggleFlash() { s.flash = !s.flash; Aud.play('beep'); }
-            function toggleMirror() { s.mirror = !s.mirror; updateMirror(); }
-            function toggleGrid() { D.video.parentElement.classList.toggle('grid-on'); Aud.play('beep'); }
-            
-            function updateMirror() {
-                if(s.mirror) D.video.style.transform = "scaleX(-1)";
-                else D.video.style.transform = "scaleX(1)";
-            }
-
-            function filter(mode, btn) {
-                s.filter = mode;
-                document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                let css = 'none';
-                if(mode==='beauty') css = 'contrast(1.05) brightness(1.1) saturate(1.1) blur(0.5px)';
-                if(mode==='bw') css = 'grayscale(100%) contrast(1.2)';
-                if(mode==='film') css = 'sepia(0.3) contrast(1.1) saturate(0.8)';
-                D.video.style.filter = css;
-                
-                if(mode==='glitch') D.video.classList.add('filter-glitch');
-                else D.video.classList.remove('filter-glitch');
-                
-                Aud.play('beep');
-            }
+            function toggleGrid() { D.video.parentElement.classList.toggle('grid-on'); }
 
             async function snap() {
                 if(s.processing) return;
                 s.processing = true; s.photos = [];
                 
-                for(let i=0; i<C.shots; i++) {
+                for(let i=0; i<CONFIG.shots; i++) {
                     await countdown(s.timer);
                     await capture();
-                    await new Promise(r => setTimeout(r, 800));
+                    await new Promise(r => setTimeout(r, 500));
                 }
                 
                 s.processing = false;
-                processAndShowResult();
+                processResult();
             }
 
             function countdown(n) {
                 return new Promise(r => {
                     let c = n; D.count.style.display = 'block'; D.count.innerText = c;
-                    Aud.play('count'); 
                     const t = setInterval(() => {
                         c--;
-                        if(c>0) { 
-                            D.count.innerText = c; 
-                            Aud.play('count');
-                        } else { 
-                            clearInterval(t); D.count.style.display = 'none'; 
-                            r(); 
-                        }
+                        if(c>0) D.count.innerText = c; 
+                        else { clearInterval(t); D.count.style.display = 'none'; r(); }
                     }, 1000);
                 });
             }
 
             function capture() {
                 return new Promise(r => {
-                    Aud.play('shutter');
-                    if(s.flash) {
-                        D.flash.classList.add('do-flash');
-                        setTimeout(() => D.flash.classList.remove('do-flash'), 200);
-                    }
+                    D.flash.classList.add('do-flash');
+                    setTimeout(() => D.flash.classList.remove('do-flash'), 300);
                     
                     const cvs = document.createElement('canvas');
-                    cvs.width = D.video.videoWidth; cvs.height = D.video.videoHeight;
+                    // Capture high res
+                    const vidW = D.video.videoWidth;
+                    const vidH = D.video.videoHeight;
+                    
+                    // Crop to 4:3 Aspect Ratio (center crop)
+                    const targetRatio = 4/3;
+                    let cropW, cropH, cropX, cropY;
+
+                    if (vidW / vidH > targetRatio) {
+                        cropH = vidH; cropW = cropH * targetRatio;
+                        cropX = (vidW - cropW) / 2; cropY = 0;
+                    } else {
+                        cropW = vidW; cropH = cropW / targetRatio;
+                        cropX = 0; cropY = (vidH - cropH) / 2;
+                    }
+
+                    cvs.width = cropW; cvs.height = cropH;
                     const ctx = cvs.getContext('2d');
                     
                     if(s.mirror) {
                         ctx.translate(cvs.width, 0); ctx.scale(-1, 1);
                     }
-                    ctx.drawImage(D.video, 0, 0);
-                    
-                    ctx.setTransform(1,0,0,1,0,0); 
-                    if(s.filter !== 'normal' && s.filter !== 'glitch') {
-                        const id = ctx.getImageData(0,0,cvs.width,cvs.height);
-                        const d = id.data;
-                        for(let i=0; i<d.length; i+=4) {
-                            let R=d[i], G=d[i+1], B=d[i+2];
-                            if(s.filter === 'bw') {
-                                const v = 0.299*R + 0.587*G + 0.114*B; d[i]=d[i+1]=d[i+2]=v;
-                            } else if(s.filter === 'film') {
-                                d[i] = R*0.393+G*0.769+B*0.189; d[i+1] = R*0.349+G*0.686+B*0.168; d[i+2] = R*0.272+G*0.534+B*0.131;
-                            }
-                        }
-                        ctx.putImageData(id, 0, 0);
-                    }
+                    ctx.drawImage(D.video, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
                     
                     s.photos.push(cvs);
                     setTimeout(r, 200);
                 });
             }
 
-            async function processAndShowResult() {
-                generateStripCanvas(); 
-                
-                const finalDataUrl = D.canvas.toDataURL('image/jpeg', 0.95);
-                D.final.src = finalDataUrl;
-                switchScreen('res');
-                
-                D.final.classList.add('printing-active');
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                
-                setTimeout(() => { 
-                    document.getElementById('res-sidebar').classList.add('show'); 
-                    handleUpload(finalDataUrl); 
-                }, 3500);
-            }
-
-            function generateStripCanvas(shiftOrder = 0) {
-                // บังคับใช้เฟรมเดียวคือ child-day
-                const f = 'child-day';
-                let stripW = C.stripW; 
-                let photoW = 540, photoH = (photoW*3)/4;
-                let gap = 25, head = 180, foot = 100;
-                let H = head + (photoH*C.shots) + (gap*(C.shots-1)) + foot;
-
-                D.canvas.width = stripW; D.canvas.height = H;
-                const ctx = D.canvas.getContext('2d');
-
-                // --- Background Drawing Logic ---
-                // พื้นหลังสีฟ้าอ่อน สดใส
-                ctx.fillStyle = '#E0F7FA'; 
-                ctx.fillRect(0,0,stripW,H);
-                
-                // วาดลายจุดสีเหลืองจางๆ
-                ctx.fillStyle = 'rgba(255, 204, 0, 0.3)';
-                for(let i=0; i<stripW; i+=30) for(let j=0; j<H; j+=30) {
-                    ctx.beginPath(); ctx.arc(i,j,5,0,Math.PI*2); ctx.fill();
-                }
-
-                // กรอบเส้นขอบ
-                ctx.strokeStyle = '#FFCC00'; 
-                ctx.lineWidth = 10;
-                ctx.strokeRect(5,5,stripW-10,H-10);
-
-                // --- Header Text ---
-                ctx.textAlign = 'center';
-                
-                // เงาข้อความ
-                ctx.fillStyle = '#4DD0E1';
-                ctx.font = '110px "JS Chanok"';
-                ctx.fillText('วันเด็ก', stripW/2 + 5, 105);
-                ctx.fillText('๒๕๖๙', stripW/2 + 5, 155);
-
-                // ข้อความหลัก
-                ctx.fillStyle = '#FF6B6B'; // สีชมพูอมแดง
-                ctx.font = '110px "JS Chanok"';
-                ctx.fillText('วันเด็ก', stripW/2, 100);
-                
-                ctx.fillStyle = '#FF9800'; // สีส้ม
-                ctx.fillText('๒๕๖๙', stripW/2, 150);
-
-                // --- Draw Photos ---
-                let y = head;
-                
-                let displayPhotos = [...s.photos];
-                for(let i=0; i<shiftOrder; i++) {
-                    displayPhotos.unshift(displayPhotos.pop());
-                }
-
-                displayPhotos.forEach((p, index) => {
-                    const sR = p.width/p.height; const dR=4/3;
-                    let sx, sy, sw, sh;
-                    if(sR > dR) { sh=p.height; sw=sh*dR; sx=(p.width-sw)/2; sy=0; }
-                    else { sw=p.width; sh=sw/dR; sx=0; sy=(p.height-sh)/2; }
-                    
-                    // กรอบรูป สีสลับกัน
-                    const colors = ['#FF6B6B', '#4DD0E1', '#FFCC00'];
-                    ctx.fillStyle = colors[index % colors.length];
-                    ctx.fillRect((stripW-photoW)/2 - 8, y - 8, photoW + 16, photoH + 16);
-                    
-                    // ขอบขาวด้านใน
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect((stripW-photoW)/2 - 3, y - 3, photoW + 6, photoH + 6);
-
-                    ctx.drawImage(p, sx, sy, sw, sh, (stripW-photoW)/2, y, photoW, photoH);
-                    y += photoH + gap;
-                });
-
-                // --- Footer ---
-                const quote = C.quotes[Math.floor(Math.random()*C.quotes.length)];
-                ctx.textAlign = 'center'; 
-                ctx.fillStyle = '#555';
-                
-                const date = new Date().toLocaleDateString('th-TH');
-                
-                // Footer Text
-                ctx.font = '30px "JS Chanok"'; 
-                ctx.fillText(quote + " • " + date, stripW/2, H - 40);
-            }
-
-            // ========================================================
-            //  DECORATE & UPLOAD LOGIC
-            // ========================================================
-            function decorateStrip() {
-                const ctx = D.canvas.getContext('2d');
-                const stickers = ["🛝", "👀", "⭐", "🍼", "🫧", "🎀", "🧸", "🎈"];
-                const w = D.canvas.width;
-                const h = D.canvas.height;
-                
-                Aud.play('magic');
-                
-                for(let i=0; i<8; i++) {
-                    const sticker = stickers[Math.floor(Math.random()*stickers.length)];
-                    const x = Math.random() * w;
-                    const y = Math.random() * h;
-                    const size = 30 + Math.random() * 40;
-                    const rot = (Math.random() - 0.5);
-
-                    ctx.save();
-                    ctx.translate(x, y);
-                    ctx.rotate(rot);
-                    ctx.font = size + "px Arial";
-                    ctx.fillText(sticker, 0, 0);
-                    ctx.restore();
-                }
-
+            function processResult() {
+                renderCanvas();
                 D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
-                confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+                switchScreen('res');
+                confetti({ particleCount: 150, colors: ['#D4AF37', '#FFF', '#000'] });
             }
 
-            async function handleUpload(base64) {
-                const log = document.getElementById('log-text');
-                const fill = document.getElementById('load-fill');
+            function renderCanvas(animOffset = 0) {
+                const W = CONFIG.stripWidth;
+                // Height is dynamic based on frame image ratio, fallback to 1600
+                const H = s.frameImage ? (s.frameImage.height / s.frameImage.width) * W : 1600;
                 
-                if (API_KEY === '') {
-                    log.innerText = "> NO API KEY";
-                    return;
+                D.canvas.width = W; D.canvas.height = H;
+                const ctx = D.canvas.getContext('2d');
+
+                // 1. Draw Frame Background First (Because uploaded image likely has white boxes as opaque)
+                // Actually, if the boxes are white in the image, we should draw photos ON TOP of them.
+                if (s.frameImage) {
+                    ctx.drawImage(s.frameImage, 0, 0, W, H);
+                } else {
+                    // Fallback Background
+                    ctx.fillStyle = "#111"; ctx.fillRect(0,0,W,H);
+                    ctx.fillStyle = "#D4AF37"; ctx.font = "bold 40px sans-serif";
+                    ctx.textAlign = "center"; ctx.fillText("FRAME NOT LOADED", W/2, H/2);
                 }
 
-                let p = 0;
-                const int = setInterval(() => { if(p<90) p+=5; fill.style.width=p+"%"; }, 100);
+                // 2. Draw Photos over the white boxes
+                // Handle animation offset for video
+                let photosToDraw = [...s.photos];
+                for(let k=0; k<animOffset; k++) photosToDraw.unshift(photosToDraw.pop());
 
-                try {
-                    const formData = new FormData();
-                    formData.append("image", base64.split(',')[1]); 
-                    log.innerText = "> CONNECTING...";
-
-                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
-                        method: "POST", body: formData
-                    });
-                    
-                    const data = await res.json();
-                    clearInterval(int); fill.style.width="100%";
-
-                    if (data.success) {
-                        const imageUrl = data.data.url;
-                        log.innerText = "> DONE!";
-                        document.getElementById('qrcode').innerHTML = "";
-                        new QRCode(document.getElementById("qrcode"), {
-                            text: imageUrl, width: 120, height: 120,
-                            colorDark : "#000000", colorLight : "#ffffff",
-                            correctLevel : QRCode.CorrectLevel.H
-                        });
-                        document.getElementById('qr-box').classList.add('show');
-                    } else { throw new Error(data.error.message); }
-
-                } catch (err) {
-                    clearInterval(int);
-                    log.innerText = "> ERR";
-                    console.error(err);
-                }
-            }
-
-            function adjCopies(n) {
-                s.copies = Math.max(1, s.copies + n);
-                document.getElementById('copy-count').innerText = s.copies;
+                CONFIG.layout.forEach((box, index) => {
+                    if (photosToDraw[index]) {
+                        // Keep aspect ratio cover
+                        // We draw directly into the defined box area
+                        ctx.drawImage(photosToDraw[index], box.x, box.y, box.w, box.h);
+                        
+                        // Optional: Add inner shadow/border to blend better
+                        ctx.strokeStyle = "rgba(0,0,0,0.1)";
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(box.x, box.y, box.w, box.h);
+                    }
+                });
             }
 
             function download() {
                 const a = document.createElement('a');
-                a.download = `SENA_${Date.now()}.jpg`;
+                a.download = `SENA_ORIENTATION_${Date.now()}.jpg`;
                 a.href = D.final.src;
-                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                a.click();
             }
 
-            // ========================================================
-            //  VIDEO DOWNLOAD
-            // ========================================================
             async function downloadVideo() {
-                const btn = event.target;
-                const originalText = btn.innerText;
-                btn.innerText = "⏳ RENDERING...";
-                btn.disabled = true;
-
                 const stream = D.canvas.captureStream(30);
-                const recorder = new MediaRecorder(stream, {
-                    mimeType: 'video/webm' 
-                });
-                
+                const recorder = new MediaRecorder(stream);
                 const chunks = [];
                 recorder.ondataavailable = e => chunks.push(e.data);
-                
                 recorder.onstop = () => {
                     const blob = new Blob(chunks, { type: 'video/webm' });
-                    const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
-                    a.href = url;
+                    a.href = URL.createObjectURL(blob);
                     a.download = `SENA_VIDEO_${Date.now()}.webm`;
-                    document.body.appendChild(a);
                     a.click();
-                    document.body.removeChild(a);
-                    
-                    generateStripCanvas(0); 
-                    D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
-                    btn.innerText = "✅ SAVED!";
-                    setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 2000);
+                    // Reset
+                    renderCanvas(0); D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
                 };
 
                 recorder.start();
-
-                let startTime = Date.now();
                 let shift = 0;
-                
-                const animInterval = setInterval(() => {
+                const int = setInterval(() => {
                     shift++;
-                    generateStripCanvas(shift); 
-                    D.final.src = D.canvas.toDataURL('image/jpeg', 0.8); 
-                    
-                    if (Date.now() - startTime >= 7000) { 
-                        clearInterval(animInterval);
+                    renderCanvas(shift);
+                    if (shift > 10) { // Approx 5-6 seconds
+                        clearInterval(int);
                         recorder.stop();
                     }
-                }, 500); 
+                }, 500);
             }
 
-            function restart() {
-                location.reload();
-            }
-
-            return { 
-                start, selectFrame, toggleCamFlip, toggleTimer, toggleFlash, toggleMirror, toggleGrid, 
-                filter, snap, adjCopies, download, restart, decorateStrip, downloadVideo 
-            };
+            return { start, toggleCamFlip, toggleTimer, toggleGrid, snap, download, downloadVideo, loadCustomFrame };
         })();
     </script>
 </body>

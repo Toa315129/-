@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SENA 125TH | FINAL ORIENTATION</title>
+    <title>SENA 125TH | PHOTOBOOTH</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -18,480 +18,305 @@
             --gold-main: #D4AF37;
             --gold-light: #F3E5AB;
             --text-main: #E0E0E0;
-            --accent: #D4AF37;
             --font-ui: 'DM Sans', sans-serif;
-            --font-head: 'Playfair Display', serif; /* ฟอนต์หรูหรา */
-            --font-thai: 'Prompt', sans-serif;
+            --font-head: 'Playfair Display', serif;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+        body { margin: 0; background: var(--bg-color); height: 100dvh; overflow: hidden; color: var(--text-main); font-family: var(--font-ui); display: flex; justify-content: center; }
 
-        body {
-            margin: 0; padding: 0;
-            background: var(--bg-color);
-            height: 100vh; height: 100dvh;
-            width: 100vw;
-            overflow: hidden;
-            color: var(--text-main);
-            font-family: var(--font-ui);
-            display: flex; justify-content: center; align-items: center;
-            touch-action: none;
-        }
-
-        /* --- Screens --- */
-        #monitor {
-            width: 100%; height: 100%;
-            position: relative;
-            background: radial-gradient(circle at center, #222 0%, #000 100%);
-            display: flex; flex-direction: column;
-        }
-
-        .screen {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.6s ease;
-            z-index: 10;
-            background: #000;
-        }
+        /* Screens */
+        #monitor { width: 100%; height: 100%; position: relative; background: #000; }
+        .screen { position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: 0.5s; z-index: 10; background: #000; }
         .screen.active { opacity: 1; pointer-events: auto; }
 
-        /* --- Home Screen --- */
-        #screen-home {
-            justify-content: center; align-items: center; text-align: center;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png'), radial-gradient(circle at center, #2a2a2a 0%, #000 100%);
-        }
+        /* Home */
+        #screen-home { justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); }
+        .main-title { font-family: var(--font-head); font-size: 3rem; color: var(--gold-main); margin-bottom: 10px; line-height: 1.1; text-transform: uppercase; letter-spacing: 2px;}
+        .sub-title { font-family: 'Prompt', sans-serif; color: #888; margin-bottom: 40px; letter-spacing: 1px;}
         
-        .logo-text {
-            font-family: var(--font-head);
-            color: var(--gold-main);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
+        .btn-start { 
+            border: 1px solid var(--gold-main); background: rgba(212, 175, 55, 0.1); 
+            color: var(--gold-main); padding: 18px 60px; font-size: 1.2rem; cursor: pointer; 
+            transition: 0.3s; margin-top: 20px; letter-spacing: 3px; font-family: var(--font-head); font-weight: 700;
         }
+        .btn-start:active { background: var(--gold-main); color: #000; transform: scale(0.95); }
 
-        .main-title {
-            font-family: var(--font-head);
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 700; 
-            background: linear-gradient(45deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.1; margin-bottom: 5vh;
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-            animation: shimmer 3s infinite linear;
-        }
-        @keyframes shimmer { 0%{background-position: -200%;} 100%{background-position: 200%;} }
-
-        .btn-start {
-            background: transparent; border: 1px solid var(--gold-main);
-            padding: 1.5rem 4rem; color: var(--gold-light);
-            font-family: var(--font-ui); font-size: 1.2rem; letter-spacing: 2px;
-            cursor: pointer; position: relative;
-            transition: 0.3s;
-            overflow: hidden;
-        }
-        .btn-start::before {
-            content:''; position: absolute; top:0; left:0; width:0%; height:100%;
-            background: var(--gold-main); transition: 0.3s; z-index: -1;
-        }
-        .btn-start:active::before { width: 100%; }
-        .btn-start:active { color: #000; transform: scale(0.95); }
-
-        /* --- Camera Screen --- */
-        #screen-cam { justify-content: space-between; background: #000; }
+        /* Camera */
+        #screen-cam { background: #000; }
+        .viewport { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        /* วิดีโอเต็มจอ */
+        video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         
-        .ui-top {
-            height: 60px; display: flex; justify-content: space-between; align-items: center;
-            padding: 0 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
-            font-family: var(--font-ui); font-size: 1.2rem; z-index: 20;
-            border-bottom: 1px solid #333;
+        /* Grid Guide แบบบางๆ เพื่อเล็งตำแหน่ง */
+        .grid-guide {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80%; height: 60%; border: 1px solid rgba(255,255,255,0.3);
+            pointer-events: none;
+            display: flex; flex-direction: column;
         }
+        .grid-row { flex: 1; border-bottom: 1px solid rgba(255,255,255,0.3); }
+        .grid-row:last-child { border-bottom: none; }
 
-        .viewport { flex: 1; position: relative; overflow: hidden; background: #000; display: flex; justify-content: center; align-items: center;}
-        video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        #countdown { position: absolute; font-size: 12rem; color: var(--gold-light); font-family: var(--font-head); text-shadow: 0 5px 30px rgba(0,0,0,0.8); display: none; z-index: 50; }
         
-        .cam-sidebar {
-            position: absolute; top: 20px; right: 20px;
-            display: flex; flex-direction: column; gap: 15px; z-index: 50;
-        }
-        .tool-btn {
-            width: 45px; height: 45px; background: rgba(255,255,255,0.1); 
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(4px);
-        }
-
-        #countdown {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            font-family: var(--font-head); font-size: 12rem; color: var(--gold-light); 
-            display: none; z-index: 100; text-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        .ui-controls {
-            height: 140px; background: #111;
-            display: flex; align-items: center; justify-content: center; gap: 20px;
-            padding-bottom: 10px; z-index: 20; border-top: 1px solid #333;
-        }
-        .btn-shutter {
-            width: 80px; height: 80px; border: 4px solid #fff; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-        }
-        .shutter-inner { width: 68px; height: 68px; background: #fff; border-radius: 50%; transition: 0.1s; }
-        .btn-shutter:active .shutter-inner { transform: scale(0.9); background: var(--gold-main); }
-
-        /* --- Result Screen --- */
-        #screen-result { 
-            justify-content: center; align-items: center; background: #080808; 
-            flex-direction: row; gap: 4vw; padding: 20px;
-        }
+        .cam-controls { height: 140px; display: flex; align-items: center; justify-content: center; background: #111; z-index: 20; border-top: 1px solid #222; }
+        .btn-shutter { width: 80px; height: 80px; background: transparent; border-radius: 50%; border: 4px solid #fff; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .btn-shutter-inner { width: 70px; height: 70px; background: #fff; border-radius: 50%; transition: 0.2s; }
+        .btn-shutter:active .btn-shutter-inner { transform: scale(0.85); background: var(--gold-main); }
         
-        .printer-wrapper { 
-            position: relative; height: 75vh; 
-            aspect-ratio: 600/1600; /* Approximate ratio of the uploaded image */
+        /* Result */
+        #screen-result { flex-direction: row; justify-content: center; align-items: center; gap: 4vw; background: #080808; padding: 20px; }
+        
+        .preview-area { 
+            height: 85vh; 
+            aspect-ratio: 600/1800; /* สัดส่วน Photo Strip ยาวๆ */
+            background: #222;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            border: 1px solid #333;
         }
-        .printer-slot {
-            width: 100%; height: 100%; background: #222; overflow: hidden;
-            display:flex; justify-content: center; align-items: center;
-        }
-        .preview-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .preview-area img { width: 100%; height: 100%; object-fit: contain; display: block; }
         
-        .result-sidebar {
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
-            width: 300px;
+        .result-ui { width: 300px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .btn-action { width: 100%; padding: 16px; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; font-family: var(--font-ui); }
+        .btn-pri { background: var(--gold-main); color: #000; }
+        .btn-sec { background: transparent; border: 1px solid #444; color: #888; }
+        .btn-sec:hover { border-color: #fff; color: #fff; }
+
+        /* QR Code */
+        .qr-wrapper {
+            background: #fff; padding: 15px 15px 10px 15px; border-radius: 4px; margin-top: 20px;
+            text-align: center; width: 100%;
         }
-        
-        .btn-action {
-            padding: 14px; font-family: var(--font-ui); font-weight: 700;
-            background: var(--gold-main); color: #000; border: none; cursor: pointer; 
-            width: 100%; border-radius: 2px; text-transform: uppercase; letter-spacing: 1px;
-            display: flex; align-items: center; justify-content: center; gap:10px;
-        }
-        .btn-action.outline { background: transparent; border: 1px solid #555; color: #aaa; }
-        .btn-action.outline:hover { border-color: #fff; color: #fff; }
+        .qr-code-box { display: flex; justify-content: center; margin-bottom: 10px; }
+        .qr-text { color: #000; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;}
 
-        .hidden-upload { display:none; }
-        .upload-trigger { font-size: 0.7rem; color: #444; margin-top: 20px; cursor: pointer; text-decoration: underline;}
+        /* Upload Link */
+        .upload-link { position: absolute; bottom: 20px; font-size: 0.7rem; color: #444; text-decoration: underline; cursor: pointer; }
 
-        #flash { position: fixed; inset: 0; background: #fff; z-index: 9999; opacity: 0; pointer-events: none; }
-        .do-flash { animation: flashAnim 0.3s ease-out; }
-        @keyframes flashAnim { 0% {opacity: 1;} 100% {opacity: 0;} }
+        #flash { position: fixed; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 100; }
+        .flash-anim { animation: flash 0.3s ease-out; }
+        @keyframes flash { 0% { opacity: 1; } 100% { opacity: 0; } }
 
-        @media (max-width: 1024px) {
-            #screen-result { flex-direction: column; padding-top: 40px; justify-content: flex-start; overflow-y: auto;}
-            .printer-wrapper { height: 60vh; margin-bottom: 20px; flex-shrink: 0; }
-            .result-sidebar { width: 90%; padding-bottom: 40px; }
+        @media (max-width: 900px) {
+            #screen-result { flex-direction: column; overflow-y: auto; justify-content: flex-start; padding-top: 40px; }
+            .preview-area { height: 60vh; flex-shrink: 0; margin-bottom: 20px;}
+            .result-ui { width: 100%; max-width: 350px; padding-bottom: 50px; }
         }
     </style>
 </head>
 <body>
 
-    <input type="file" id="frame-uploader" class="hidden-upload" accept="image/*" onchange="OS.loadCustomFrame(this)">
+    <input type="file" id="frame-upload" hidden accept="image/*" onchange="App.loadFrame(this)">
 
     <div id="monitor">
         
         <div id="screen-home" class="screen active">
-            <div class="logo-text">SENA DEVELOPMENT</div>
-            <div class="main-title">FINAL<br>ORIENTATION<br>DAY</div>
-            <div style="color: var(--gold-main); font-family: 'Prompt'; margin-bottom: 30px; font-size: 1.2rem;">5 FEBRUARY 2026</div>
-            
-            <button class="btn-start" onclick="OS.start()">START PHOTOBOOTH</button>
-            
-            <div class="upload-trigger" onclick="document.getElementById('frame-uploader').click()">
-                (Custom Frame: Click to load 'frame.png' manually if missing)
+            <h1 class="main-title">SENA 125TH<br>FINAL ORIENTATION</h1>
+            <div class="sub-title">5 FEBRUARY 2026</div>
+            <button class="btn-start" onclick="App.start()">START</button>
+            <div class="upload-link" onclick="document.getElementById('frame-upload').click()">
+                (หากไม่พบไฟล์ frame.png คลิกที่นี่เพื่อเลือกรูป)
             </div>
         </div>
 
         <div id="screen-cam" class="screen">
-            <div class="ui-top">
-                <div style="color:var(--gold-main)">● REC</div>
-                <div id="clock">00:00</div>
-            </div>
-            
             <div class="viewport">
-                <video id="video-feed" autoplay playsinline muted></video>
-                <div id="countdown">3</div>
-                
-                <div class="cam-sidebar">
-                    <div class="tool-btn" onclick="OS.toggleCamFlip()">↻</div>
-                    <div class="tool-btn" onclick="OS.toggleTimer()" id="btn-timer">3s</div>
-                    <div class="tool-btn" onclick="OS.toggleGrid()">#</div>
+                <video id="vid" autoplay playsinline muted></video>
+                <div class="grid-guide">
+                    <div class="grid-row"></div>
+                    <div class="grid-row"></div>
+                    <div class="grid-row"></div>
                 </div>
+                <div id="countdown">3</div>
             </div>
-
-            <div class="ui-controls">
-                <div class="btn-shutter" onclick="OS.snap()">
-                    <div class="shutter-inner"></div>
+            <div class="cam-controls">
+                <div class="btn-shutter" onclick="App.snap()">
+                    <div class="btn-shutter-inner"></div>
                 </div>
             </div>
         </div>
 
         <div id="screen-result" class="screen">
-            <div class="printer-wrapper">
-                <div class="printer-slot">
-                    <img id="final-img" class="preview-img" alt="Result">
-                </div>
+            <div class="preview-area">
+                <img id="final-img">
             </div>
-
-            <div class="result-sidebar">
-                <h3 style="font-family:var(--font-head); color:var(--gold-main); margin:0;">READY TO PRINT</h3>
+            
+            <div class="result-ui">
+                <h3 style="color:var(--gold-main); font-family:var(--font-head); margin:0; letter-spacing: 1px;">COMPLETED</h3>
                 
-                <button class="btn-action" onclick="OS.download()">DOWNLOAD IMAGE</button>
-                <button class="btn-action outline" style="border-color:var(--gold-main); color:var(--gold-main)" onclick="OS.downloadVideo()">🎥 DOWNLOAD VIDEO</button>
-                <button class="btn-action outline" onclick="location.reload()">HOME</button>
+                <div class="qr-wrapper">
+                    <div id="qrcode" class="qr-code-box"></div>
+                    <div class="qr-text">SCAN TO DOWNLOAD</div>
+                </div>
+
+                <button class="btn-action btn-pri" onclick="App.download()">DOWNLOAD IMAGE</button>
+                <button class="btn-action btn-sec" onclick="location.reload()">HOME</button>
             </div>
         </div>
     </div>
 
     <div id="flash"></div>
-    <canvas id="hidden-canvas" style="display:none"></canvas> 
+    <canvas id="c" style="display:none"></canvas>
 
     <script>
-        const OS = (function() {
+        const App = (() => {
             
-            // CONFIG: Adjust coordinates here if the image changes
-            // Based on a standard width of 600px for the canvas
+            // --- CONFIGURATION ---
+            // ตั้งค่าพิกัดให้ตรงกับรูป SENA 125TH (อิงความกว้าง 600px)
             const CONFIG = {
-                stripWidth: 600,
-                shots: 3,
-                frameSrc: 'frame.png', // Default filename to look for
+                width: 600,  // ความกว้างมาตรฐาน
+                height: 1800, // ความสูงมาตรฐาน (สัดส่วน 1:3)
                 
-                // Coordinates for the 3 photo boxes (Estimated based on your image)
-                // x, y, w, h
-                layout: [
-                    { x: 38, y: 310, w: 524, h: 393 },  // Top Box
-                    { x: 38, y: 735, w: 524, h: 393 },  // Middle Box
-                    { x: 38, y: 1160, w: 524, h: 393 }  // Bottom Box
+                // พิกัดช่องว่าง (สำหรับวางรูปรอไว้ด้านหลัง)
+                // [x, y, w, h]
+                // ปรับตำแหน่ง Y ลงมาเพื่อให้พ้น Header ด้านบนที่มีโลโก้
+                slots: [
+                    { x: 40, y: 400, w: 520, h: 390 },  // ช่องบน (เริ่มที่ y=400)
+                    { x: 40, y: 830, w: 520, h: 390 },  // ช่องกลาง (ห่างกันประมาณ 40px)
+                    { x: 40, y: 1260, w: 520, h: 390 }  // ช่องล่าง
                 ]
             };
 
-            let s = { 
-                photos: [], 
-                stream: null, 
-                processing: false,
-                timer: 3,
-                mirror: true,
-                frameImage: null
-            };
-
+            const s = { stream: null, photos: [], frame: null };
             const D = {
-                screens: {
-                    home: document.getElementById('screen-home'),
-                    cam: document.getElementById('screen-cam'),
-                    res: document.getElementById('screen-result')
-                },
-                video: document.getElementById('video-feed'),
-                canvas: document.getElementById('hidden-canvas'),
+                screens: document.querySelectorAll('.screen'),
+                vid: document.getElementById('vid'),
+                canvas: document.getElementById('c'),
+                final: document.getElementById('final-img'),
                 count: document.getElementById('countdown'),
                 flash: document.getElementById('flash'),
-                final: document.getElementById('final-img'),
-                btnTimer: document.getElementById('btn-timer')
+                qr: document.getElementById('qrcode')
             };
 
-            // Preload Frame
-            function initFrame() {
-                const img = new Image();
-                img.crossOrigin = "Anonymous";
-                img.src = CONFIG.frameSrc;
-                img.onload = () => { s.frameImage = img; console.log("Frame Loaded"); };
-                img.onerror = () => { console.log("Frame not found. Use custom upload."); };
-            }
+            // Init Frame
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.src = 'frame.png';
+            img.onload = () => s.frame = img;
+            img.onerror = () => console.log('Frame not found in folder');
 
-            window.onload = () => {
-                initFrame();
-                setInterval(() => {
-                    const d = new Date();
-                    document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0');
-                }, 1000);
-            };
-
-            function loadCustomFrame(input) {
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const img = new Image();
-                        img.onload = () => { s.frameImage = img; alert("Custom Frame Loaded!"); };
-                        img.src = e.target.result;
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
+            function show(id) {
+                D.screens.forEach(sc => sc.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
             }
 
             async function start() {
-                // If no frame is loaded, warn but proceed
-                if(!s.frameImage) alert("Warning: 'frame.png' not found. You can click the text below START to upload it manually, or proceed with a plain background.");
-                await initCamera();
-                switchScreen('cam');
-            }
-
-            function switchScreen(name) {
-                Object.values(D.screens).forEach(s => s.classList.remove('active'));
-                D.screens[name].classList.add('active');
-            }
-
-            async function initCamera() {
-                if(s.stream) return;
+                if(!s.frame) alert("⚠️ Warning: ไม่พบไฟล์ 'frame.png'\nโปรดตรวจสอบว่าไฟล์อยู่ในโฟลเดอร์เดียวกัน หรือกดลิงก์ด้านล่างเพื่อเลือกรูปเอง");
                 try {
                     s.stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { facingMode: 'user', width: {ideal: 1280}, height: {ideal: 720} },
-                        audio: false
+                        video: { facingMode: 'user', width: {ideal:1280}, height: {ideal:720} } 
                     });
-                    D.video.srcObject = s.stream;
-                } catch(e) { alert("Camera Error"); }
+                    D.vid.srcObject = s.stream;
+                    show('screen-cam');
+                } catch(e) { alert("Camera Error: " + e.message); }
             }
-
-            function toggleCamFlip() {
-                // Simplified for demo
-                s.mirror = !s.mirror;
-                D.video.style.transform = s.mirror ? "scaleX(-1)" : "scaleX(1)";
-            }
-            function toggleTimer() {
-                s.timer = s.timer === 3 ? 5 : 3;
-                D.btnTimer.innerText = s.timer + "s";
-            }
-            function toggleGrid() { D.video.parentElement.classList.toggle('grid-on'); }
 
             async function snap() {
-                if(s.processing) return;
-                s.processing = true; s.photos = [];
-                
-                for(let i=0; i<CONFIG.shots; i++) {
-                    await countdown(s.timer);
-                    await capture();
-                    await new Promise(r => setTimeout(r, 500));
+                s.photos = [];
+                for(let i=0; i<3; i++) {
+                    await runCount(3);
+                    D.flash.classList.add('flash-anim');
+                    setTimeout(() => D.flash.classList.remove('flash-anim'), 300);
+
+                    // Capture Logic (4:3 Ratio)
+                    const cvs = document.createElement('canvas');
+                    const ctx = cvs.getContext('2d');
+                    
+                    const vw = D.vid.videoWidth, vh = D.vid.videoHeight;
+                    const slotRatio = 4/3; 
+                    
+                    let cw = vw, ch = vw / slotRatio;
+                    if(ch > vh) { ch = vh; cw = ch * slotRatio; }
+                    
+                    cvs.width = cw; cvs.height = ch;
+                    ctx.translate(cw, 0); ctx.scale(-1, 1); // Flip
+                    ctx.drawImage(D.vid, (vw-cw)/2, (vh-ch)/2, cw, ch, 0, 0, cw, ch);
+                    
+                    s.photos.push(cvs);
+                    await new Promise(r => setTimeout(r, 600)); 
                 }
-                
-                s.processing = false;
-                processResult();
+                process();
             }
 
-            function countdown(n) {
+            function runCount(n) {
                 return new Promise(r => {
                     let c = n; D.count.style.display = 'block'; D.count.innerText = c;
                     const t = setInterval(() => {
                         c--;
-                        if(c>0) D.count.innerText = c; 
-                        else { clearInterval(t); D.count.style.display = 'none'; r(); }
+                        if(c>0) D.count.innerText = c;
+                        else { clearInterval(t); D.count.style.display='none'; r(); }
                     }, 1000);
                 });
             }
 
-            function capture() {
-                return new Promise(r => {
-                    D.flash.classList.add('do-flash');
-                    setTimeout(() => D.flash.classList.remove('do-flash'), 300);
-                    
-                    const cvs = document.createElement('canvas');
-                    // Capture high res
-                    const vidW = D.video.videoWidth;
-                    const vidH = D.video.videoHeight;
-                    
-                    // Crop to 4:3 Aspect Ratio (center crop)
-                    const targetRatio = 4/3;
-                    let cropW, cropH, cropX, cropY;
-
-                    if (vidW / vidH > targetRatio) {
-                        cropH = vidH; cropW = cropH * targetRatio;
-                        cropX = (vidW - cropW) / 2; cropY = 0;
-                    } else {
-                        cropW = vidW; cropH = cropW / targetRatio;
-                        cropX = 0; cropY = (vidH - cropH) / 2;
-                    }
-
-                    cvs.width = cropW; cvs.height = cropH;
-                    const ctx = cvs.getContext('2d');
-                    
-                    if(s.mirror) {
-                        ctx.translate(cvs.width, 0); ctx.scale(-1, 1);
-                    }
-                    ctx.drawImage(D.video, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-                    
-                    s.photos.push(cvs);
-                    setTimeout(r, 200);
-                });
-            }
-
-            function processResult() {
-                renderCanvas();
-                D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
-                switchScreen('res');
-                confetti({ particleCount: 150, colors: ['#D4AF37', '#FFF', '#000'] });
-            }
-
-            function renderCanvas(animOffset = 0) {
-                const W = CONFIG.stripWidth;
-                // Height is dynamic based on frame image ratio, fallback to 1600
-                const H = s.frameImage ? (s.frameImage.height / s.frameImage.width) * W : 1600;
+            function process() {
+                // Setup Canvas
+                const W = CONFIG.width;
+                // ถ้ามีเฟรม ให้ใช้สัดส่วนเฟรมจริง ถ้าไม่มีให้ใช้ค่า Default
+                const H = s.frame ? (s.frame.height / s.frame.width) * W : CONFIG.height;
                 
                 D.canvas.width = W; D.canvas.height = H;
                 const ctx = D.canvas.getContext('2d');
+                
+                // 1. Fill Background
+                ctx.fillStyle = "#111"; ctx.fillRect(0,0,W,H);
 
-                // 1. Draw Frame Background First (Because uploaded image likely has white boxes as opaque)
-                // Actually, if the boxes are white in the image, we should draw photos ON TOP of them.
-                if (s.frameImage) {
-                    ctx.drawImage(s.frameImage, 0, 0, W, H);
-                } else {
-                    // Fallback Background
-                    ctx.fillStyle = "#111"; ctx.fillRect(0,0,W,H);
-                    ctx.fillStyle = "#D4AF37"; ctx.font = "bold 40px sans-serif";
-                    ctx.textAlign = "center"; ctx.fillText("FRAME NOT LOADED", W/2, H/2);
-                }
-
-                // 2. Draw Photos over the white boxes
-                // Handle animation offset for video
-                let photosToDraw = [...s.photos];
-                for(let k=0; k<animOffset; k++) photosToDraw.unshift(photosToDraw.pop());
-
-                CONFIG.layout.forEach((box, index) => {
-                    if (photosToDraw[index]) {
-                        // Keep aspect ratio cover
-                        // We draw directly into the defined box area
-                        ctx.drawImage(photosToDraw[index], box.x, box.y, box.w, box.h);
+                // 2. Draw Photos (Underneath)
+                // เราต้อง Map รูปถ่ายใส่ลงไปใน Slot ที่กำหนดไว้
+                // ถ้าสัดส่วนเฟรมจริงต่างจาก Config เราต้อง Scale ตำแหน่ง Y ด้วย
+                const scaleY = H / CONFIG.height; // เผื่อเฟรมยาวกว่าปกติ
+                
+                CONFIG.slots.forEach((slot, i) => {
+                    if(s.photos[i]) {
+                        // ปรับตำแหน่ง Y ตามสัดส่วนจริงของภาพถ้าจำเป็น
+                        // หรือใช้ค่าตรงๆ ถ้าเฟรมตรงเป๊ะ
+                        const targetY = s.frame ? (slot.y / CONFIG.height) * H : slot.y;
+                        const targetH = s.frame ? (slot.h / CONFIG.height) * H : slot.h;
                         
-                        // Optional: Add inner shadow/border to blend better
-                        ctx.strokeStyle = "rgba(0,0,0,0.1)";
-                        ctx.lineWidth = 2;
-                        ctx.strokeRect(box.x, box.y, box.w, box.h);
+                        ctx.drawImage(s.photos[i], slot.x, targetY, slot.w, targetH);
                     }
                 });
+
+                // 3. Draw Frame (Overlay) - ต้องเป็น PNG เจาะรู
+                if(s.frame) ctx.drawImage(s.frame, 0, 0, W, H);
+
+                // Finalize
+                D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
+                
+                // Generate QR
+                D.qr.innerHTML = "";
+                new QRCode(D.qr, {
+                    text: "https://www.sena.co.th", // เปลี่ยนเป็น Link จริงของคุณ
+                    width: 90, height: 90,
+                    colorDark : "#000000", colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.L
+                });
+
+                show('screen-result');
+                confetti({ particleCount: 150, spread: 70, colors: ['#D4AF37', '#FFF'] });
             }
 
             function download() {
                 const a = document.createElement('a');
-                a.download = `SENA_ORIENTATION_${Date.now()}.jpg`;
                 a.href = D.final.src;
+                a.download = `SENA_${Date.now()}.jpg`;
                 a.click();
             }
 
-            async function downloadVideo() {
-                const stream = D.canvas.captureStream(30);
-                const recorder = new MediaRecorder(stream);
-                const chunks = [];
-                recorder.ondataavailable = e => chunks.push(e.data);
-                recorder.onstop = () => {
-                    const blob = new Blob(chunks, { type: 'video/webm' });
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(blob);
-                    a.download = `SENA_VIDEO_${Date.now()}.webm`;
-                    a.click();
-                    // Reset
-                    renderCanvas(0); D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
-                };
-
-                recorder.start();
-                let shift = 0;
-                const int = setInterval(() => {
-                    shift++;
-                    renderCanvas(shift);
-                    if (shift > 10) { // Approx 5-6 seconds
-                        clearInterval(int);
-                        recorder.stop();
-                    }
-                }, 500);
+            function loadFrame(input) {
+                if(input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const i = new Image();
+                        i.onload = () => { s.frame = i; alert("Custom Frame Loaded!"); };
+                        i.src = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
             }
 
-            return { start, toggleCamFlip, toggleTimer, toggleGrid, snap, download, downloadVideo, loadCustomFrame };
+            return { start, snap, download, loadFrame };
         })();
     </script>
 </body>

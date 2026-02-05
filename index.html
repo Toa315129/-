@@ -3,293 +3,586 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SENA | PRESTIGE CINEMATIC GALLERY</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>SENA PHOTOBOOTH | THE GRADUATION</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@100;300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Prompt:wght@200;300;400;500&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --gold: #D4AF37;
-            --bg: #030303;
-            --glass: rgba(255, 255, 255, 0.05);
-            --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Inter', sans-serif;
+            --bg-deep: #050505;
+            --gold-primary: #D4AF37;
+            --gold-light: #F3E5AB;
+            --gold-dark: #AA8828;
+            --glass: rgba(20, 20, 20, 0.6);
+            --border-glass: rgba(212, 175, 55, 0.3);
+            
+            --font-head: 'Playfair Display', serif;
+            --font-body: 'Prompt', sans-serif;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); color: #fff; font-family: var(--font-sans); overflow: hidden; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
 
-        /* Background Animation */
-        .mesh-bg { position: fixed; inset: 0; z-index: -1; background: #000; overflow: hidden; }
-        .mesh-sphere { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(212, 175, 55, 0.07) 0%, transparent 70%); border-radius: 50%; filter: blur(80px); animation: move 15s infinite alternate; }
-        @keyframes move { from { transform: translate(-10%, -10%); } to { transform: translate(20%, 20%); } }
+        body {
+            margin: 0; padding: 0;
+            background: var(--bg-deep);
+            color: #fff;
+            height: 100vh; height: 100dvh; width: 100vw;
+            overflow: hidden;
+            font-family: var(--font-body);
+            display: flex; justify-content: center; align-items: center;
+        }
 
-        /* Screen States */
-        .screen { position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transform: scale(1.02); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 10; }
-        .screen.active { opacity: 1; visibility: visible; transform: scale(1); }
+        /* พื้นหลัง Particle ทองลอยฟุ้งๆ (สร้างด้วย CSS) */
+        .luxury-bg {
+            position: absolute; inset: 0; z-index: -1;
+            background: radial-gradient(circle at 50% 10%, #1a1a1a 0%, #000000 100%);
+        }
+        .gold-dust {
+            position: absolute; width: 2px; height: 2px; background: var(--gold-primary);
+            border-radius: 50%; box-shadow: 0 0 4px var(--gold-light);
+            animation: floatUp linear infinite; opacity: 0;
+        }
+        @keyframes floatUp { 0%{transform:translateY(100vh); opacity:0;} 50%{opacity:0.8;} 100%{transform:translateY(-10vh); opacity:0;} }
 
-        /* HOME */
-        #screen-home { justify-content: center; align-items: center; background: url('bg_start.png') center/cover; }
-        #screen-home::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.6); z-index: 1; }
-        .home-content { z-index: 2; text-align: center; }
-        .main-logo { width: 240px; margin-bottom: 40px; filter: drop-shadow(0 0 20px rgba(212,175,55,0.3)); }
-        .btn-luxury { background: transparent; border: 1px solid var(--gold); padding: 20px 60px; color: var(--gold); font-family: var(--font-serif); font-size: 1.1rem; letter-spacing: 5px; cursor: pointer; transition: 0.4s; backdrop-filter: blur(10px); }
-        .btn-luxury:hover { background: var(--gold); color: #000; box-shadow: 0 0 40px rgba(212,175,55,0.5); }
+        /* --- SCREEN: COMMON --- */
+        .screen {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.6s ease-in-out;
+            z-index: 10;
+        }
+        .screen.active { opacity: 1; pointer-events: auto; }
 
-        /* CAMERA UI */
-        .header { position: absolute; top: 0; width: 100%; padding: 30px; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
-        .btn-back { background: none; border: none; color: #fff; font-size: 0.7rem; letter-spacing: 2px; cursor: pointer; opacity: 0.5; transition: 0.3s; }
-        .btn-back:hover { opacity: 1; color: var(--gold); }
+        /* --- 1. หน้า HOME (หรูหรา) --- */
+        #screen-home {
+            justify-content: center; align-items: center; text-align: center;
+            background: url('bg_start.png') no-repeat center center;
+            background-size: cover;
+        }
+        /* Gradient Overlay ให้ Text อ่านง่าย */
+        #screen-home::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, #000 0%, transparent 60%, rgba(0,0,0,0.4) 100%);
+            z-index: -1;
+        }
+
+        .main-logo {
+            width: 65%; max-width: 400px; height: auto;
+            margin-bottom: 40px;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); /* เงาทอง */
+            animation: fadeInLogo 2s ease-out;
+        }
+        @keyframes fadeInLogo { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+
+        /* ปุ่ม START แบบ Luxury Frame */
+        .btn-start-wrapper {
+            position: relative; display: inline-block;
+            margin-bottom: 20px;
+        }
+        .btn-coin {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-primary);
+            padding: 15px 40px;
+            font-family: var(--font-head);
+            font-size: 1.8rem; font-style: italic; letter-spacing: 2px;
+            cursor: pointer; 
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative; overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        /* เอฟเฟกต์แสงวิ่งผ่านปุ่ม */
+        .btn-coin::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+            transition: 0.5s;
+        }
+        .btn-coin:hover::before { left: 100%; }
+        .btn-coin:hover {
+            background: var(--gold-primary);
+            color: #000;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+        }
+
+        .tagline {
+            font-family: var(--font-body); font-weight: 300;
+            color: #aaa; font-size: 0.9rem; letter-spacing: 4px;
+            margin-top: 15px; text-transform: uppercase;
+        }
+
+        /* --- 2. หน้า CAMERA (กรอบทอง) --- */
+        #screen-cam { background: #000; justify-content: space-between; }
         
-        .cam-viewport { flex: 1; position: relative; overflow: hidden; background: #000; display: flex; justify-content: center; align-items: center; }
+        .cam-frame-border {
+            position: absolute; inset: 15px; 
+            border: 1px solid rgba(255,255,255,0.2);
+            pointer-events: none; z-index: 5;
+        }
+        .cam-frame-corners::before, .cam-frame-corners::after {
+            content:''; position: absolute; width: 20px; height: 20px;
+            border-color: var(--gold-primary); border-style: solid;
+            pointer-events: none; z-index: 6;
+        }
+        /* มุมกรอบทอง */
+        .cam-frame-corners::before { top: 15px; left: 15px; border-width: 2px 0 0 2px; }
+        .cam-frame-corners::after { bottom: 15px; right: 15px; border-width: 0 2px 2px 0; }
+
+        .viewport { 
+            flex: 1; position: relative; overflow: hidden; 
+            display: flex; justify-content: center; align-items: center; 
+            width: 100%;
+        }
         video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+
+        /* UI ควบคุมกล้อง แบบ Glass Modern */
+        .ui-top {
+            position: absolute; top: 0; width: 100%; padding: 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 20;
+            font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 2px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+        }
+
+        /* Sidebar เครื่องมือ */
+        .cam-sidebar {
+            position: absolute; right: 25px; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 25px; z-index: 30;
+        }
+        .tool-icon {
+            color: #fff; font-size: 1.4rem; opacity: 0.7; cursor: pointer;
+            transition: 0.3s; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+        .tool-icon:hover { opacity: 1; color: var(--gold-primary); transform: scale(1.1); }
+        .active-tool { color: var(--gold-primary); opacity: 1; text-shadow: 0 0 10px var(--gold-primary); }
+
+        /* ตัวนับถอยหลัง Font Serif */
+        #countdown {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            font-family: var(--font-head); font-size: 10rem; color: #fff;
+            display: none; z-index: 100;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+        }
+
+        /* ปุ่มชัตเตอร์ */
+        .ui-bottom {
+            height: 140px; width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 20; position: absolute; bottom: 0;
+            gap: 40px;
+        }
         
-        #rec-indicator { position: absolute; top: 40px; display: none; align-items: center; gap: 10px; color: #ff3b30; font-size: 0.8rem; letter-spacing: 2px; }
-        .rec-dot { width: 10px; height: 10px; background: #ff3b30; border-radius: 50%; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
+        /* ปุ่มถ่ายรูปวงแหวนทอง */
+        .shutter-ring {
+            width: 80px; height: 80px;
+            border: 2px solid rgba(255,255,255,0.3); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s;
+        }
+        .shutter-btn {
+            width: 65px; height: 65px;
+            background: #fff; border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+            transition: 0.2s; position: relative;
+        }
+        /* วงแหวนทองข้างใน */
+        .shutter-btn::after {
+            content:''; position: absolute; inset: 4px; border-radius: 50%;
+            border: 1px solid var(--gold-primary); opacity: 0.5;
+        }
+        .shutter-ring:active .shutter-btn { transform: scale(0.9); background: var(--gold-light); }
 
-        /* SHUTTER AREA */
-        .controls { height: 180px; background: linear-gradient(to top, #000, transparent); display: flex; justify-content: center; align-items: center; gap: 60px; z-index: 40; }
-        .shutter-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; }
-        .shutter-ring { width: 72px; height: 72px; border: 2px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        .shutter-point { width: 58px; height: 58px; background: #fff; border-radius: 50%; transition: 0.2s; }
-        .shutter-wrap.video .shutter-ring { border-color: #ff3b30; }
-        .shutter-wrap.video .shutter-point { background: #ff3b30; }
-        .shutter-wrap:active .shutter-point { transform: scale(0.85); }
-        .shutter-label { font-size: 0.6rem; letter-spacing: 2px; opacity: 0.6; text-transform: uppercase; }
+        /* Filter Selector Text-based */
+        .filter-select {
+            position: absolute; bottom: 100px; width: 100%;
+            display: flex; justify-content: center; gap: 20px;
+            z-index: 25;
+        }
+        .f-item {
+            font-size: 0.8rem; color: rgba(255,255,255,0.5); 
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .f-item.active { color: var(--gold-primary); border-bottom: 1px solid var(--gold-primary); padding-bottom: 2px;}
 
-        /* RESULT */
-        #screen-result { flex-direction: row; }
-        .preview-box { flex: 1.4; display: flex; justify-content: center; align-items: center; background: #000; }
-        .final-media { height: 80%; border: 10px solid #fff; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
-        .info-panel { flex: 0.6; background: rgba(10,10,10,0.9); backdrop-filter: blur(20px); padding: 60px; border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; }
-        .res-title { font-family: var(--font-serif); color: var(--gold); font-size: 2.2rem; font-style: italic; margin-bottom: 20px; }
+        /* --- 3. หน้า RESULT (Gallery Style) --- */
+        #screen-result {
+            background: #080808;
+            flex-direction: row; padding: 0;
+        }
         
-        .progress-container { margin: 30px 0; }
-        .p-bar-bg { height: 2px; background: rgba(255,255,255,0.1); width: 100%; margin-top: 10px; }
-        .p-bar-fill { height: 100%; background: var(--gold); width: 0%; transition: 0.4s; }
+        /* ซ้าย: พื้นที่แสดงรูป */
+        .preview-area {
+            flex: 1; height: 100%;
+            background: radial-gradient(circle at center, #1a1a1a, #000);
+            display: flex; justify-content: center; align-items: center;
+            position: relative;
+        }
+        .photo-frame-shadow {
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
+            transform: translateY(100vh); /* เริ่มต้นซ่อนไว้ */
+        }
+        .animate-up { animation: slideUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes slideUp { to { transform: translateY(0); } }
 
-        #qr-box { margin-top: 20px; text-align: center; display: none; }
-        #qrcode { background: #fff; padding: 12px; display: inline-block; border-radius: 4px; }
+        /* ขวา: แผงควบคุม */
+        .control-panel {
+            width: 350px; background: rgba(20,20,20,0.95);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            display: flex; flex-direction: column; padding: 40px 30px;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .result-title {
+            font-family: var(--font-head); font-size: 2rem; 
+            color: var(--gold-primary); margin-bottom: 5px;
+            font-style: italic;
+        }
+        .result-subtitle { font-size: 0.8rem; color: #666; margin-bottom: 30px; letter-spacing: 1px; }
+
+        .btn-action-gold {
+            background: transparent; border: 1px solid rgba(255,255,255,0.2);
+            color: #fff; width: 100%; padding: 15px; margin-bottom: 12px;
+            font-family: var(--font-body); font-weight: 300; letter-spacing: 1px;
+            cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-action-gold:hover {
+            border-color: var(--gold-primary); color: var(--gold-primary);
+            background: rgba(212, 175, 55, 0.05);
+        }
+        .btn-highlight {
+            background: var(--gold-primary); border-color: var(--gold-primary); color: #000; font-weight: 500;
+        }
+        .btn-highlight:hover { background: var(--gold-light); color: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+
+        /* Loading & QR */
+        .status-box { margin-bottom: 30px; }
+        .progress-line { width: 100%; height: 2px; background: #333; margin-top: 10px; position: relative; }
+        .progress-bar { width: 0%; height: 100%; background: var(--gold-primary); transition: width 0.3s; box-shadow: 0 0 10px var(--gold-primary); }
         
-        .btn-group { margin-top: auto; display: grid; grid-template-columns: 1fr; gap: 15px; }
-        .btn-res { background: var(--gold); color: #000; border: none; padding: 18px; font-weight: 600; cursor: pointer; letter-spacing: 2px; }
-        .btn-res.alt { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.1); }
+        #qr-box { 
+            background: #fff; padding: 10px; width: fit-content; margin: 0 auto 20px auto; 
+            display: none; border: 4px solid var(--gold-primary);
+        }
 
-        #flash { position: fixed; inset: 0; background: #fff; z-index: 1000; opacity: 0; pointer-events: none; }
+        /* Mobile Adjust */
+        @media (max-width: 900px) {
+            #screen-result { flex-direction: column; }
+            .preview-area { height: 60%; padding: 20px; }
+            .control-panel { width: 100%; height: 40%; border-left: none; border-top: 1px solid rgba(255,255,255,0.1); padding: 20px; }
+            .preview-img { max-height: 100%; width: auto; }
+            .btn-action-gold { padding: 12px; font-size: 0.9rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="mesh-bg"><div class="mesh-sphere"></div></div>
+    <div class="luxury-bg">
+        <div class="gold-dust" style="left:10%; animation-duration: 8s;"></div>
+        <div class="gold-dust" style="left:30%; animation-duration: 12s; animation-delay: 2s;"></div>
+        <div class="gold-dust" style="left:70%; animation-duration: 10s; animation-delay: 1s;"></div>
+        <div class="gold-dust" style="left:90%; animation-duration: 15s;"></div>
+        <div class="gold-dust" style="left:50%; animation-duration: 9s; animation-delay: 4s;"></div>
+    </div>
 
     <div id="screen-home" class="screen active">
-        <div class="home-content">
-            <img src="logo_sena.png" class="main-logo">
-            <br>
-            <button class="btn-luxury" onclick="OS.start()">START EXPERIENCE</button>
+        <button style="position:absolute; top:20px; right:20px; background:none; border:none; color:rgba(255,255,255,0.3); font-size:1.5rem;" onclick="toggleFullscreen()">⛶</button>
+        
+        <img src="logo_sena.png" class="main-logo" alt="SENA">
+        
+        <div class="btn-start-wrapper">
+            <button class="btn-coin" onclick="OS.start()">
+                START
+            </button>
         </div>
+        
+        <div class="tagline">The Memories | Class of 2024</div>
     </div>
 
     <div id="screen-cam" class="screen">
-        <div class="header">
-            <button class="btn-back" onclick="OS.goBack()">← BACK</button>
-            <div id="timer-ui" style="font-size:0.8rem; letter-spacing:2px;">READY</div>
+        <div class="cam-frame-border"></div>
+        <div class="cam-frame-corners"></div>
+
+        <div class="ui-top">
+            <span style="color:var(--gold-primary);">● REC</span>
+            <span id="clock" style="font-weight:300;">12:00</span>
         </div>
 
-        <div class="cam-viewport">
-            <div id="rec-indicator"><div class="rec-dot"></div> RECORDING CINEMA</div>
+        <div class="viewport">
             <video id="video-feed" autoplay playsinline muted></video>
-            <div id="countdown" style="position:absolute; font-family:var(--font-serif); font-size:10rem; display:none; z-index:100;">3</div>
+            <div id="countdown">3</div>
+            
+            <div class="cam-sidebar">
+                <div class="tool-icon" onclick="OS.toggleCamFlip()">↺</div>
+                <div class="tool-icon" onclick="OS.toggleTimer()" id="btn-timer" style="font-size:1rem; font-weight:bold; border:1px solid #fff; border-radius:50%; width:35px; height:35px; display:flex; align-items:center; justify-content:center;">3s</div>
+                <div class="tool-icon" onclick="OS.toggleFlash()">⚡</div>
+            </div>
         </div>
 
-        <div class="controls">
-            <div class="shutter-wrap" onclick="OS.takePhotos()">
-                <div class="shutter-ring"><div class="shutter-point"></div></div>
-                <span class="shutter-label">Capture Strip</span>
-            </div>
-            <div class="shutter-wrap video" onclick="OS.takeVideo()">
-                <div class="shutter-ring"><div class="shutter-point"></div></div>
-                <span class="shutter-label">Cinema MOV</span>
+        <div class="filter-select">
+            <div class="f-item active" onclick="OS.filter('normal', this)">Original</div>
+            <div class="f-item" onclick="OS.filter('beauty', this)">Glow</div>
+            <div class="f-item" onclick="OS.filter('bw', this)">Noir</div>
+            <div class="f-item" onclick="OS.filter('film', this)">Vintage</div>
+        </div>
+
+        <div class="ui-bottom">
+            <div class="shutter-ring" onclick="OS.snap()">
+                <div class="shutter-btn"></div>
             </div>
         </div>
     </div>
 
     <div id="screen-result" class="screen">
-        <div class="preview-box">
-            <img id="res-img" class="final-media" style="display:none;">
-            <video id="res-vid" class="final-media" autoplay loop muted style="display:none;"></video>
+        <div class="preview-area">
+            <img id="final-img" class="preview-img photo-frame-shadow" style="height: 85%; width: auto; border: 8px solid #fff;" alt="Print">
         </div>
-        <div class="info-panel">
-            <div class="res-title">The Masterpiece</div>
-            <p id="status-text" style="opacity:0.5; font-size:0.8rem; line-height:1.6;">Your cinematic moment is being processed for high-speed download.</p>
-            
-            <div class="progress-container">
-                <div style="display:flex; justify-content:space-between; font-size:0.7rem;">
-                    <span>CLOUD UPLOAD</span><span id="pct">0%</span>
+
+        <div class="control-panel">
+            <div class="status-box">
+                <div class="result-title">Your Moment</div>
+                <div class="result-subtitle">Captured & Preserved</div>
+                
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-top:10px;">
+                    <span id="log-text">Processing...</span> <span id="pct" style="color:var(--gold-primary);">0%</span>
                 </div>
-                <div class="p-bar-bg"><div class="p-bar-fill" id="load-fill"></div></div>
+                <div class="progress-line"><div class="progress-bar" id="load-fill"></div></div>
             </div>
 
             <div id="qr-box">
                 <div id="qrcode"></div>
-                <p style="font-size:0.6rem; opacity:0.4; margin-top:10px;">SCAN TO DOWNLOAD MOV / JPG</p>
             </div>
 
-            <div class="btn-group">
-                <button class="btn-res" onclick="OS.download()">DOWNLOAD TO DEVICE</button>
-                <button class="btn-res alt" onclick="OS.restart()">NEW SESSION</button>
+            <div class="action-list">
+                <button class="btn-action-gold btn-highlight" onclick="OS.download()">
+                    <span>Download Photo</span>
+                </button>
+                <button class="btn-action-gold" onclick="OS.decorateStrip()">
+                    <span>✨ Decorate (Gold)</span>
+                </button>
+                <button class="btn-action-gold" onclick="OS.downloadVideo()">
+                    <span>🎥 Save Video</span>
+                </button>
+                <button class="btn-action-gold" onclick="OS.restart()" style="border:none; color:#666; margin-top:10px;">
+                    Tap to Restart
+                </button>
             </div>
         </div>
     </div>
 
-    <div id="flash"></div>
+    <div id="flash" style="position:fixed; inset:0; background:#fff; z-index:999; opacity:0; pointer-events:none; transition:opacity 0.1s;"></div>
     <canvas id="hidden-canvas" style="display:none"></canvas>
 
     <script>
-        const IMGBB_KEY = 'ffc90ad0bc5c7e0c056b68ef7430304a'; // API ภาพนิ่ง
-        // สำหรับวิดีโอระดับโลก มักใช้ File.io หรืออัปโหลดไปที่ Server ส่วนตัว
-        // ในที่นี้ระบบจะใช้เทคนิค Blob URL และอัปโหลดจำลองความเร็วสูงเพื่อให้ได้ QR
+        // --- JS SYSTEM (SAME LOGIC) ---
+        const FIXED_FRAME_URL = 'frame.png'; 
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{});
+            else if (document.exitFullscreen) document.exitFullscreen();
+        }
 
         const OS = (function() {
-            let s = { stream: null, photos: [], processing: false, mode: 'image', videoUrl: null, videoBlob: null };
+            // ** ใส่ API KEY ของคุณตรงนี้ **
+            const API_KEY = 'ffc90ad0bc5c7e0c056b68ef7430304a'; 
+            
+            const C = { w: 1280, h: 720, stripW: 600, shots: 3 };
+            let s = { filter: 'normal', frameImg: null, photos: [], stream: null, processing: false, timer: 3, flash: true, facingMode: 'user', mirror: true };
             const D = {
-                video: document.getElementById('video-feed'),
-                canvas: document.getElementById('hidden-canvas'),
-                resImg: document.getElementById('res-img'),
-                resVid: document.getElementById('res-vid'),
-                count: document.getElementById('countdown'),
-                recUI: document.getElementById('rec-indicator'),
-                flash: document.getElementById('flash'),
-                load: document.getElementById('load-fill'),
-                pct: document.getElementById('pct')
+                screens: { home: document.getElementById('screen-home'), cam: document.getElementById('screen-cam'), res: document.getElementById('screen-result') },
+                video: document.getElementById('video-feed'), canvas: document.getElementById('hidden-canvas'), count: document.getElementById('countdown'),
+                flash: document.getElementById('flash'), final: document.getElementById('final-img'), btnTimer: document.getElementById('btn-timer')
             };
 
+            const Aud = {
+                ctx: null,
+                init: function() { if(!this.ctx) this.ctx = new (window.AudioContext||window.webkitAudioContext)(); },
+                play: function(type) {
+                    this.init(); if(this.ctx.state === 'suspended') this.ctx.resume();
+                    const o = this.ctx.createOscillator(); const g = this.ctx.createGain();
+                    o.connect(g); g.connect(this.ctx.destination);
+                    const t = this.ctx.currentTime;
+                    // ปรับเสียงให้ดูแพงขึ้น (นุ่มนวล)
+                    if(type === 'coin') { 
+                        o.frequency.setValueAtTime(600, t); o.frequency.exponentialRampToValueAtTime(1200, t+0.4); 
+                        g.gain.setValueAtTime(0.05, t); g.gain.linearRampToValueAtTime(0, t+0.4); 
+                    } else if(type === 'shutter') {
+                        // เสียงชัตเตอร์แน่นๆ
+                        const n = this.ctx.createBufferSource(); const b = this.ctx.createBuffer(1, this.ctx.sampleRate*0.1, this.ctx.sampleRate);
+                        const d = b.getChannelData(0); for(let i=0;i<b.length;i++) d[i]=Math.random()*2-1;
+                        n.buffer=b; n.connect(g); g.gain.value=0.2; n.start(t);
+                    } else {
+                        // Beep
+                        o.frequency.value=800; g.gain.value=0.05; o.start(t); o.stop(t+0.1);
+                    }
+                    if(type!=='shutter') { o.start(t); o.stop(t+0.4); }
+                }
+            };
+
+            window.onload = async () => {
+                const img = new Image(); img.src = FIXED_FRAME_URL; img.onload = () => { s.frameImg = img; };
+                setInterval(() => { const d = new Date(); document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0'); }, 1000);
+            };
+
+            function switchScreen(name) { 
+                Object.values(D.screens).forEach(s => s.classList.remove('active')); 
+                D.screens[name].classList.add('active'); 
+            }
+            
+            async function start() { Aud.play('coin'); await initCamera(); switchScreen('cam'); }
+            
             async function initCamera() {
                 if(s.stream) s.stream.getTracks().forEach(t=>t.stop());
-                s.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 1920, height: 1080 } });
-                D.video.srcObject = s.stream;
+                try {
+                    s.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: s.facingMode, width: {ideal: 1920}, height: {ideal: 1080} }, audio: false });
+                    D.video.srcObject = s.stream; updateMirror();
+                } catch(e) { alert("Camera Error"); }
             }
 
-            function setScreen(id) {
-                document.querySelectorAll('.screen').forEach(scr => scr.classList.remove('active'));
-                document.getElementById(id).classList.add('active');
+            function toggleCamFlip() { s.facingMode = (s.facingMode === 'user') ? 'environment' : 'user'; initCamera(); }
+            function toggleTimer() { const timers = [3, 5, 10]; s.timer = timers[(timers.indexOf(s.timer)+1) % timers.length]; D.btnTimer.innerText = s.timer + "s"; Aud.play('beep'); }
+            function toggleFlash() { s.flash = !s.flash; Aud.play('beep'); document.querySelector('.tool-icon:last-child').style.opacity = s.flash?1:0.3;}
+            function toggleMirror() { s.mirror = !s.mirror; updateMirror(); }
+            function updateMirror() { D.video.style.transform = s.mirror ? "scaleX(-1)" : "scaleX(1)"; }
+
+            function filter(mode, btn) {
+                s.filter = mode; document.querySelectorAll('.f-item').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+                let css = 'none';
+                if(mode==='beauty') css = 'contrast(1.05) brightness(1.1) saturate(1.1) blur(0.3px)';
+                if(mode==='bw') css = 'grayscale(100%) contrast(1.2)';
+                if(mode==='film') css = 'sepia(0.2) contrast(1.1) saturate(0.8)';
+                D.video.style.filter = css; Aud.play('beep');
             }
 
-            async function takePhotos() {
-                if(s.processing) return; s.processing = true; s.mode = 'image'; s.photos = [];
-                for(let i=0; i<3; i++) {
-                    await countdown(3);
-                    await capture();
-                }
-                renderStrip();
+            async function snap() {
+                if(s.processing) return; s.processing = true; s.photos = [];
+                for(let i=0; i<C.shots; i++) { await countdown(s.timer); await capture(); await new Promise(r => setTimeout(r, 800)); }
+                s.processing = false; processResult();
             }
 
             function countdown(n) {
                 return new Promise(r => {
-                    let c = n; D.count.innerText = c; D.count.style.display = 'block';
-                    const t = setInterval(() => {
-                        c--; if(c>0) D.count.innerText = c;
-                        else { clearInterval(t); D.count.style.display = 'none'; r(); }
-                    }, 1000);
+                    let c = n; D.count.style.display = 'block'; D.count.innerText = c; 
+                    const t = setInterval(() => { c--; if(c>0) { D.count.innerText = c; } else { clearInterval(t); D.count.style.display = 'none'; r(); } }, 1000);
                 });
             }
 
             function capture() {
                 return new Promise(r => {
-                    D.flash.style.opacity = 1; setTimeout(()=>D.flash.style.opacity=0, 100);
-                    const cvs = document.createElement('canvas');
-                    cvs.width = D.video.videoWidth; cvs.height = D.video.videoHeight;
+                    Aud.play('shutter');
+                    if(s.flash) { D.flash.style.opacity=1; setTimeout(() => D.flash.style.opacity=0, 150); }
+                    const cvs = document.createElement('canvas'); cvs.width = D.video.videoWidth; cvs.height = D.video.videoHeight;
                     const ctx = cvs.getContext('2d');
-                    ctx.translate(cvs.width, 0); ctx.scale(-1, 1);
-                    ctx.drawImage(D.video, 0, 0);
-                    s.photos.push(cvs);
-                    setTimeout(r, 600);
+                    if(s.mirror) { ctx.translate(cvs.width, 0); ctx.scale(-1, 1); }
+                    ctx.drawImage(D.video, 0, 0); 
+                    
+                    if(s.filter !== 'normal') {
+                        const id = ctx.getImageData(0,0,cvs.width,cvs.height); const d = id.data;
+                        for(let i=0; i<d.length; i+=4) {
+                            let R=d[i], G=d[i+1], B=d[i+2];
+                            if(s.filter === 'bw') { const v = 0.299*R + 0.587*G + 0.114*B; d[i]=d[i+1]=d[i+2]=v; }
+                            else if(s.filter === 'film') { d[i] = R*0.393+G*0.769+B*0.189; d[i+1] = R*0.349+G*0.686+B*0.168; d[i+2] = R*0.272+G*0.534+B*0.131; }
+                        }
+                        ctx.putImageData(id, 0, 0);
+                    }
+                    s.photos.push(cvs); setTimeout(r, 200);
                 });
             }
 
-            async function takeVideo() {
-                if(s.processing) return; s.processing = true; s.mode = 'video';
-                D.recUI.style.display = 'flex';
-                const recorder = new MediaRecorder(s.stream, { mimeType: 'video/webm;codecs=vp9' });
+            function processResult() {
+                generateStripCanvas(); 
+                const finalDataUrl = D.canvas.toDataURL('image/jpeg', 0.95);
+                D.final.src = finalDataUrl; 
+                switchScreen('res');
+                D.final.classList.remove('animate-up');
+                void D.final.offsetWidth; // trigger reflow
+                D.final.classList.add('animate-up');
+                
+                // Luxury Confetti (Gold/Silver)
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors:['#D4AF37', '#ffffff', '#000000'] });
+                handleUpload(finalDataUrl);
+            }
+
+            function generateStripCanvas(shiftOrder = 0) {
+                let stripW = C.stripW; let photoW = 540; let photoH = (photoW*3)/4;
+                let gap = 25, head = 150, foot = 100;
+                let H = head + (photoH*C.shots) + (gap*(C.shots-1)) + foot;
+                D.canvas.width = stripW; D.canvas.height = H;
+                const ctx = D.canvas.getContext('2d');
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,stripW,H);
+                let y = head;
+                let displayPhotos = [...s.photos];
+                for(let i=0; i<shiftOrder; i++) displayPhotos.unshift(displayPhotos.pop());
+                displayPhotos.forEach(p => {
+                    const sR = p.width/p.height; const dR=4/3;
+                    let sx, sy, sw, sh;
+                    if(sR > dR) { sh=p.height; sw=sh*dR; sx=(p.width-sw)/2; sy=0; } else { sw=p.width; sh=sw/dR; sx=0; sy=(p.height-sh)/2; }
+                    ctx.drawImage(p, sx, sy, sw, sh, (stripW-photoW)/2, y, photoW, photoH);
+                    y += photoH + gap;
+                });
+                if (s.frameImg) ctx.drawImage(s.frameImg, 0, 0, stripW, H);
+            }
+
+            function decorateStrip() {
+                const ctx = D.canvas.getContext('2d');
+                const texts = ["CONGRATS", "2024", "MEMORIES", "✨"];
+                const w = D.canvas.width; const h = D.canvas.height;
+                Aud.play('coin');
+                for(let i=0; i<5; i++) {
+                    const t = texts[Math.floor(Math.random()*texts.length)];
+                    const x = Math.random() * w; const y = Math.random() * h;
+                    ctx.save(); ctx.translate(x, y); ctx.rotate((Math.random()-0.5));
+                    ctx.font = "italic 40px 'Playfair Display'"; ctx.fillStyle = "#D4AF37"; 
+                    ctx.fillText(t, 0, 0); ctx.restore();
+                }
+                D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
+            }
+
+            async function handleUpload(base64) {
+                const fill = document.getElementById('load-fill'); const pct = document.getElementById('pct'); const log = document.getElementById('log-text');
+                if (API_KEY === '') return;
+                let p = 0; const int = setInterval(() => { if(p<90) p+=2; fill.style.width=p+"%"; pct.innerText=p+"%";}, 50);
+                try {
+                    const formData = new FormData(); formData.append("image", base64.split(',')[1]); 
+                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, { method: "POST", body: formData });
+                    const data = await res.json();
+                    clearInterval(int); fill.style.width="100%"; pct.innerText="100%"; log.innerText = "Ready to Save";
+                    if (data.success) {
+                        document.getElementById('qrcode').innerHTML = "";
+                        new QRCode(document.getElementById("qrcode"), { text: data.data.url, width: 120, height: 120, colorDark : "#D4AF37", colorLight : "#ffffff" });
+                        document.getElementById('qr-box').style.display = 'block';
+                    }
+                } catch (err) { clearInterval(int); log.innerText = "Upload Failed (Check Internet)"; }
+            }
+
+            function download() { const a = document.createElement('a'); a.download = `SENA_GRAD_${Date.now()}.jpg`; a.href = D.final.src; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
+            
+            async function downloadVideo() {
+                const stream = D.canvas.captureStream(30);
+                const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
                 const chunks = [];
                 recorder.ondataavailable = e => chunks.push(e.data);
-                recorder.onstop = async () => {
-                    s.videoBlob = new Blob(chunks, { type: 'video/mp4' }); // บีบอัดเป็น mp4/mov จำลอง
-                    s.videoUrl = URL.createObjectURL(s.videoBlob);
-                    D.resVid.src = s.videoUrl;
-                    D.resVid.style.display = 'block'; D.resImg.style.display = 'none';
-                    setScreen('screen-result');
-                    uploadVideo();
+                recorder.onstop = () => {
+                    const blob = new Blob(chunks, { type: 'video/webm' }); const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a'); a.href = url; a.download = `SENA_MEMORY_${Date.now()}.webm`;
+                    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                    generateStripCanvas(0); D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
                 };
                 recorder.start();
-                setTimeout(() => { recorder.stop(); D.recUI.style.display = 'none'; }, 5000);
+                let startT = Date.now(); let shift = 0;
+                const anim = setInterval(() => { shift++; generateStripCanvas(shift); D.final.src = D.canvas.toDataURL('image/jpeg', 0.8); if (Date.now() - startT >= 5000) { clearInterval(anim); recorder.stop(); } }, 500); 
             }
 
-            function renderStrip() {
-                const w = 600, h = 405, head = 150;
-                const totalH = head + (h*3) + (25*2) + 100;
-                D.canvas.width = w; D.canvas.height = totalH;
-                const ctx = D.canvas.getContext('2d');
-                ctx.fillStyle = "#fff"; ctx.fillRect(0,0,w,totalH);
-                s.photos.forEach((p, i) => ctx.drawImage(p, 30, head + (i*(h+25)), 540, h));
-                
-                const frame = new Image(); frame.src = 'frame.png';
-                frame.onload = () => {
-                    ctx.drawImage(frame, 0, 0, w, totalH);
-                    D.resImg.src = D.canvas.toDataURL('image/jpeg', 0.9);
-                    D.resImg.style.display = 'block'; D.resVid.style.display = 'none';
-                    setScreen('screen-result');
-                    uploadImage(D.resImg.src);
-                    confetti({ colors: ['#D4AF37', '#ffffff'] });
-                };
-            }
-
-            async function uploadImage(base64) {
-                try {
-                    const fd = new FormData(); fd.append("image", base64.split(',')[1]);
-                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
-                    const data = await res.json();
-                    if(data.success) showQR(data.data.url);
-                } catch(e) { simulateProgress(); }
-            }
-
-            async function uploadVideo() {
-                // สำหรับวิดีโอระดับ Production: อัปโหลดไปที่โฮสต์ชั่วคราวเพื่อให้คนแสกนได้
-                simulateProgress(() => {
-                    // ในที่นี้ใช้ Blob URL เพื่อความรวดเร็วในการแสดงผล
-                    showQR(s.videoUrl);
-                });
-            }
-
-            function simulateProgress(cb) {
-                let p = 0; const inv = setInterval(() => {
-                    p += 5; D.load.style.width = p+'%'; D.pct.innerText = p+'%';
-                    if(p >= 100) { clearInterval(inv); if(cb) cb(); }
-                }, 100);
-            }
-
-            function showQR(url) {
-                document.getElementById('qr-box').style.display = 'block';
-                document.getElementById('qrcode').innerHTML = "";
-                new QRCode(document.getElementById("qrcode"), { text: url, width: 120, height: 120 });
-                D.load.style.width = '100%'; D.pct.innerText = '100%';
-            }
-
-            return {
-                start: () => { initCamera(); setScreen('screen-cam'); },
-                goBack: () => setScreen('screen-home'),
-                takePhotos, takeVideo,
-                download: () => {
-                    const a = document.createElement('a');
-                    if(s.mode === 'image') { a.href = D.resImg.src; a.download = 'SENA_PRESTIGE.jpg'; }
-                    else { a.href = s.videoUrl; a.download = 'SENA_CINEMA.mov'; }
-                    a.click();
-                },
-                restart: () => location.reload()
-            };
+            function restart() { location.reload(); }
+            return { start, toggleCamFlip, toggleTimer, toggleFlash, toggleMirror, filter, snap, download, restart, decorateStrip, downloadVideo };
         })();
     </script>
 </body>

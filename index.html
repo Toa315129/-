@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>SENA PHOTOBOOTH | VIDEO EDITION</title>
+    <title>SENA PHOTOBOOTH | FIXED FRAME</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&family=VT323&family=Prompt:wght@400;600;800&family=Fredoka:wght@300;600&family=Bangers&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CSS เดิมทั้งหมด (ไม่เปลี่ยนดีไซน์) --- */
+        /* --- CSS เดิมทั้งหมด ไม่เปลี่ยนดีไซน์ --- */
         @font-face {
             font-family: 'JS Chanok';
             src: url('https://cdn.jsdelivr.net/gh/Toa315129/Saphabooth@main/JS-Chanok-Normal.ttf') format('truetype');
@@ -98,27 +98,6 @@
         .btn-coin:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
         .blink-text { animation: blink 1.5s infinite; }
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-
-        #screen-frames {
-            justify-content: center; align-items: center; background: #080808; 
-            padding: 20px;
-        }
-        
-        /* Styles for File Upload Area */
-        .upload-zone {
-            border: 2px dashed #444;
-            padding: 40px;
-            text-align: center;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            margin-bottom: 20px;
-        }
-        .upload-zone h3 { margin-top: 0; font-family: var(--font-code); color: var(--accent); }
-        .custom-file-input {
-            margin-top: 20px;
-        }
-        /* End Upload Styles */
 
         #screen-cam { justify-content: space-between; background: #000; }
         
@@ -264,20 +243,7 @@
             <button class="btn-coin" onclick="OS.start()">
                 <span class="blink-text">TOUCH TO START</span>
             </button>
-            <p style="margin-top:20px; font-family:var(--font-code); color:#666;">PRO EDITION v4.0 (VIDEO SUPPORT)</p>
-        </div>
-
-        <div id="screen-frames" class="screen">
-            <div class="upload-zone">
-                <h3>UPLOAD YOUR FRAME</h3>
-                <p style="font-size:0.8rem; color:#888;">(.PNG transparent only)</p>
-                <input type="file" id="frame-input" accept="image/png" style="margin-bottom:20px; color:#fff;" onchange="OS.handleFrameUpload(this)">
-                
-                <br>
-                <button id="btn-start-cam" class="btn-action" style="display:none;" onclick="OS.goToCamera()">START CAMERA</button>
-            </div>
-
-            <button class="btn-action outline" style="width:200px; margin:20px auto;" onclick="location.reload()">← BACK</button>
+            <p style="margin-top:20px; font-family:var(--font-code); color:#666;">PRO EDITION v4.0</p>
         </div>
 
         <div id="screen-cam" class="screen">
@@ -363,6 +329,11 @@
     <canvas id="hidden-canvas" style="display:none"></canvas> 
 
     <script>
+        // --- ส่วนตั้งค่ารูปกรอบ ---
+        // ให้เอารูปของคุณเซฟชื่อไฟล์ว่า "frame.png" แล้ววางไว้คู่กับไฟล์ html นี้
+        const FIXED_FRAME_URL = 'frame.png'; 
+        // -------------------------
+
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(e=>{});
@@ -383,7 +354,7 @@
 
             let s = { 
                 filter: 'normal', 
-                frameImg: null, // เก็บรูปกรอบที่อัพโหลด
+                frameImg: null, // จะโหลดให้อัตโนมัติ
                 photos: [], 
                 stream: null, 
                 processing: false,
@@ -397,7 +368,6 @@
             const D = {
                 screens: {
                     home: document.getElementById('screen-home'),
-                    frames: document.getElementById('screen-frames'),
                     cam: document.getElementById('screen-cam'),
                     res: document.getElementById('screen-result')
                 },
@@ -452,6 +422,12 @@
             };
 
             window.onload = async () => {
+                // Preload the fixed frame
+                const img = new Image();
+                img.src = FIXED_FRAME_URL;
+                img.onload = () => { s.frameImg = img; console.log("Frame Loaded"); }
+                img.onerror = () => { console.error("Cannot load frame.png. Please check file name."); }
+
                 setInterval(() => {
                     const d = new Date();
                     document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0');
@@ -465,31 +441,8 @@
 
             async function start() {
                 Aud.play('coin');
-                switchScreen('frames');
-            }
-
-            // ฟังก์ชั่นจัดการการอัพโหลดรูปกรอบ
-            function handleFrameUpload(input) {
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const img = new Image();
-                        img.onload = function() {
-                            s.frameImg = img;
-                            document.getElementById('btn-start-cam').style.display = 'block'; // โชว์ปุ่ม Start
-                            Aud.play('beep');
-                        };
-                        img.src = e.target.result;
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-
-            async function goToCamera() {
-                if (!s.frameImg) { alert("Please upload a frame first!"); return; }
-                Aud.play('beep');
                 await initCamera();
-                switchScreen('cam');
+                switchScreen('cam'); // ข้ามไปกล้องเลย
             }
 
             async function initCamera() {
@@ -625,7 +578,6 @@
                 }, 3500);
             }
 
-            // --- แก้ไข Logic การวาดรูป: วาดรูปก่อน แล้ววาดกรอบทับ ---
             function generateStripCanvas(shiftOrder = 0) {
                 let stripW = C.stripW; // 600px
                 let photoW = 540; 
@@ -636,14 +588,12 @@
                 D.canvas.width = stripW; D.canvas.height = H;
                 const ctx = D.canvas.getContext('2d');
 
-                // 1. พื้นหลังสีขาว
+                // 1. พื้นหลัง
                 ctx.fillStyle = '#ffffff'; 
                 ctx.fillRect(0,0,stripW,H);
 
-                // 2. วาดรูปถ่าย (Bottom Layer)
+                // 2. วาดรูปถ่ายก่อน
                 let y = head;
-                
-                // สลับลำดับรูป (สำหรับ Video Loop)
                 let displayPhotos = [...s.photos];
                 for(let i=0; i<shiftOrder; i++) {
                     displayPhotos.unshift(displayPhotos.pop());
@@ -655,21 +605,16 @@
                     if(sR > dR) { sh=p.height; sw=sh*dR; sx=(p.width-sw)/2; sy=0; }
                     else { sw=p.width; sh=sw/dR; sx=0; sy=(p.height-sh)/2; }
                     
-                    // วาดรูปลงไปที่ตำแหน่งเดิม ตรงกลาง
                     ctx.drawImage(p, sx, sy, sw, sh, (stripW-photoW)/2, y, photoW, photoH);
                     y += photoH + gap;
                 });
 
-                // 3. วาดกรอบที่อัพโหลดทับลงไป (Top Overlay Layer)
+                // 3. วาดกรอบ frame.png ทับลงไป
                 if (s.frameImg) {
-                     // ดึงรูปกรอบให้เต็มพื้นที่ Canvas (600xHeight)
                     ctx.drawImage(s.frameImg, 0, 0, stripW, H);
                 }
             }
 
-            // ========================================================
-            //  DECORATE & UPLOAD LOGIC
-            // ========================================================
             function decorateStrip() {
                 const ctx = D.canvas.getContext('2d');
                 const stickers = ["🛝", "👀", "⭐", "🍼", "🫧", "🎀", "🧸"];
@@ -805,8 +750,7 @@
 
             return { 
                 start, toggleCamFlip, toggleTimer, toggleFlash, toggleMirror, toggleGrid, 
-                filter, snap, adjCopies, download, restart, decorateStrip, downloadVideo,
-                handleFrameUpload, goToCamera 
+                filter, snap, adjCopies, download, restart, decorateStrip, downloadVideo
             };
         })();
     </script>

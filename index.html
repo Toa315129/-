@@ -12,25 +12,16 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&family=VT323&family=Prompt:wght@400;600;800&family=Fredoka:wght@300;600&family=Bangers&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CSS เดิมทั้งหมด --- */
-        @font-face {
-            font-family: 'JS Chanok';
-            src: url('https://cdn.jsdelivr.net/gh/Toa315129/Saphabooth@main/JS-Chanok-Normal.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
+        /* --- Setting หลัก --- */
         :root {
             --bg-color: #000;
-            --text-main: #E0E0E0;
-            --accent: #00ff41;
-            --alert: #FF3333; 
-            --font-ui: 'DM Sans', sans-serif;
-            --font-code: 'VT323', monospace;
-            --font-thai: 'Prompt', sans-serif;
+            --text-main: #fff;
+            --accent: #FF0055; /* สีชมพูแดง ให้ดูเด่น */
+            --glass: rgba(255, 255, 255, 0.15);
+            --font-main: 'Prompt', sans-serif; /* เปลี่ยนฟอนต์หลัก */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
@@ -42,7 +33,7 @@
             width: 100vw;
             overflow: hidden;
             color: var(--text-main);
-            font-family: var(--font-ui);
+            font-family: var(--font-main); /* ใช้ Prompt ทั้งเว็บ */
             display: flex; justify-content: center; align-items: center;
             touch-action: none;
         }
@@ -50,237 +41,242 @@
         #monitor {
             width: 100%; height: 100%;
             position: relative;
-            background: #050505;
+            background: #111;
             display: flex; flex-direction: column;
         }
 
-        .scanlines {
-            position: absolute; inset: 0; pointer-events: none; z-index: 900;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 4px; opacity: 0.6;
-        }
+        /* เอา Scanlines ออกเพื่อให้ภาพชัดพรีเมียม แต่เก็บ Vignette ไว้ให้ดูมีมิติ */
         .vignette {
             position: absolute; inset: 0; pointer-events: none; z-index: 901;
-            background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.6) 100%);
+            background: radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 100%);
         }
 
         .screen {
             position: absolute; inset: 0;
             display: flex; flex-direction: column;
             opacity: 0; pointer-events: none;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.4s ease;
             z-index: 10;
             background: #000;
         }
         .screen.active { opacity: 1; pointer-events: auto; }
 
-        /* --- ปรับปรุงหน้า Home --- */
+        /* --- 1. หน้า HOME ดีไซน์ใหม่ --- */
         #screen-home {
             justify-content: center; align-items: center; text-align: center;
-            /* เปลี่ยนพื้นหลังเป็นรูป */
             background: url('bg_start.png') no-repeat center center;
             background-size: cover;
             position: relative;
+            padding-bottom: 50px; /* ดันเนื้อหาขึ้นบนเล็กน้อย */
         }
-        /* เพิ่ม Overlay ดำบางๆ เพื่อให้โลโก้เด่นขึ้น */
         #screen-home::before {
             content: ''; position: absolute; inset: 0;
-            background: rgba(0,0,0,0.2); 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)); /* ไล่เงาดำข้างล่าง */
             z-index: -1;
         }
 
-        /* Class ใหม่สำหรับ Logo รูปภาพ */
         .main-logo {
-            width: 80%;
-            max-width: 500px;
-            height: auto;
-            margin-bottom: 10px;
-            /* เพิ่มเงาเรืองแสงเพื่อให้เห็นชัดบนพื้นหลัง */
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.6));
+            width: 70%; max-width: 450px; height: auto;
+            margin-bottom: 30px; /* ระยะห่างจากปุ่ม */
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
             animation: float 4s ease-in-out infinite;
         }
+        @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+
+        /* ปุ่ม START ดีไซน์ใหม่ : ทรงแคปซูล + ตำแหน่งขยับขึ้น */
+        .btn-coin {
+            background: #fff; 
+            color: #000;
+            border: none;
+            padding: 18px 50px;
+            font-family: var(--font-main); 
+            font-size: 1.5rem; font-weight: 800; letter-spacing: 1px;
+            cursor: pointer; position: relative;
+            border-radius: 50px; /* ความมนแบบแคปซูล */
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .btn-coin:active { transform: scale(0.95); box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
+        .btn-coin:hover { transform: scale(1.05); }
 
         .tagline {
-            font-family: var(--font-thai);
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 4vh;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            font-size: 1.2rem; font-weight: 600; color: #eee;
+            letter-spacing: 2px; opacity: 0.8;
+            margin-top: 10px;
         }
 
-        @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
-        
-        .btn-coin {
-            background: rgba(0,0,0,0.4); border: 2px solid #fff;
-            padding: 2vh 4vw; color: #fff;
-            font-family: var(--font-code); font-size: 2rem;
-            cursor: pointer; position: relative;
-            box-shadow: 0 0 15px rgba(255,255,255,0.2);
-            transition: 0.2s; border-radius: 4px;
-            backdrop-filter: blur(5px);
-        }
-        .btn-coin:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
-        .blink-text { animation: blink 1.5s infinite; }
-        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-
-        /* --- จบส่วนหน้า Home --- */
-
+        /* --- 2. หน้ากล้อง (CAM) ดีไซน์ใหม่ --- */
         #screen-cam { justify-content: space-between; background: #000; }
         
         .ui-top {
-            height: 60px; display: flex; justify-content: space-between; align-items: center;
-            padding: 0 20px; background: #111; border-bottom: 1px solid #333;
-            font-family: var(--font-code); font-size: 1.2rem;
-            z-index: 20;
+            height: 70px; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 25px; background: rgba(0,0,0,0.5); 
+            backdrop-filter: blur(10px);
+            font-weight: 600; letter-spacing: 1px;
+            z-index: 20; position: absolute; top: 0; width: 100%;
         }
-        .rec-badge { color: var(--alert); display: flex; align-items: center; gap: 8px; font-weight: bold;}
-        .rec-dot { width: 10px; height: 10px; background: var(--alert); border-radius: 50%; }
+        .rec-badge { color: var(--accent); display: flex; align-items: center; gap: 8px;}
+        .rec-dot { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); }
 
+        .viewport { flex: 1; position: relative; overflow: hidden; background: #000; display: flex; justify-content: center; align-items: center;}
+        video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); transition: filter 0.3s; }
+
+        /* Sidebar กลมมน และเรียบขึ้น */
         .cam-sidebar {
-            position: absolute; top: 70px; right: 10px; bottom: 140px;
-            width: 60px; display: flex; flex-direction: column; gap: 15px;
+            position: absolute; top: 90px; right: 20px;
+            display: flex; flex-direction: column; gap: 20px;
             z-index: 50; pointer-events: none;
         }
         .tool-btn {
-            width: 50px; height: 50px; background: rgba(0,0,0,0.6); 
-            border: 1px solid #fff; border-radius: 50%; color: #fff;
+            width: 55px; height: 55px; background: rgba(255,255,255,0.2); 
+            border: 1px solid rgba(255,255,255,0.4); 
+            border-radius: 50%; color: #fff;
             display: flex; align-items: center; justify-content: center;
             font-size: 1.2rem; cursor: pointer; pointer-events: auto;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px); transition: 0.2s;
         }
-        .tool-btn.active { background: #fff; color: #000; }
+        .tool-btn:active { transform: scale(0.9); background: #fff; color: #000;}
 
-        .viewport { flex: 1; position: relative; overflow: hidden; background: #050505; display: flex; justify-content: center; align-items: center;}
-        video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); transition: filter 0.3s; }
-        
+        /* Countdown */
+        #countdown {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            font-size: 12rem; font-weight: 800; color: #fff; display: none;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100;
+        }
+
+        /* Control Bar ด้านล่าง */
+        .ui-controls {
+            height: 160px; background: rgba(0,0,0,0.8); 
+            backdrop-filter: blur(15px);
+            display: flex; align-items: center; justify-content: center; gap: 20px;
+            padding-bottom: 20px; z-index: 20; border-radius: 20px 20px 0 0;
+            position: absolute; bottom: 0; width: 100%;
+        }
+
+        /* Filter ปุ่มมน */
+        .filter-scroller {
+            display: flex; gap: 10px; overflow-x: auto; padding: 0 15px;
+            max-width: 35%; scrollbar-width: none;
+        }
+        .btn-filter {
+            min-width: 70px; height: 40px; background: transparent; border: 1px solid #666;
+            color: #aaa; border-radius: 20px; /* ปุ่มรี */
+            cursor: pointer; font-family: var(--font-main); font-weight: 600; font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .btn-filter.active { background: #fff; color: #000; border-color: #fff; transform: scale(1.05); }
+
+        /* ปุ่มชัตเตอร์ สไตล์ iPhone */
+        .btn-shutter {
+            width: 85px; height: 85px; border: 4px solid #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            flex-shrink: 0; transition: 0.2s;
+        }
+        .shutter-inner { width: 73px; height: 73px; background: #fff; border-radius: 50%; transition: 0.2s; }
+        .btn-shutter:active .shutter-inner { transform: scale(0.85); background: #ccc; }
+
+        /* Filter Styles */
         .filter-beauty { filter: contrast(1.05) brightness(1.1) saturate(1.1) blur(0.5px); }
         .filter-bw { filter: grayscale(100%) contrast(1.2); }
         .filter-film { filter: sepia(0.3) contrast(1.1) saturate(0.8); }
         .filter-glitch { animation: glitchAnim 0.2s infinite; }
-        @keyframes glitchAnim { 
-            0% { transform: translate(0) scaleX(-1); } 20% { transform: translate(-2px, 2px) scaleX(-1); } 
-            40% { transform: translate(-2px, -2px) scaleX(-1); } 60% { transform: translate(2px, 2px) scaleX(-1); } 
-            80% { transform: translate(2px, -2px) scaleX(-1); } 100% { transform: translate(0) scaleX(-1); } 
-        }
 
-        #countdown {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            font-size: 15rem; font-weight: 800; color: #fff; display: none;
-            text-shadow: 4px 4px 0 #000; z-index: 100;
-        }
-
-        .ui-controls {
-            height: 140px; background: #111; border-top: 1px solid #333;
-            display: flex; align-items: center; justify-content: center; gap: 15px;
-            padding-bottom: 10px; z-index: 20;
-        }
-        .filter-scroller {
-            display: flex; gap: 10px; overflow-x: auto; padding: 0 10px;
-            max-width: 40%; scrollbar-width: none;
-        }
-        .btn-filter {
-            min-width: 60px; height: 60px; background: #222; border: 1px solid #555;
-            color: #888; border-radius: 8px; cursor: pointer;
-            font-family: var(--font-code); display: flex; align-items: center; justify-content: center; font-size: 0.8rem;
-        }
-        .btn-filter.active { background: #fff; color: #000; box-shadow: 0 0 10px #fff; }
-
-        .btn-shutter {
-            width: 80px; height: 80px; border: 4px solid #fff; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            flex-shrink: 0; margin: 0 20px;
-        }
-        .shutter-inner { width: 68px; height: 68px; background: #fff; border-radius: 50%; transition: 0.1s; }
-        .btn-shutter:active .shutter-inner { transform: scale(0.9); background: #ccc; }
-
+        /* --- 3. หน้า RESULT ดีไซน์ใหม่ --- */
         #screen-result { 
-            justify-content: center; align-items: center; background: #0a0a0a; 
-            flex-direction: row; gap: 4vw; padding: 20px;
+            background: #111; 
+            flex-direction: row; gap: 40px; padding: 20px;
         }
         
-        .printer-wrapper { position: relative; height: 70vh; aspect-ratio: 160/420; }
+        .printer-wrapper { height: 75vh; aspect-ratio: 160/420; }
         .printer-slot {
             width: 100%; height: 100%;
-            border: 1px solid #333; border-top: 4px solid #111;
             background: #000; overflow: hidden; position: relative;
-            box-shadow: 0 0 40px rgba(0,0,0,0.9); border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); border-radius: 10px;
         }
-        .preview-img { width: 100%; height: auto; display: block; transform: translateY(105%); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .preview-img { width: 100%; height: auto; display: block; transform: translateY(105%); }
         .printing-active { animation: printSlide 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
         @keyframes printSlide { 0% { transform: translateY(105%); } 100% { transform: translateY(0); } }
 
         .result-sidebar {
             display: flex; flex-direction: column; align-items: center; gap: 15px;
-            opacity: 0; transition: opacity 1s ease 4s; width: 320px;
+            opacity: 0; transition: opacity 1s ease 4s; width: 340px;
         }
         .result-sidebar.show { opacity: 1; }
 
+        /* Loading Bar แบบ Modern */
         .server-log {
-            font-family: var(--font-code); color: var(--accent); width: 100%;
-            background: #111; padding: 10px; border: 1px solid #333;
-            font-size: 0.9rem; margin-bottom: 5px;
-            white-space: pre-wrap; line-height: 1.4;
+            color: #fff; width: 100%;
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px;
+            font-size: 0.9rem; font-weight: 600;
         }
-        .loading-bar { height: 4px; background: #333; width: 100%; margin-top: 5px; position: relative; overflow: hidden; }
-        .loading-fill { position: absolute; left:0; top:0; bottom:0; background: var(--accent); width: 0%; transition: width 0.2s; }
+        .loading-bar { height: 6px; background: rgba(255,255,255,0.1); width: 100%; margin-top: 8px; border-radius: 3px; overflow: hidden; }
+        .loading-fill { height: 100%; background: #00E676; width: 0%; transition: width 0.2s; border-radius: 3px; }
 
-        .qr-container { background: #fff; padding: 10px; border-radius: 8px; text-align: center; display: none; }
-        .qr-container.show { display: block; animation: popIn 0.5s ease; }
-        .email-box { width: 100%; display: flex; gap: 5px; margin-top: 5px; }
-        .email-input { flex: 1; background: #222; border: 1px solid #444; color: #fff; padding: 8px; font-family: var(--font-ui); border-radius: 4px;}
+        .qr-container { background: #fff; padding: 15px; border-radius: 16px; text-align: center; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3);}
+        .qr-container.show { display: block; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { 0%{transform:scale(0.5); opacity:0;} 100%{transform:scale(1); opacity:1;} }
         
-        .action-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 10px; }
+        /* ปุ่ม Action แบบโค้งมน */
+        .action-btns { display: flex; flex-direction: column; gap: 12px; width: 100%; margin-top: 10px; }
         .btn-action {
-            padding: 12px; font-family: var(--font-ui); font-weight: 700;
+            padding: 14px; font-family: var(--font-main); font-weight: 700;
             background: #fff; color: #000; border: none; cursor: pointer; font-size: 1rem;
-            width: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; border-radius: 50px; /* ปุ่มมน */
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: 0.2s;
         }
-        .btn-action.outline { background: transparent; border: 1px solid #fff; color: #fff; }
-        .btn-magic { background: linear-gradient(45deg, #ff00cc, #3333ff); color: #fff; border:none; }
-        .btn-video { border: 2px solid #ff0055; color: #ff0055; background: rgba(255,0,85,0.1); }
-        .btn-video:hover { background: #ff0055; color: #fff; }
+        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
+        
+        .btn-action.outline { background: transparent; border: 2px solid rgba(255,255,255,0.3); color: #fff; }
+        .btn-magic { background: linear-gradient(135deg, #ff00cc, #3333ff); color: #fff; border:none; }
+        .btn-video { background: #FF0055; color: #fff; }
 
-        .print-control { display: flex; justify-content: space-between; align-items: center; width: 100%; background: #222; padding: 5px 15px; border-radius: 4px; margin-top: 5px;}
+        .print-control { 
+            display: flex; justify-content: space-between; align-items: center; width: 100%; 
+            background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 30px; margin-top: 5px;
+        }
 
         #flash { position: fixed; inset: 0; background: #fff; z-index: 9999; opacity: 0; pointer-events: none; }
         .do-flash { animation: flashAnim 0.2s linear; }
         @keyframes flashAnim { 0%,100%{opacity:0;} 50%{opacity:1;} }
         
+        /* Mobile Responsive */
         @media (max-width: 1024px) {
             #screen-result { flex-direction: column; padding-top: 40px; justify-content: flex-start; overflow-y: auto;}
-            .printer-wrapper { height: 50vh; margin-bottom: 20px; flex-shrink: 0; }
-            .result-sidebar { width: 90%; transition-delay: 2s; padding-bottom: 40px; }
+            .printer-wrapper { height: 55vh; margin-bottom: 20px; flex-shrink: 0; }
+            .result-sidebar { width: 90%; padding-bottom: 60px; }
             .action-btns { flex-direction: row; flex-wrap: wrap; }
             .btn-action { flex: 1; min-width: 140px; }
-            .cam-sidebar { right: 20px; top: 80px; }
-            .tool-btn { width: 60px; height: 60px; font-size: 1.4rem; }
+            
+            .ui-controls { height: 140px; }
+            .filter-scroller { max-width: 100%; order: -1; position: absolute; top: -50px; left:0; right:0; padding: 10px; justify-content: center; background: transparent; }
         }
     </style>
 </head>
 <body>
 
     <div id="monitor">
-        <div class="scanlines"></div>
         <div class="vignette"></div>
 
         <div id="screen-home" class="screen active">
-            <button style="position:absolute; top:20px; right:20px; background:none; border:none; color:#333; font-size:2rem;" onclick="toggleFullscreen()">⛶</button>
+            <button style="position:absolute; top:20px; right:20px; background:none; border:none; color:#fff; font-size:2rem; opacity:0.5;" onclick="toggleFullscreen()">⛶</button>
             
             <img src="logo_sena.png" class="main-logo" alt="SENA 125TH">
             
+            <button class="btn-coin" onclick="OS.start()">
+                START PHOTOBOOTH
+            </button>
+            
             <div class="tagline">#senaphotobooth</div>
 
-            <button class="btn-coin" onclick="OS.start()">
-                <span class="blink-text">TOUCH TO START</span>
-            </button>
-            <p style="margin-top:20px; font-family:var(--font-code); color:#ccc; text-shadow: 1px 1px 2px #000;">PRO EDITION v4.0</p>
+            <p style="position:absolute; bottom:20px; font-size:0.8rem; color:rgba(255,255,255,0.3);">PRO EDITION v4.5</p>
         </div>
 
         <div id="screen-cam" class="screen">
             <div class="ui-top">
-                <div class="rec-badge"><div class="rec-dot"></div> REC</div>
+                <div class="rec-badge"><div class="rec-dot"></div> LIVE</div>
                 <div id="clock">00:00</div>
             </div>
             
@@ -293,24 +289,21 @@
                     <div class="tool-btn" onclick="OS.toggleTimer()" id="btn-timer">3s</div>
                     <div class="tool-btn" onclick="OS.toggleFlash()">⚡</div>
                     <div class="tool-btn" onclick="OS.toggleMirror()">↔</div>
-                    <div class="tool-btn" onclick="OS.toggleGrid()">#</div>
                 </div>
             </div>
 
             <div class="ui-controls">
                 <div class="filter-scroller">
-                    <button class="btn-filter active" onclick="OS.filter('normal', this)">NORM</button>
-                    <button class="btn-filter" onclick="OS.filter('beauty', this)">SOFT</button>
+                    <button class="btn-filter active" onclick="OS.filter('normal', this)">Original</button>
+                    <button class="btn-filter" onclick="OS.filter('beauty', this)">Soft</button>
                     <button class="btn-filter" onclick="OS.filter('bw', this)">B/W</button>
-                    <button class="btn-filter" onclick="OS.filter('film', this)">FILM</button>
-                    <button class="btn-filter" onclick="OS.filter('glitch', this)">GLITCH</button>
+                    <button class="btn-filter" onclick="OS.filter('film', this)">1990s</button>
+                    <button class="btn-filter" onclick="OS.filter('glitch', this)">Glitch</button>
                 </div>
 
                 <div class="btn-shutter" onclick="OS.snap()">
                     <div class="shutter-inner"></div>
                 </div>
-                
-                <div style="width: 20px;"></div>
             </div>
         </div>
 
@@ -324,34 +317,29 @@
             <div class="result-sidebar" id="res-sidebar">
                 
                 <div class="server-log" id="server-status">
-                    <div id="log-text">> UPLOADING...</div>
+                    <div id="log-text" style="display:flex; justify-content:space-between;"><span>UPLOADING...</span> <span id="pct">0%</span></div>
                     <div class="loading-bar"><div class="loading-fill" id="load-fill"></div></div>
                 </div>
 
                 <div class="qr-container" id="qr-box">
                     <div id="qrcode" style="display:flex;justify-content:center;"></div>
-                    <div style="font-size:0.8rem; color:#000; margin-top:5px; font-weight:bold;">SCAN TO DOWNLOAD</div>
+                    <div style="font-size:0.8rem; color:#000; margin-top:10px; font-weight:bold;">SCAN TO DOWNLOAD</div>
                 </div>
 
                 <div class="print-control">
-                    <span style="color:#aaa; font-size:0.8rem;">COPIES</span>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <button class="tool-btn" style="width:30px; height:30px; font-size:1rem;" onclick="OS.adjCopies(-1)">-</button>
-                        <span id="copy-count" style="font-family:var(--font-code); font-size:1.2rem;">1</span>
-                        <button class="tool-btn" style="width:30px; height:30px; font-size:1rem;" onclick="OS.adjCopies(1)">+</button>
+                    <span style="color:#fff; font-size:0.8rem; opacity:0.7;">COPIES</span>
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <button class="tool-btn" style="width:30px; height:30px; font-size:1rem; background:none; border:none;" onclick="OS.adjCopies(-1)">-</button>
+                        <span id="copy-count" style="font-size:1.2rem; font-weight:bold;">1</span>
+                        <button class="tool-btn" style="width:30px; height:30px; font-size:1rem; background:none; border:none;" onclick="OS.adjCopies(1)">+</button>
                     </div>
-                </div>
-
-                <div class="email-box">
-                    <input type="email" placeholder="Enter Email" class="email-input">
-                    <button class="btn-action" style="width:auto; padding:0 15px;" onclick="alert('Sent!')">SEND</button>
                 </div>
                 
                 <div class="action-btns">
                     <button class="btn-action btn-magic" onclick="OS.decorateStrip()">✨ MAGIC DECORATE</button>
-                    <button class="btn-action btn-video" onclick="OS.downloadVideo()">🎥 VIDEO (7s)</button>
-                    <button class="btn-action" onclick="OS.download()">SAVE IMAGE</button>
-                    <button class="btn-action outline" onclick="OS.restart()">HOME</button>
+                    <button class="btn-action btn-video" onclick="OS.downloadVideo()">🎥 SAVE VIDEO (7s)</button>
+                    <button class="btn-action" onclick="OS.download()">📥 SAVE IMAGE</button>
+                    <button class="btn-action outline" onclick="OS.restart()">🏠 HOME</button>
                 </div>
             </div>
         </div>
@@ -361,10 +349,8 @@
     <canvas id="hidden-canvas" style="display:none"></canvas> 
 
     <script>
-        // --- ส่วนตั้งค่ารูปกรอบ ---
-        // ให้เอารูปของคุณเซฟชื่อไฟล์ว่า "frame.png" แล้ววางไว้คู่กับไฟล์ html นี้
+        // --- ระบบเดิมทั้งหมด ---
         const FIXED_FRAME_URL = 'frame.png'; 
-        // -------------------------
 
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
@@ -375,415 +361,189 @@
         }
 
         const OS = (function() {
-            
             const API_KEY = 'ffc90ad0bc5c7e0c056b68ef7430304a'; 
-
-            const C = {
-                w: 1280, h: 720,
-                stripW: 600,
-                shots: 3
-            };
-
-            let s = { 
-                filter: 'normal', 
-                frameImg: null, // จะโหลดให้อัตโนมัติ
-                photos: [], 
-                stream: null, 
-                processing: false,
-                timer: 3,
-                flash: true,
-                facingMode: 'user',
-                mirror: true,
-                copies: 1
-            };
-
+            const C = { w: 1280, h: 720, stripW: 600, shots: 3 };
+            let s = { filter: 'normal', frameImg: null, photos: [], stream: null, processing: false, timer: 3, flash: true, facingMode: 'user', mirror: true, copies: 1 };
             const D = {
-                screens: {
-                    home: document.getElementById('screen-home'),
-                    cam: document.getElementById('screen-cam'),
-                    res: document.getElementById('screen-result')
-                },
-                video: document.getElementById('video-feed'),
-                canvas: document.getElementById('hidden-canvas'),
-                count: document.getElementById('countdown'),
-                flash: document.getElementById('flash'),
-                final: document.getElementById('final-img'),
-                btnTimer: document.getElementById('btn-timer')
+                screens: { home: document.getElementById('screen-home'), cam: document.getElementById('screen-cam'), res: document.getElementById('screen-result') },
+                video: document.getElementById('video-feed'), canvas: document.getElementById('hidden-canvas'), count: document.getElementById('countdown'),
+                flash: document.getElementById('flash'), final: document.getElementById('final-img'), btnTimer: document.getElementById('btn-timer')
             };
 
             const Aud = {
                 ctx: null,
                 init: function() { if(!this.ctx) this.ctx = new (window.AudioContext||window.webkitAudioContext)(); },
                 play: function(type) {
-                    this.init();
-                    if(this.ctx.state === 'suspended') this.ctx.resume();
+                    this.init(); if(this.ctx.state === 'suspended') this.ctx.resume();
                     const o = this.ctx.createOscillator(); const g = this.ctx.createGain();
                     o.connect(g); g.connect(this.ctx.destination);
-                    
                     const t = this.ctx.currentTime;
-                    if(type === 'coin') { 
-                        o.frequency.setValueAtTime(1200, t); 
-                        o.frequency.exponentialRampToValueAtTime(1800, t+0.1);
-                        g.gain.setValueAtTime(0.1, t); g.gain.exponentialRampToValueAtTime(0.01, t+0.4);
-                        o.start(t); o.stop(t+0.4); 
-                    }
-                    else if(type === 'beep') { 
-                        o.type='square'; o.frequency.value = 800; g.gain.value = 0.05; 
-                        o.start(t); o.stop(t+0.1); 
-                    }
-                    else if(type === 'count') { 
-                        o.type='sine'; o.frequency.value = 600; g.gain.value = 0.1;
-                        o.start(t); o.stop(t+0.15);
-                    }
+                    if(type === 'coin') { o.frequency.setValueAtTime(1000, t); o.frequency.exponentialRampToValueAtTime(2000, t+0.2); g.gain.setValueAtTime(0.1, t); g.gain.exponentialRampToValueAtTime(0.01, t+0.3); o.start(t); o.stop(t+0.3); }
+                    else if(type === 'beep') { o.type='sine'; o.frequency.value = 800; g.gain.value = 0.1; o.start(t); o.stop(t+0.1); }
+                    else if(type === 'count') { o.frequency.value = 600; g.gain.value = 0.1; o.start(t); o.stop(t+0.15); }
                     else if(type === 'shutter') { 
-                        const noise = this.ctx.createBufferSource();
-                        const buffer = this.ctx.createBuffer(1, this.ctx.sampleRate * 0.1, this.ctx.sampleRate);
-                        const data = buffer.getChannelData(0);
-                        for (let i = 0; i < buffer.length; i++) data[i] = Math.random() * 2 - 1;
-                        noise.buffer = buffer; noise.connect(g);
-                        g.gain.setValueAtTime(0.5, t); g.gain.exponentialRampToValueAtTime(0.01, t+0.1);
-                        noise.start(t);
+                        const noise = this.ctx.createBufferSource(); const buffer = this.ctx.createBuffer(1, this.ctx.sampleRate * 0.1, this.ctx.sampleRate);
+                        const data = buffer.getChannelData(0); for (let i = 0; i < buffer.length; i++) data[i] = Math.random() * 2 - 1;
+                        noise.buffer = buffer; noise.connect(g); g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.01, t+0.1); noise.start(t);
                     }
-                    else if(type === 'magic') {
-                        o.frequency.setValueAtTime(400, t);
-                        o.frequency.linearRampToValueAtTime(1000, t+0.1);
-                        o.frequency.linearRampToValueAtTime(600, t+0.2);
-                        g.gain.value = 0.1; o.start(t); o.stop(t+0.3);
-                    }
+                    else if(type === 'magic') { o.frequency.setValueAtTime(400, t); o.frequency.linearRampToValueAtTime(1000, t+0.1); g.gain.value = 0.1; o.start(t); o.stop(t+0.3); }
                 }
             };
 
             window.onload = async () => {
-                // Preload the fixed frame
-                const img = new Image();
-                img.src = FIXED_FRAME_URL;
-                img.onload = () => { s.frameImg = img; console.log("Frame Loaded"); }
-                img.onerror = () => { console.error("Cannot load frame.png. Please check file name."); }
-
-                setInterval(() => {
-                    const d = new Date();
-                    document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0');
-                }, 1000);
+                const img = new Image(); img.src = FIXED_FRAME_URL;
+                img.onload = () => { s.frameImg = img; };
+                setInterval(() => { const d = new Date(); document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0'); }, 1000);
             };
 
-            function switchScreen(name) {
-                Object.values(D.screens).forEach(s => s.classList.remove('active'));
-                D.screens[name].classList.add('active');
-            }
-
-            async function start() {
-                Aud.play('coin');
-                await initCamera();
-                switchScreen('cam'); // ข้ามไปกล้องเลย
-            }
-
+            function switchScreen(name) { Object.values(D.screens).forEach(s => s.classList.remove('active')); D.screens[name].classList.add('active'); }
+            async function start() { Aud.play('coin'); await initCamera(); switchScreen('cam'); }
             async function initCamera() {
                 if(s.stream) s.stream.getTracks().forEach(t=>t.stop());
                 try {
-                    s.stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { facingMode: s.facingMode, width: {ideal: 1920}, height: {ideal: 1080} },
-                        audio: false
-                    });
-                    D.video.srcObject = s.stream;
-                    updateMirror();
+                    s.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: s.facingMode, width: {ideal: 1920}, height: {ideal: 1080} }, audio: false });
+                    D.video.srcObject = s.stream; updateMirror();
                 } catch(e) { alert("Camera Error: " + e.message); }
             }
 
-            function toggleCamFlip() {
-                s.facingMode = (s.facingMode === 'user') ? 'environment' : 'user';
-                initCamera();
-            }
-            function toggleTimer() {
-                const timers = [3, 5, 10];
-                let idx = timers.indexOf(s.timer);
-                s.timer = timers[(idx+1) % timers.length];
-                D.btnTimer.innerText = s.timer + "s";
-                Aud.play('beep');
-            }
+            function toggleCamFlip() { s.facingMode = (s.facingMode === 'user') ? 'environment' : 'user'; initCamera(); }
+            function toggleTimer() { const timers = [3, 5, 10]; s.timer = timers[(timers.indexOf(s.timer)+1) % timers.length]; D.btnTimer.innerText = s.timer + "s"; Aud.play('beep'); }
             function toggleFlash() { s.flash = !s.flash; Aud.play('beep'); }
             function toggleMirror() { s.mirror = !s.mirror; updateMirror(); }
-            function toggleGrid() { D.video.parentElement.classList.toggle('grid-on'); Aud.play('beep'); }
-            
-            function updateMirror() {
-                if(s.mirror) D.video.style.transform = "scaleX(-1)";
-                else D.video.style.transform = "scaleX(1)";
-            }
+            function updateMirror() { D.video.style.transform = s.mirror ? "scaleX(-1)" : "scaleX(1)"; }
 
             function filter(mode, btn) {
-                s.filter = mode;
-                document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
+                s.filter = mode; document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active')); btn.classList.add('active');
                 let css = 'none';
                 if(mode==='beauty') css = 'contrast(1.05) brightness(1.1) saturate(1.1) blur(0.5px)';
                 if(mode==='bw') css = 'grayscale(100%) contrast(1.2)';
                 if(mode==='film') css = 'sepia(0.3) contrast(1.1) saturate(0.8)';
                 D.video.style.filter = css;
-                
-                if(mode==='glitch') D.video.classList.add('filter-glitch');
-                else D.video.classList.remove('filter-glitch');
-                
+                mode==='glitch' ? D.video.classList.add('filter-glitch') : D.video.classList.remove('filter-glitch');
                 Aud.play('beep');
             }
 
             async function snap() {
-                if(s.processing) return;
-                s.processing = true; s.photos = [];
-                
-                for(let i=0; i<C.shots; i++) {
-                    await countdown(s.timer);
-                    await capture();
-                    await new Promise(r => setTimeout(r, 800));
-                }
-                
-                s.processing = false;
-                processAndShowResult();
+                if(s.processing) return; s.processing = true; s.photos = [];
+                for(let i=0; i<C.shots; i++) { await countdown(s.timer); await capture(); await new Promise(r => setTimeout(r, 800)); }
+                s.processing = false; processAndShowResult();
             }
 
             function countdown(n) {
                 return new Promise(r => {
-                    let c = n; D.count.style.display = 'block'; D.count.innerText = c;
-                    Aud.play('count'); 
-                    const t = setInterval(() => {
-                        c--;
-                        if(c>0) { 
-                            D.count.innerText = c; 
-                            Aud.play('count');
-                        } else { 
-                            clearInterval(t); D.count.style.display = 'none'; 
-                            r(); 
-                        }
-                    }, 1000);
+                    let c = n; D.count.style.display = 'block'; D.count.innerText = c; Aud.play('count'); 
+                    const t = setInterval(() => { c--; if(c>0) { D.count.innerText = c; Aud.play('count'); } else { clearInterval(t); D.count.style.display = 'none'; r(); } }, 1000);
                 });
             }
 
             function capture() {
                 return new Promise(r => {
                     Aud.play('shutter');
-                    if(s.flash) {
-                        D.flash.classList.add('do-flash');
-                        setTimeout(() => D.flash.classList.remove('do-flash'), 200);
-                    }
-                    
-                    const cvs = document.createElement('canvas');
-                    cvs.width = D.video.videoWidth; cvs.height = D.video.videoHeight;
+                    if(s.flash) { D.flash.classList.add('do-flash'); setTimeout(() => D.flash.classList.remove('do-flash'), 200); }
+                    const cvs = document.createElement('canvas'); cvs.width = D.video.videoWidth; cvs.height = D.video.videoHeight;
                     const ctx = cvs.getContext('2d');
+                    if(s.mirror) { ctx.translate(cvs.width, 0); ctx.scale(-1, 1); }
+                    ctx.drawImage(D.video, 0, 0); ctx.setTransform(1,0,0,1,0,0); 
                     
-                    if(s.mirror) {
-                        ctx.translate(cvs.width, 0); ctx.scale(-1, 1);
-                    }
-                    ctx.drawImage(D.video, 0, 0);
-                    
-                    ctx.setTransform(1,0,0,1,0,0); 
                     if(s.filter !== 'normal' && s.filter !== 'glitch') {
-                        const id = ctx.getImageData(0,0,cvs.width,cvs.height);
-                        const d = id.data;
+                        const id = ctx.getImageData(0,0,cvs.width,cvs.height); const d = id.data;
                         for(let i=0; i<d.length; i+=4) {
                             let R=d[i], G=d[i+1], B=d[i+2];
-                            if(s.filter === 'bw') {
-                                const v = 0.299*R + 0.587*G + 0.114*B; d[i]=d[i+1]=d[i+2]=v;
-                            } else if(s.filter === 'film') {
-                                d[i] = R*0.393+G*0.769+B*0.189; d[i+1] = R*0.349+G*0.686+B*0.168; d[i+2] = R*0.272+G*0.534+B*0.131;
-                            }
+                            if(s.filter === 'bw') { const v = 0.299*R + 0.587*G + 0.114*B; d[i]=d[i+1]=d[i+2]=v; }
+                            else if(s.filter === 'film') { d[i] = R*0.393+G*0.769+B*0.189; d[i+1] = R*0.349+G*0.686+B*0.168; d[i+2] = R*0.272+G*0.534+B*0.131; }
                         }
                         ctx.putImageData(id, 0, 0);
                     }
-                    
-                    s.photos.push(cvs);
-                    setTimeout(r, 200);
+                    s.photos.push(cvs); setTimeout(r, 200);
                 });
             }
 
             async function processAndShowResult() {
                 generateStripCanvas(); 
-                
                 const finalDataUrl = D.canvas.toDataURL('image/jpeg', 0.95);
-                D.final.src = finalDataUrl;
-                switchScreen('res');
-                
+                D.final.src = finalDataUrl; switchScreen('res');
                 D.final.classList.add('printing-active');
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                
-                setTimeout(() => { 
-                    document.getElementById('res-sidebar').classList.add('show'); 
-                    handleUpload(finalDataUrl); 
-                }, 3500);
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors:['#ffffff','#FF0055'] });
+                setTimeout(() => { document.getElementById('res-sidebar').classList.add('show'); handleUpload(finalDataUrl); }, 3500);
             }
 
             function generateStripCanvas(shiftOrder = 0) {
-                let stripW = C.stripW; // 600px
-                let photoW = 540; 
-                let photoH = (photoW*3)/4;
+                let stripW = C.stripW; let photoW = 540; let photoH = (photoW*3)/4;
                 let gap = 25, head = 150, foot = 100;
                 let H = head + (photoH*C.shots) + (gap*(C.shots-1)) + foot;
-
                 D.canvas.width = stripW; D.canvas.height = H;
                 const ctx = D.canvas.getContext('2d');
-
-                // 1. พื้นหลัง
-                ctx.fillStyle = '#ffffff'; 
-                ctx.fillRect(0,0,stripW,H);
-
-                // 2. วาดรูปถ่ายก่อน
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,stripW,H);
                 let y = head;
                 let displayPhotos = [...s.photos];
-                for(let i=0; i<shiftOrder; i++) {
-                    displayPhotos.unshift(displayPhotos.pop());
-                }
-
+                for(let i=0; i<shiftOrder; i++) displayPhotos.unshift(displayPhotos.pop());
                 displayPhotos.forEach(p => {
                     const sR = p.width/p.height; const dR=4/3;
                     let sx, sy, sw, sh;
-                    if(sR > dR) { sh=p.height; sw=sh*dR; sx=(p.width-sw)/2; sy=0; }
-                    else { sw=p.width; sh=sw/dR; sx=0; sy=(p.height-sh)/2; }
-                    
+                    if(sR > dR) { sh=p.height; sw=sh*dR; sx=(p.width-sw)/2; sy=0; } else { sw=p.width; sh=sw/dR; sx=0; sy=(p.height-sh)/2; }
                     ctx.drawImage(p, sx, sy, sw, sh, (stripW-photoW)/2, y, photoW, photoH);
                     y += photoH + gap;
                 });
-
-                // 3. วาดกรอบ frame.png ทับลงไป
-                if (s.frameImg) {
-                    ctx.drawImage(s.frameImg, 0, 0, stripW, H);
-                }
+                if (s.frameImg) ctx.drawImage(s.frameImg, 0, 0, stripW, H);
             }
 
             function decorateStrip() {
                 const ctx = D.canvas.getContext('2d');
-                const stickers = ["🛝", "👀", "⭐", "🍼", "🫧", "🎀", "🧸"];
-                const w = D.canvas.width;
-                const h = D.canvas.height;
-                
+                const stickers = ["SENA", "❤️", "125TH", "✨", "🎉", "🔥"];
+                const w = D.canvas.width; const h = D.canvas.height;
                 Aud.play('magic');
-                
-                for(let i=0; i<8; i++) {
+                for(let i=0; i<6; i++) {
                     const sticker = stickers[Math.floor(Math.random()*stickers.length)];
-                    const x = Math.random() * w;
-                    const y = Math.random() * h;
-                    const size = 30 + Math.random() * 40;
-                    const rot = (Math.random() - 0.5);
-
-                    ctx.save();
-                    ctx.translate(x, y);
-                    ctx.rotate(rot);
-                    ctx.font = size + "px Arial";
-                    ctx.fillText(sticker, 0, 0);
+                    const x = Math.random() * w; const y = Math.random() * h;
+                    const size = 40 + Math.random() * 40; const rot = (Math.random() - 0.5);
+                    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+                    ctx.font = "bold "+size + "px Prompt"; ctx.fillStyle = "#FF0055"; ctx.fillText(sticker, 0, 0);
                     ctx.restore();
                 }
-
                 D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
                 confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
             }
 
             async function handleUpload(base64) {
-                const log = document.getElementById('log-text');
-                const fill = document.getElementById('load-fill');
-                
-                if (API_KEY === '') {
-                    log.innerText = "> NO API KEY";
-                    return;
-                }
-
-                let p = 0;
-                const int = setInterval(() => { if(p<90) p+=5; fill.style.width=p+"%"; }, 100);
-
+                const fill = document.getElementById('load-fill'); const pct = document.getElementById('pct');
+                if (API_KEY === '') return;
+                let p = 0; const int = setInterval(() => { if(p<90) p+=5; fill.style.width=p+"%"; pct.innerText=p+"%";}, 100);
                 try {
-                    const formData = new FormData();
-                    formData.append("image", base64.split(',')[1]); 
-                    log.innerText = "> CONNECTING...";
-
-                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
-                        method: "POST", body: formData
-                    });
-                    
+                    const formData = new FormData(); formData.append("image", base64.split(',')[1]); 
+                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, { method: "POST", body: formData });
                     const data = await res.json();
-                    clearInterval(int); fill.style.width="100%";
-
+                    clearInterval(int); fill.style.width="100%"; pct.innerText="100%";
                     if (data.success) {
-                        const imageUrl = data.data.url;
-                        log.innerText = "> DONE!";
                         document.getElementById('qrcode').innerHTML = "";
-                        new QRCode(document.getElementById("qrcode"), {
-                            text: imageUrl, width: 120, height: 120,
-                            colorDark : "#000000", colorLight : "#ffffff",
-                            correctLevel : QRCode.CorrectLevel.H
-                        });
+                        new QRCode(document.getElementById("qrcode"), { text: data.data.url, width: 120, height: 120 });
                         document.getElementById('qr-box').classList.add('show');
-                    } else { throw new Error(data.error.message); }
-
-                } catch (err) {
-                    clearInterval(int);
-                    log.innerText = "> ERR";
-                    console.error(err);
-                }
+                    }
+                } catch (err) { clearInterval(int); }
             }
 
-            function adjCopies(n) {
-                s.copies = Math.max(1, s.copies + n);
-                document.getElementById('copy-count').innerText = s.copies;
-            }
-
-            function download() {
-                const a = document.createElement('a');
-                a.download = `SENA_${Date.now()}.jpg`;
-                a.href = D.final.src;
-                document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            }
-
+            function adjCopies(n) { s.copies = Math.max(1, s.copies + n); document.getElementById('copy-count').innerText = s.copies; }
+            function download() { const a = document.createElement('a'); a.download = `SENA_${Date.now()}.jpg`; a.href = D.final.src; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
+            
             async function downloadVideo() {
-                const btn = event.target;
-                const originalText = btn.innerText;
-                btn.innerText = "⏳ RENDERING...";
-                btn.disabled = true;
-
+                const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳ PROCESSING..."; btn.disabled = true;
                 const stream = D.canvas.captureStream(30);
-                const recorder = new MediaRecorder(stream, {
-                    mimeType: 'video/webm' 
-                });
-                
+                const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
                 const chunks = [];
                 recorder.ondataavailable = e => chunks.push(e.data);
-                
                 recorder.onstop = () => {
-                    const blob = new Blob(chunks, { type: 'video/webm' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `SENA_VIDEO_${Date.now()}.webm`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    
-                    generateStripCanvas(0); 
-                    D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
-                    btn.innerText = "✅ SAVED!";
-                    setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 2000);
+                    const blob = new Blob(chunks, { type: 'video/webm' }); const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a'); a.href = url; a.download = `SENA_VIDEO_${Date.now()}.webm`;
+                    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                    generateStripCanvas(0); D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
+                    btn.innerText = "✅ SAVED!"; setTimeout(() => { btn.innerText = oldText; btn.disabled = false; }, 2000);
                 };
-
                 recorder.start();
-
-                let startTime = Date.now();
-                let shift = 0;
-                
-                const animInterval = setInterval(() => {
-                    shift++;
-                    generateStripCanvas(shift); 
-                    D.final.src = D.canvas.toDataURL('image/jpeg', 0.8); 
-                    
-                    if (Date.now() - startTime >= 7000) { 
-                        clearInterval(animInterval);
-                        recorder.stop();
-                    }
-                }, 500); 
+                let startT = Date.now(); let shift = 0;
+                const anim = setInterval(() => { shift++; generateStripCanvas(shift); D.final.src = D.canvas.toDataURL('image/jpeg', 0.8); if (Date.now() - startT >= 7000) { clearInterval(anim); recorder.stop(); } }, 500); 
             }
 
-            function restart() {
-                location.reload();
-            }
-
-            return { 
-                start, toggleCamFlip, toggleTimer, toggleFlash, toggleMirror, toggleGrid, 
-                filter, snap, adjCopies, download, restart, decorateStrip, downloadVideo
-            };
+            function restart() { location.reload(); }
+            return { start, toggleCamFlip, toggleTimer, toggleFlash, toggleMirror, filter, snap, adjCopies, download, restart, decorateStrip, downloadVideo };
         })();
     </script>
 </body>

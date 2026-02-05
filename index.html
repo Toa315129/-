@@ -3,586 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>SENA PHOTOBOOTH | THE GRADUATION</title>
+    <title>SENA | THE PRESTIGE PHOTOBOOTH</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Prompt:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@100;300;400;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-deep: #050505;
-            --gold-primary: #D4AF37;
-            --gold-light: #F3E5AB;
-            --gold-dark: #AA8828;
-            --glass: rgba(20, 20, 20, 0.6);
-            --border-glass: rgba(212, 175, 55, 0.3);
-            
-            --font-head: 'Playfair Display', serif;
-            --font-body: 'Prompt', sans-serif;
+            --gold: #D4AF37;
+            --gold-gradient: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa8828 100%);
+            --bg: #030303;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-heavy: rgba(10, 10, 10, 0.85);
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Inter', sans-serif;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: var(--bg); color: #fff;
+            font-family: var(--font-sans); overflow: hidden;
+        }
 
-        body {
-            margin: 0; padding: 0;
-            background: var(--bg-deep);
-            color: #fff;
-            height: 100vh; height: 100dvh; width: 100vw;
+        /* --- World-class Background Mesh --- */
+        .mesh-bg {
+            position: fixed; inset: 0; z-index: -1;
+            background: var(--bg);
             overflow: hidden;
-            font-family: var(--font-body);
-            display: flex; justify-content: center; align-items: center;
+        }
+        .mesh-sphere {
+            position: absolute; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+            border-radius: 50%; filter: blur(80px);
+            animation: meshMove 20s infinite alternate;
+        }
+        @keyframes meshMove {
+            0% { transform: translate(-10%, -10%); }
+            100% { transform: translate(30%, 20%); }
         }
 
-        /* พื้นหลัง Particle ทองลอยฟุ้งๆ (สร้างด้วย CSS) */
-        .luxury-bg {
-            position: absolute; inset: 0; z-index: -1;
-            background: radial-gradient(circle at 50% 10%, #1a1a1a 0%, #000000 100%);
-        }
-        .gold-dust {
-            position: absolute; width: 2px; height: 2px; background: var(--gold-primary);
-            border-radius: 50%; box-shadow: 0 0 4px var(--gold-light);
-            animation: floatUp linear infinite; opacity: 0;
-        }
-        @keyframes floatUp { 0%{transform:translateY(100vh); opacity:0;} 50%{opacity:0.8;} 100%{transform:translateY(-10vh); opacity:0;} }
-
-        /* --- SCREEN: COMMON --- */
+        /* --- Smooth Screen Transitions --- */
         .screen {
             position: absolute; inset: 0;
             display: flex; flex-direction: column;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.6s ease-in-out;
+            opacity: 0; visibility: hidden;
+            transform: scale(1.05);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             z-index: 10;
         }
-        .screen.active { opacity: 1; pointer-events: auto; }
+        .screen.active { 
+            opacity: 1; visibility: visible; transform: scale(1);
+        }
 
-        /* --- 1. หน้า HOME (หรูหรา) --- */
+        /* --- หน้า HOME: High-End Fashion Look --- */
         #screen-home {
-            justify-content: center; align-items: center; text-align: center;
+            justify-content: center; align-items: center;
             background: url('bg_start.png') no-repeat center center;
             background-size: cover;
         }
-        /* Gradient Overlay ให้ Text อ่านง่าย */
-        #screen-home::after {
+        #screen-home::before {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to top, #000 0%, transparent 60%, rgba(0,0,0,0.4) 100%);
-            z-index: -1;
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%);
         }
 
         .main-logo {
-            width: 65%; max-width: 400px; height: auto;
-            margin-bottom: 40px;
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); /* เงาทอง */
-            animation: fadeInLogo 2s ease-out;
+            width: 280px; z-index: 2;
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.5));
+            margin-bottom: 60px;
+            animation: logoEntrance 1.5s ease-out;
         }
-        @keyframes fadeInLogo { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+        @keyframes logoEntrance { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ปุ่ม START แบบ Luxury Frame */
-        .btn-start-wrapper {
-            position: relative; display: inline-block;
-            margin-bottom: 20px;
-        }
-        .btn-coin {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--gold-primary);
-            color: var(--gold-primary);
-            padding: 15px 40px;
-            font-family: var(--font-head);
-            font-size: 1.8rem; font-style: italic; letter-spacing: 2px;
-            cursor: pointer; 
-            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        .btn-luxury {
+            z-index: 2; background: transparent;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            padding: 20px 60px; color: var(--gold);
+            font-family: var(--font-serif); font-size: 1.2rem;
+            letter-spacing: 5px; cursor: pointer;
+            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
             position: relative; overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
         }
-        /* เอฟเฟกต์แสงวิ่งผ่านปุ่ม */
-        .btn-coin::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
-            transition: 0.5s;
-        }
-        .btn-coin:hover::before { left: 100%; }
-        .btn-coin:hover {
-            background: var(--gold-primary);
-            color: #000;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+        .btn-luxury:hover {
+            color: #000; border-color: var(--gold);
+            background: var(--gold); box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
         }
 
-        .tagline {
-            font-family: var(--font-body); font-weight: 300;
-            color: #aaa; font-size: 0.9rem; letter-spacing: 4px;
-            margin-top: 15px; text-transform: uppercase;
-        }
-
-        /* --- 2. หน้า CAMERA (กรอบทอง) --- */
-        #screen-cam { background: #000; justify-content: space-between; }
+        /* --- หน้า CAM: Cinematic Experience --- */
+        #screen-cam { background: #000; }
         
-        .cam-frame-border {
-            position: absolute; inset: 15px; 
-            border: 1px solid rgba(255,255,255,0.2);
+        .cam-container {
+            flex: 1; position: relative; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+        video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); transition: filter 0.5s; }
+
+        .overlay-elements {
+            position: absolute; inset: 40px; border: 1px solid rgba(255,255,255,0.1);
             pointer-events: none; z-index: 5;
         }
-        .cam-frame-corners::before, .cam-frame-corners::after {
-            content:''; position: absolute; width: 20px; height: 20px;
-            border-color: var(--gold-primary); border-style: solid;
-            pointer-events: none; z-index: 6;
-        }
-        /* มุมกรอบทอง */
-        .cam-frame-corners::before { top: 15px; left: 15px; border-width: 2px 0 0 2px; }
-        .cam-frame-corners::after { bottom: 15px; right: 15px; border-width: 0 2px 2px 0; }
-
-        .viewport { 
-            flex: 1; position: relative; overflow: hidden; 
-            display: flex; justify-content: center; align-items: center; 
-            width: 100%;
-        }
-        video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-
-        /* UI ควบคุมกล้อง แบบ Glass Modern */
-        .ui-top {
-            position: absolute; top: 0; width: 100%; padding: 25px;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 20;
-            font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 2px;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-        }
-
-        /* Sidebar เครื่องมือ */
-        .cam-sidebar {
-            position: absolute; right: 25px; top: 50%; transform: translateY(-50%);
-            display: flex; flex-direction: column; gap: 25px; z-index: 30;
-        }
-        .tool-icon {
-            color: #fff; font-size: 1.4rem; opacity: 0.7; cursor: pointer;
-            transition: 0.3s; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-        }
-        .tool-icon:hover { opacity: 1; color: var(--gold-primary); transform: scale(1.1); }
-        .active-tool { color: var(--gold-primary); opacity: 1; text-shadow: 0 0 10px var(--gold-primary); }
-
-        /* ตัวนับถอยหลัง Font Serif */
-        #countdown {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            font-family: var(--font-head); font-size: 10rem; color: #fff;
-            display: none; z-index: 100;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
-        }
-
-        /* ปุ่มชัตเตอร์ */
-        .ui-bottom {
-            height: 140px; width: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 20; position: absolute; bottom: 0;
-            gap: 40px;
-        }
         
-        /* ปุ่มถ่ายรูปวงแหวนทอง */
-        .shutter-ring {
-            width: 80px; height: 80px;
-            border: 2px solid rgba(255,255,255,0.3); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.3s;
-        }
-        .shutter-btn {
-            width: 65px; height: 65px;
-            background: #fff; border-radius: 50%;
-            box-shadow: 0 0 15px rgba(255,255,255,0.5);
-            transition: 0.2s; position: relative;
-        }
-        /* วงแหวนทองข้างใน */
-        .shutter-btn::after {
-            content:''; position: absolute; inset: 4px; border-radius: 50%;
-            border: 1px solid var(--gold-primary); opacity: 0.5;
-        }
-        .shutter-ring:active .shutter-btn { transform: scale(0.9); background: var(--gold-light); }
-
-        /* Filter Selector Text-based */
-        .filter-select {
-            position: absolute; bottom: 100px; width: 100%;
-            display: flex; justify-content: center; gap: 20px;
-            z-index: 25;
-        }
-        .f-item {
-            font-size: 0.8rem; color: rgba(255,255,255,0.5); 
-            cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .f-item.active { color: var(--gold-primary); border-bottom: 1px solid var(--gold-primary); padding-bottom: 2px;}
-
-        /* --- 3. หน้า RESULT (Gallery Style) --- */
-        #screen-result {
-            background: #080808;
-            flex-direction: row; padding: 0;
-        }
-        
-        /* ซ้าย: พื้นที่แสดงรูป */
-        .preview-area {
-            flex: 1; height: 100%;
-            background: radial-gradient(circle at center, #1a1a1a, #000);
+        .shutter-panel {
+            height: 180px; background: linear-gradient(to top, #000, transparent);
             display: flex; justify-content: center; align-items: center;
-            position: relative;
-        }
-        .photo-frame-shadow {
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
-            transform: translateY(100vh); /* เริ่มต้นซ่อนไว้ */
-        }
-        .animate-up { animation: slideUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        @keyframes slideUp { to { transform: translateY(0); } }
-
-        /* ขวา: แผงควบคุม */
-        .control-panel {
-            width: 350px; background: rgba(20,20,20,0.95);
-            border-left: 1px solid rgba(255,255,255,0.1);
-            display: flex; flex-direction: column; padding: 40px 30px;
-            justify-content: center;
-            backdrop-filter: blur(20px);
+            position: relative; z-index: 20;
         }
 
-        .result-title {
-            font-family: var(--font-head); font-size: 2rem; 
-            color: var(--gold-primary); margin-bottom: 5px;
-            font-style: italic;
-        }
-        .result-subtitle { font-size: 0.8rem; color: #666; margin-bottom: 30px; letter-spacing: 1px; }
-
-        .btn-action-gold {
-            background: transparent; border: 1px solid rgba(255,255,255,0.2);
-            color: #fff; width: 100%; padding: 15px; margin-bottom: 12px;
-            font-family: var(--font-body); font-weight: 300; letter-spacing: 1px;
+        .shutter-outer {
+            width: 90px; height: 90px; border: 2px solid #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .btn-action-gold:hover {
-            border-color: var(--gold-primary); color: var(--gold-primary);
-            background: rgba(212, 175, 55, 0.05);
+        .shutter-inner {
+            width: 74px; height: 74px; background: #fff; border-radius: 50%;
+            transition: 0.2s;
         }
-        .btn-highlight {
-            background: var(--gold-primary); border-color: var(--gold-primary); color: #000; font-weight: 500;
-        }
-        .btn-highlight:hover { background: var(--gold-light); color: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+        .shutter-outer:active .shutter-inner { transform: scale(0.8); background: var(--gold); }
 
-        /* Loading & QR */
-        .status-box { margin-bottom: 30px; }
-        .progress-line { width: 100%; height: 2px; background: #333; margin-top: 10px; position: relative; }
-        .progress-bar { width: 0%; height: 100%; background: var(--gold-primary); transition: width 0.3s; box-shadow: 0 0 10px var(--gold-primary); }
+        .side-dock {
+            position: absolute; right: 30px; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 30px; z-index: 30;
+        }
+        .dock-item {
+            width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+            background: var(--glass); border-radius: 50%; backdrop-filter: blur(10px);
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        }
+        .dock-item:hover { background: rgba(255,255,255,0.1); border-color: var(--gold); }
+
+        /* --- หน้า RESULT: Art Gallery Reveal --- */
+        #screen-result {
+            flex-direction: row; background: #050505;
+        }
         
-        #qr-box { 
-            background: #fff; padding: 10px; width: fit-content; margin: 0 auto 20px auto; 
-            display: none; border: 4px solid var(--gold-primary);
+        .result-view {
+            flex: 1.4; display: flex; justify-content: center; align-items: center;
+            background: radial-gradient(circle, #111 0%, #000 100%);
+            perspective: 1000px;
+        }
+        .photo-print {
+            height: 80%; border: 12px solid #fff;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            transform: rotateY(-10deg) rotateX(5deg);
+            transition: 1s cubic-bezier(0.2, 0.8, 0.2, 1.2);
+        }
+        .photo-print.reveal { transform: rotateY(0) rotateX(0); }
+
+        .result-info {
+            flex: 0.6; background: var(--glass-heavy);
+            backdrop-filter: blur(30px); padding: 60px 40px;
+            display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Mobile Adjust */
-        @media (max-width: 900px) {
+        .gold-text {
+            font-family: var(--font-serif); color: var(--gold);
+            font-size: 2.5rem; margin-bottom: 10px; font-style: italic;
+        }
+
+        .btn-finish {
+            background: var(--gold); color: #000; border: none;
+            padding: 18px; font-weight: 600; font-size: 1rem;
+            margin-top: auto; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .btn-finish:hover { background: #fff; transform: translateY(-3px); }
+
+        .loader-wrap { margin: 30px 0; }
+        .bar-bg { height: 2px; background: rgba(255,255,255,0.1); width: 100%; margin-top: 10px; }
+        .bar-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.5s; }
+
+        #flash {
+            position: fixed; inset: 0; background: #fff; z-index: 1000;
+            opacity: 0; pointer-events: none;
+        }
+
+        @media (max-width: 1000px) {
             #screen-result { flex-direction: column; }
-            .preview-area { height: 60%; padding: 20px; }
-            .control-panel { width: 100%; height: 40%; border-left: none; border-top: 1px solid rgba(255,255,255,0.1); padding: 20px; }
-            .preview-img { max-height: 100%; width: auto; }
-            .btn-action-gold { padding: 12px; font-size: 0.9rem; }
+            .result-info { flex: none; height: 50%; width: 100%; padding: 30px; }
+            .photo-print { height: 70%; }
         }
     </style>
 </head>
 <body>
 
-    <div class="luxury-bg">
-        <div class="gold-dust" style="left:10%; animation-duration: 8s;"></div>
-        <div class="gold-dust" style="left:30%; animation-duration: 12s; animation-delay: 2s;"></div>
-        <div class="gold-dust" style="left:70%; animation-duration: 10s; animation-delay: 1s;"></div>
-        <div class="gold-dust" style="left:90%; animation-duration: 15s;"></div>
-        <div class="gold-dust" style="left:50%; animation-duration: 9s; animation-delay: 4s;"></div>
+    <div class="mesh-bg">
+        <div class="mesh-sphere" style="top: 10%; left: 10%;"></div>
+        <div class="mesh-sphere" style="bottom: 10%; right: 10%; animation-delay: -5s;"></div>
     </div>
 
     <div id="screen-home" class="screen active">
-        <button style="position:absolute; top:20px; right:20px; background:none; border:none; color:rgba(255,255,255,0.3); font-size:1.5rem;" onclick="toggleFullscreen()">⛶</button>
-        
         <img src="logo_sena.png" class="main-logo" alt="SENA">
-        
-        <div class="btn-start-wrapper">
-            <button class="btn-coin" onclick="OS.start()">
-                START
-            </button>
-        </div>
-        
-        <div class="tagline">The Memories | Class of 2024</div>
+        <button class="btn-luxury" onclick="OS.start()">ENTER EXPERIENCE</button>
+        <p style="position:absolute; bottom:40px; font-size:0.7rem; letter-spacing:3px; opacity:0.4;">EST. 2024 • SENA MEMORIES</p>
     </div>
 
     <div id="screen-cam" class="screen">
-        <div class="cam-frame-border"></div>
-        <div class="cam-frame-corners"></div>
-
-        <div class="ui-top">
-            <span style="color:var(--gold-primary);">● REC</span>
-            <span id="clock" style="font-weight:300;">12:00</span>
-        </div>
-
-        <div class="viewport">
+        <div class="overlay-elements"></div>
+        <div class="cam-container">
             <video id="video-feed" autoplay playsinline muted></video>
-            <div id="countdown">3</div>
+            <div id="countdown" style="position:absolute; font-family:var(--font-serif); font-size:12rem; color:#fff; display:none; z-index:100; text-shadow:0 0 50px rgba(0,0,0,0.5);">3</div>
             
-            <div class="cam-sidebar">
-                <div class="tool-icon" onclick="OS.toggleCamFlip()">↺</div>
-                <div class="tool-icon" onclick="OS.toggleTimer()" id="btn-timer" style="font-size:1rem; font-weight:bold; border:1px solid #fff; border-radius:50%; width:35px; height:35px; display:flex; align-items:center; justify-content:center;">3s</div>
-                <div class="tool-icon" onclick="OS.toggleFlash()">⚡</div>
+            <div class="side-dock">
+                <div class="dock-item" onclick="OS.toggleCamFlip()">↻</div>
+                <div class="dock-item" onclick="OS.toggleTimer()" id="btn-timer" style="font-size:0.8rem; font-weight:bold;">3s</div>
+                <div class="dock-item" onclick="OS.toggleFlash()">⚡</div>
             </div>
         </div>
 
-        <div class="filter-select">
-            <div class="f-item active" onclick="OS.filter('normal', this)">Original</div>
-            <div class="f-item" onclick="OS.filter('beauty', this)">Glow</div>
-            <div class="f-item" onclick="OS.filter('bw', this)">Noir</div>
-            <div class="f-item" onclick="OS.filter('film', this)">Vintage</div>
-        </div>
-
-        <div class="ui-bottom">
-            <div class="shutter-ring" onclick="OS.snap()">
-                <div class="shutter-btn"></div>
+        <div class="shutter-panel">
+            <div class="shutter-outer" onclick="OS.snap()">
+                <div class="shutter-inner"></div>
+            </div>
+            
+            <div style="position:absolute; left:40px; display:flex; gap:20px;">
+                <span onclick="OS.filter('normal', this)" style="cursor:pointer; font-size:0.7rem; letter-spacing:1px; color:var(--gold);">NATURAL</span>
+                <span onclick="OS.filter('bw', this)" style="cursor:pointer; font-size:0.7rem; letter-spacing:1px; opacity:0.5;">NOIR</span>
             </div>
         </div>
     </div>
 
     <div id="screen-result" class="screen">
-        <div class="preview-area">
-            <img id="final-img" class="preview-img photo-frame-shadow" style="height: 85%; width: auto; border: 8px solid #fff;" alt="Print">
+        <div class="result-view">
+            <img id="final-img" class="photo-print" alt="Result">
         </div>
-
-        <div class="control-panel">
-            <div class="status-box">
-                <div class="result-title">Your Moment</div>
-                <div class="result-subtitle">Captured & Preserved</div>
-                
-                <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-top:10px;">
-                    <span id="log-text">Processing...</span> <span id="pct" style="color:var(--gold-primary);">0%</span>
+        <div class="result-info">
+            <div class="gold-text">The Prestige</div>
+            <p style="font-weight:100; opacity:0.6; line-height:1.6;">Your memory has been captured in high definition and is being processed for our digital archives.</p>
+            
+            <div class="loader-wrap">
+                <div style="display:flex; justify-content:space-between; font-size:0.7rem; letter-spacing:1px;">
+                    <span id="log-text">UPLOADING TO CLOUD</span>
+                    <span id="pct">0%</span>
                 </div>
-                <div class="progress-line"><div class="progress-bar" id="load-fill"></div></div>
+                <div class="bar-bg"><div class="bar-fill" id="load-fill"></div></div>
             </div>
 
-            <div id="qr-box">
-                <div id="qrcode"></div>
+            <div id="qr-wrap" style="display:none; text-align:center; margin-bottom:30px;">
+                <div id="qrcode" style="display:inline-block; padding:10px; background:#fff; border-radius:4px;"></div>
+                <p style="font-size:0.7rem; margin-top:10px; opacity:0.5;">SCAN TO DOWNLOAD</p>
             </div>
 
-            <div class="action-list">
-                <button class="btn-action-gold btn-highlight" onclick="OS.download()">
-                    <span>Download Photo</span>
-                </button>
-                <button class="btn-action-gold" onclick="OS.decorateStrip()">
-                    <span>✨ Decorate (Gold)</span>
-                </button>
-                <button class="btn-action-gold" onclick="OS.downloadVideo()">
-                    <span>🎥 Save Video</span>
-                </button>
-                <button class="btn-action-gold" onclick="OS.restart()" style="border:none; color:#666; margin-top:10px;">
-                    Tap to Restart
-                </button>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <button class="btn-finish" style="background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.1);" onclick="OS.download()">Save File</button>
+                <button class="btn-finish" onclick="OS.restart()">New Session</button>
             </div>
         </div>
     </div>
 
-    <div id="flash" style="position:fixed; inset:0; background:#fff; z-index:999; opacity:0; pointer-events:none; transition:opacity 0.1s;"></div>
+    <div id="flash"></div>
     <canvas id="hidden-canvas" style="display:none"></canvas>
 
     <script>
-        // --- JS SYSTEM (SAME LOGIC) ---
         const FIXED_FRAME_URL = 'frame.png'; 
-
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{});
-            else if (document.exitFullscreen) document.exitFullscreen();
-        }
+        const API_KEY = 'ffc90ad0bc5c7e0c056b68ef7430304a'; 
 
         const OS = (function() {
-            // ** ใส่ API KEY ของคุณตรงนี้ **
-            const API_KEY = 'ffc90ad0bc5c7e0c056b68ef7430304a'; 
-            
-            const C = { w: 1280, h: 720, stripW: 600, shots: 3 };
             let s = { filter: 'normal', frameImg: null, photos: [], stream: null, processing: false, timer: 3, flash: true, facingMode: 'user', mirror: true };
             const D = {
-                screens: { home: document.getElementById('screen-home'), cam: document.getElementById('screen-cam'), res: document.getElementById('screen-result') },
-                video: document.getElementById('video-feed'), canvas: document.getElementById('hidden-canvas'), count: document.getElementById('countdown'),
-                flash: document.getElementById('flash'), final: document.getElementById('final-img'), btnTimer: document.getElementById('btn-timer')
+                screens: document.querySelectorAll('.screen'),
+                video: document.getElementById('video-feed'),
+                canvas: document.getElementById('hidden-canvas'),
+                count: document.getElementById('countdown'),
+                final: document.getElementById('final-img'),
+                flash: document.getElementById('flash')
             };
 
             const Aud = {
-                ctx: null,
-                init: function() { if(!this.ctx) this.ctx = new (window.AudioContext||window.webkitAudioContext)(); },
-                play: function(type) {
-                    this.init(); if(this.ctx.state === 'suspended') this.ctx.resume();
-                    const o = this.ctx.createOscillator(); const g = this.ctx.createGain();
-                    o.connect(g); g.connect(this.ctx.destination);
-                    const t = this.ctx.currentTime;
-                    // ปรับเสียงให้ดูแพงขึ้น (นุ่มนวล)
-                    if(type === 'coin') { 
-                        o.frequency.setValueAtTime(600, t); o.frequency.exponentialRampToValueAtTime(1200, t+0.4); 
-                        g.gain.setValueAtTime(0.05, t); g.gain.linearRampToValueAtTime(0, t+0.4); 
-                    } else if(type === 'shutter') {
-                        // เสียงชัตเตอร์แน่นๆ
-                        const n = this.ctx.createBufferSource(); const b = this.ctx.createBuffer(1, this.ctx.sampleRate*0.1, this.ctx.sampleRate);
-                        const d = b.getChannelData(0); for(let i=0;i<b.length;i++) d[i]=Math.random()*2-1;
-                        n.buffer=b; n.connect(g); g.gain.value=0.2; n.start(t);
-                    } else {
-                        // Beep
-                        o.frequency.value=800; g.gain.value=0.05; o.start(t); o.stop(t+0.1);
-                    }
-                    if(type!=='shutter') { o.start(t); o.stop(t+0.4); }
+                play: (freq) => {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const o = ctx.createOscillator(); const g = ctx.createGain();
+                    o.connect(g); g.connect(ctx.destination);
+                    o.frequency.setValueAtTime(freq, ctx.currentTime);
+                    g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.5);
+                    o.start(); o.stop(ctx.currentTime + 0.5);
                 }
             };
 
-            window.onload = async () => {
-                const img = new Image(); img.src = FIXED_FRAME_URL; img.onload = () => { s.frameImg = img; };
-                setInterval(() => { const d = new Date(); document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0'); }, 1000);
+            window.onload = () => {
+                const img = new Image(); img.src = FIXED_FRAME_URL;
+                img.onload = () => s.frameImg = img;
             };
 
-            function switchScreen(name) { 
-                Object.values(D.screens).forEach(s => s.classList.remove('active')); 
-                D.screens[name].classList.add('active'); 
+            async function start() {
+                Aud.play(440);
+                await initCamera();
+                showScreen('screen-cam');
             }
-            
-            async function start() { Aud.play('coin'); await initCamera(); switchScreen('cam'); }
-            
+
             async function initCamera() {
                 if(s.stream) s.stream.getTracks().forEach(t=>t.stop());
-                try {
-                    s.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: s.facingMode, width: {ideal: 1920}, height: {ideal: 1080} }, audio: false });
-                    D.video.srcObject = s.stream; updateMirror();
-                } catch(e) { alert("Camera Error"); }
+                s.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: s.facingMode, width: 1920, height: 1080 } });
+                D.video.srcObject = s.stream;
             }
 
-            function toggleCamFlip() { s.facingMode = (s.facingMode === 'user') ? 'environment' : 'user'; initCamera(); }
-            function toggleTimer() { const timers = [3, 5, 10]; s.timer = timers[(timers.indexOf(s.timer)+1) % timers.length]; D.btnTimer.innerText = s.timer + "s"; Aud.play('beep'); }
-            function toggleFlash() { s.flash = !s.flash; Aud.play('beep'); document.querySelector('.tool-icon:last-child').style.opacity = s.flash?1:0.3;}
-            function toggleMirror() { s.mirror = !s.mirror; updateMirror(); }
-            function updateMirror() { D.video.style.transform = s.mirror ? "scaleX(-1)" : "scaleX(1)"; }
-
-            function filter(mode, btn) {
-                s.filter = mode; document.querySelectorAll('.f-item').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-                let css = 'none';
-                if(mode==='beauty') css = 'contrast(1.05) brightness(1.1) saturate(1.1) blur(0.3px)';
-                if(mode==='bw') css = 'grayscale(100%) contrast(1.2)';
-                if(mode==='film') css = 'sepia(0.2) contrast(1.1) saturate(0.8)';
-                D.video.style.filter = css; Aud.play('beep');
+            function showScreen(id) {
+                D.screens.forEach(scr => scr.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
             }
 
             async function snap() {
-                if(s.processing) return; s.processing = true; s.photos = [];
-                for(let i=0; i<C.shots; i++) { await countdown(s.timer); await capture(); await new Promise(r => setTimeout(r, 800)); }
-                s.processing = false; processResult();
+                if(s.processing) return;
+                s.processing = true;
+                s.photos = [];
+                for(let i=0; i<3; i++) {
+                    await countdown();
+                    await capture();
+                }
+                processResult();
             }
 
-            function countdown(n) {
+            function countdown() {
                 return new Promise(r => {
-                    let c = n; D.count.style.display = 'block'; D.count.innerText = c; 
-                    const t = setInterval(() => { c--; if(c>0) { D.count.innerText = c; } else { clearInterval(t); D.count.style.display = 'none'; r(); } }, 1000);
+                    let c = s.timer; D.count.innerText = c; D.count.style.display = 'block';
+                    const t = setInterval(() => {
+                        c--; 
+                        if(c>0) { D.count.innerText = c; Aud.play(600); }
+                        else { clearInterval(t); D.count.style.display = 'none'; r(); }
+                    }, 1000);
                 });
             }
 
             function capture() {
                 return new Promise(r => {
-                    Aud.play('shutter');
-                    if(s.flash) { D.flash.style.opacity=1; setTimeout(() => D.flash.style.opacity=0, 150); }
-                    const cvs = document.createElement('canvas'); cvs.width = D.video.videoWidth; cvs.height = D.video.videoHeight;
+                    if(s.flash) { D.flash.style.opacity = 1; setTimeout(()=>D.flash.style.opacity=0, 100); }
+                    const cvs = document.createElement('canvas');
+                    cvs.width = D.video.videoWidth; cvs.height = D.video.videoHeight;
                     const ctx = cvs.getContext('2d');
                     if(s.mirror) { ctx.translate(cvs.width, 0); ctx.scale(-1, 1); }
-                    ctx.drawImage(D.video, 0, 0); 
-                    
-                    if(s.filter !== 'normal') {
-                        const id = ctx.getImageData(0,0,cvs.width,cvs.height); const d = id.data;
-                        for(let i=0; i<d.length; i+=4) {
-                            let R=d[i], G=d[i+1], B=d[i+2];
-                            if(s.filter === 'bw') { const v = 0.299*R + 0.587*G + 0.114*B; d[i]=d[i+1]=d[i+2]=v; }
-                            else if(s.filter === 'film') { d[i] = R*0.393+G*0.769+B*0.189; d[i+1] = R*0.349+G*0.686+B*0.168; d[i+2] = R*0.272+G*0.534+B*0.131; }
+                    ctx.drawImage(D.video, 0, 0);
+                    if(s.filter === 'bw') {
+                        const id = ctx.getImageData(0,0,cvs.width,cvs.height);
+                        for(let i=0; i<id.data.length; i+=4) {
+                            const v = 0.3*id.data[i] + 0.59*id.data[i+1] + 0.11*id.data[i+2];
+                            id.data[i] = id.data[i+1] = id.data[i+2] = v;
                         }
                         ctx.putImageData(id, 0, 0);
                     }
-                    s.photos.push(cvs); setTimeout(r, 200);
+                    s.photos.push(cvs);
+                    setTimeout(r, 600);
                 });
             }
 
             function processResult() {
-                generateStripCanvas(); 
-                const finalDataUrl = D.canvas.toDataURL('image/jpeg', 0.95);
-                D.final.src = finalDataUrl; 
-                switchScreen('res');
-                D.final.classList.remove('animate-up');
-                void D.final.offsetWidth; // trigger reflow
-                D.final.classList.add('animate-up');
-                
-                // Luxury Confetti (Gold/Silver)
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors:['#D4AF37', '#ffffff', '#000000'] });
-                handleUpload(finalDataUrl);
-            }
-
-            function generateStripCanvas(shiftOrder = 0) {
-                let stripW = C.stripW; let photoW = 540; let photoH = (photoW*3)/4;
-                let gap = 25, head = 150, foot = 100;
-                let H = head + (photoH*C.shots) + (gap*(C.shots-1)) + foot;
+                const stripW = 600; const photoH = 405; const head = 150;
+                const H = head + (photoH * 3) + (25 * 2) + 100;
                 D.canvas.width = stripW; D.canvas.height = H;
                 const ctx = D.canvas.getContext('2d');
-                ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,stripW,H);
-                let y = head;
-                let displayPhotos = [...s.photos];
-                for(let i=0; i<shiftOrder; i++) displayPhotos.unshift(displayPhotos.pop());
-                displayPhotos.forEach(p => {
-                    const sR = p.width/p.height; const dR=4/3;
-                    let sx, sy, sw, sh;
-                    if(sR > dR) { sh=p.height; sw=sh*dR; sx=(p.width-sw)/2; sy=0; } else { sw=p.width; sh=sw/dR; sx=0; sy=(p.height-sh)/2; }
-                    ctx.drawImage(p, sx, sy, sw, sh, (stripW-photoW)/2, y, photoW, photoH);
-                    y += photoH + gap;
+                ctx.fillStyle = "#fff"; ctx.fillRect(0,0,stripW,H);
+                
+                s.photos.forEach((p, i) => {
+                    ctx.drawImage(p, 30, head + (i*(photoH+25)), 540, photoH);
                 });
-                if (s.frameImg) ctx.drawImage(s.frameImg, 0, 0, stripW, H);
+                if(s.frameImg) ctx.drawImage(s.frameImg, 0, 0, stripW, H);
+
+                D.final.src = D.canvas.toDataURL('image/jpeg', 0.9);
+                showScreen('screen-result');
+                setTimeout(() => D.final.classList.add('reveal'), 100);
+                upload(D.final.src);
+                confetti({ colors: ['#D4AF37', '#ffffff'] });
             }
 
-            function decorateStrip() {
-                const ctx = D.canvas.getContext('2d');
-                const texts = ["CONGRATS", "2024", "MEMORIES", "✨"];
-                const w = D.canvas.width; const h = D.canvas.height;
-                Aud.play('coin');
-                for(let i=0; i<5; i++) {
-                    const t = texts[Math.floor(Math.random()*texts.length)];
-                    const x = Math.random() * w; const y = Math.random() * h;
-                    ctx.save(); ctx.translate(x, y); ctx.rotate((Math.random()-0.5));
-                    ctx.font = "italic 40px 'Playfair Display'"; ctx.fillStyle = "#D4AF37"; 
-                    ctx.fillText(t, 0, 0); ctx.restore();
-                }
-                D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
-            }
-
-            async function handleUpload(base64) {
-                const fill = document.getElementById('load-fill'); const pct = document.getElementById('pct'); const log = document.getElementById('log-text');
-                if (API_KEY === '') return;
-                let p = 0; const int = setInterval(() => { if(p<90) p+=2; fill.style.width=p+"%"; pct.innerText=p+"%";}, 50);
+            async function upload(base64) {
+                const fill = document.getElementById('load-fill');
+                const pct = document.getElementById('pct');
+                let p = 0; const inv = setInterval(() => { if(p<90) p+=5; fill.style.width=p+'%'; pct.innerText=p+'%'; }, 100);
+                
                 try {
-                    const formData = new FormData(); formData.append("image", base64.split(',')[1]); 
-                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, { method: "POST", body: formData });
+                    const fd = new FormData(); fd.append("image", base64.split(',')[1]);
+                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, { method: "POST", body: fd });
                     const data = await res.json();
-                    clearInterval(int); fill.style.width="100%"; pct.innerText="100%"; log.innerText = "Ready to Save";
-                    if (data.success) {
-                        document.getElementById('qrcode').innerHTML = "";
-                        new QRCode(document.getElementById("qrcode"), { text: data.data.url, width: 120, height: 120, colorDark : "#D4AF37", colorLight : "#ffffff" });
-                        document.getElementById('qr-box').style.display = 'block';
+                    clearInterval(inv); fill.style.width='100%'; pct.innerText='100%';
+                    if(data.success) {
+                        new QRCode(document.getElementById("qrcode"), { text: data.data.url, width: 100, height: 100, colorDark: "#000" });
+                        document.getElementById('qr-wrap').style.display = 'block';
                     }
-                } catch (err) { clearInterval(int); log.innerText = "Upload Failed (Check Internet)"; }
+                } catch(e) { clearInterval(inv); }
             }
 
-            function download() { const a = document.createElement('a'); a.download = `SENA_GRAD_${Date.now()}.jpg`; a.href = D.final.src; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
-            
-            async function downloadVideo() {
-                const stream = D.canvas.captureStream(30);
-                const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-                const chunks = [];
-                recorder.ondataavailable = e => chunks.push(e.data);
-                recorder.onstop = () => {
-                    const blob = new Blob(chunks, { type: 'video/webm' }); const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a'); a.href = url; a.download = `SENA_MEMORY_${Date.now()}.webm`;
-                    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-                    generateStripCanvas(0); D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
-                };
-                recorder.start();
-                let startT = Date.now(); let shift = 0;
-                const anim = setInterval(() => { shift++; generateStripCanvas(shift); D.final.src = D.canvas.toDataURL('image/jpeg', 0.8); if (Date.now() - startT >= 5000) { clearInterval(anim); recorder.stop(); } }, 500); 
-            }
-
-            function restart() { location.reload(); }
-            return { start, toggleCamFlip, toggleTimer, toggleFlash, toggleMirror, filter, snap, download, restart, decorateStrip, downloadVideo };
+            return {
+                start, 
+                toggleCamFlip: () => { s.facingMode = s.facingMode === 'user' ? 'environment' : 'user'; initCamera(); },
+                toggleTimer: () => { s.timer = s.timer === 3 ? 5 : 3; document.getElementById('btn-timer').innerText = s.timer+'s'; },
+                toggleFlash: () => { s.flash = !s.flash; },
+                filter: (f, el) => { s.filter = f; document.querySelectorAll('.shutter-panel span').forEach(s=>s.style.opacity=0.5); el.style.opacity=1; },
+                snap, download: () => { const a = document.createElement('a'); a.download = 'SENA_MEMS.jpg'; a.href = D.final.src; a.click(); },
+                restart: () => location.reload()
+            };
         })();
     </script>
 </body>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>SENA PHOTOBOOTH | FIXED FRAME</title>
+    <title>SENA PHOTOBOOTH | 125TH ORIENTATION</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&family=VT323&family=Prompt:wght@400;600;800&family=Fredoka:wght@300;600&family=Bangers&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CSS เดิมทั้งหมด ไม่เปลี่ยนดีไซน์ --- */
+        /* --- CSS เดิมทั้งหมด --- */
         @font-face {
             font-family: 'JS Chanok';
             src: url('https://cdn.jsdelivr.net/gh/Toa315129/Saphabooth@main/JS-Chanok-Normal.ttf') format('truetype');
@@ -74,30 +74,58 @@
         }
         .screen.active { opacity: 1; pointer-events: auto; }
 
+        /* --- ปรับปรุงหน้า Home --- */
         #screen-home {
             justify-content: center; align-items: center; text-align: center;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            /* เปลี่ยนพื้นหลังเป็นรูป */
+            background: url('bg_start.png') no-repeat center center;
+            background-size: cover;
+            position: relative;
         }
-        .main-title {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 800; color: #fff;
-            line-height: 0.9; letter-spacing: -2px;
-            margin-bottom: 4vh;
-            text-shadow: 0 0 20px rgba(255,255,255,0.4);
+        /* เพิ่ม Overlay ดำบางๆ เพื่อให้โลโก้เด่นขึ้น */
+        #screen-home::before {
+            content: ''; position: absolute; inset: 0;
+            background: rgba(0,0,0,0.2); 
+            z-index: -1;
+        }
+
+        /* Class ใหม่สำหรับ Logo รูปภาพ */
+        .main-logo {
+            width: 80%;
+            max-width: 500px;
+            height: auto;
+            margin-bottom: 10px;
+            /* เพิ่มเงาเรืองแสงเพื่อให้เห็นชัดบนพื้นหลัง */
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.6));
             animation: float 4s ease-in-out infinite;
         }
+
+        .tagline {
+            font-family: var(--font-thai);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4vh;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+        }
+
         @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+        
         .btn-coin {
-            background: transparent; border: 2px solid #fff;
+            background: rgba(0,0,0,0.4); border: 2px solid #fff;
             padding: 2vh 4vw; color: #fff;
             font-family: var(--font-code); font-size: 2rem;
             cursor: pointer; position: relative;
             box-shadow: 0 0 15px rgba(255,255,255,0.2);
             transition: 0.2s; border-radius: 4px;
+            backdrop-filter: blur(5px);
         }
         .btn-coin:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
         .blink-text { animation: blink 1.5s infinite; }
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+        /* --- จบส่วนหน้า Home --- */
 
         #screen-cam { justify-content: space-between; background: #000; }
         
@@ -239,11 +267,15 @@
 
         <div id="screen-home" class="screen active">
             <button style="position:absolute; top:20px; right:20px; background:none; border:none; color:#333; font-size:2rem;" onclick="toggleFullscreen()">⛶</button>
-            <div class="main-title">SENA<br>PHOTOBOOTH</div>
+            
+            <img src="logo_sena.png" class="main-logo" alt="SENA 125TH">
+            
+            <div class="tagline">#senaphotobooth</div>
+
             <button class="btn-coin" onclick="OS.start()">
                 <span class="blink-text">TOUCH TO START</span>
             </button>
-            <p style="margin-top:20px; font-family:var(--font-code); color:#666;">PRO EDITION v4.0</p>
+            <p style="margin-top:20px; font-family:var(--font-code); color:#ccc; text-shadow: 1px 1px 2px #000;">PRO EDITION v4.0</p>
         </div>
 
         <div id="screen-cam" class="screen">

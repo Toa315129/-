@@ -111,6 +111,37 @@
             margin-top: 15px; text-transform: uppercase;
         }
 
+        /* 1.5 FRAME SELECTION SCREEN (NEW) */
+        #screen-select-frame {
+            justify-content: center; align-items: center; 
+            background: #000;
+            text-align: center;
+        }
+        .frame-grid {
+            display: flex; gap: 30px; justify-content: center; align-items: center;
+            margin-top: 40px; flex-wrap: wrap;
+        }
+        .frame-option {
+            width: 140px; cursor: pointer; transition: 0.4s;
+            position: relative;
+        }
+        .frame-option img {
+            width: 100%; height: auto; 
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: 0.4s;
+        }
+        .frame-option:hover img {
+            transform: translateY(-10px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+        }
+        .frame-label {
+            margin-top: 15px; font-family: var(--font-body); font-size: 0.8rem;
+            color: #888; letter-spacing: 1px;
+        }
+
         /* 2. CAMERA */
         #screen-cam { background: #000; justify-content: space-between; }
         
@@ -252,28 +283,14 @@
         #print-only-img { display: none; }
 
         @media print {
-            body { 
-                visibility: hidden; 
-                background: white; 
-                margin: 0; padding: 0;
-            }
+            body { visibility: hidden; background: white; margin: 0; padding: 0; }
             .screen, .luxury-bg, #flash { display: none !important; }
-
-            /* ส่วนสำคัญ: บังคับรูปให้เต็มความสูงกระดาษ */
             #print-only-img {
-                display: block !important;
-                visibility: visible !important;
-                position: fixed;
-                top: 0; left: 0;
-                height: 100%; /* เต็มความสูง */
-                width: auto;  /* ความกว้างตามสัดส่วน (จะมีขอบขาวข้างๆ ให้ตัดเอง) */
-                z-index: 9999;
+                display: block !important; visibility: visible !important;
+                position: fixed; top: 0; left: 0;
+                height: 100%; width: auto; z-index: 9999;
             }
-            
-            @page {
-                size: 4in 6in; /* ขนาด 4x6 นิ้ว หรือ A6 */
-                margin: 0;
-            }
+            @page { size: 4in 6in; margin: 0; }
         }
 
         @media (max-width: 900px) {
@@ -297,45 +314,51 @@
 
     <div id="screen-home" class="screen active">
         <button style="position:absolute; top:20px; right:20px; background:none; border:none; color:rgba(255,255,255,0.3); font-size:1.5rem;" onclick="toggleFullscreen()">⛶</button>
-        
         <img src="logo_sena.png" class="main-logo" alt="SENA">
-        
         <div class="btn-start-wrapper">
-            <button class="btn-coin" onclick="OS.start()">
-                START
-            </button>
+            <button class="btn-coin" onclick="OS.goToFrameSelect()">START</button>
         </div>
-        
         <div class="tagline">The Memories | Class of 2024</div>
+    </div>
+
+    <div id="screen-select-frame" class="screen">
+        <div class="result-title" style="font-size:2.5rem; margin-bottom:10px;">Select Frame</div>
+        <div class="tagline" style="margin-bottom:40px;">Choose your style</div>
+
+        <div class="frame-grid">
+            <div class="frame-option" onclick="OS.selectFrame('frame1.png')">
+                <img src="frame1.png" alt="Classic Gold">
+                <div class="frame-label">CLASSIC</div>
+            </div>
+            <div class="frame-option" onclick="OS.selectFrame('frame2.png')">
+                <img src="frame2.png" alt="Modern Luxury">
+                <div class="frame-label">MODERN</div>
+            </div>
+        </div>
     </div>
 
     <div id="screen-cam" class="screen">
         <div class="cam-frame-border"></div>
         <div class="cam-frame-corners"></div>
-
         <div class="ui-top">
             <span style="color:var(--gold-primary);">● REC</span>
             <span id="clock" style="font-weight:300;">12:00</span>
         </div>
-
         <div class="viewport">
             <video id="video-feed" autoplay playsinline muted></video>
             <div id="countdown">3</div>
-            
             <div class="cam-sidebar">
                 <div class="tool-icon" onclick="OS.toggleCamFlip()">↺</div>
                 <div class="tool-icon" onclick="OS.toggleTimer()" id="btn-timer" style="font-size:1rem; font-weight:bold; border:1px solid #fff; border-radius:50%; width:35px; height:35px; display:flex; align-items:center; justify-content:center;">3s</div>
                 <div class="tool-icon" onclick="OS.toggleFlash()">⚡</div>
             </div>
         </div>
-
         <div class="filter-select">
             <div class="f-item active" onclick="OS.filter('normal', this)">Original</div>
             <div class="f-item" onclick="OS.filter('beauty', this)">Glow</div>
             <div class="f-item" onclick="OS.filter('bw', this)">Noir</div>
             <div class="f-item" onclick="OS.filter('film', this)">Vintage</div>
         </div>
-
         <div class="ui-bottom">
             <div class="shutter-ring" onclick="OS.snap()">
                 <div class="shutter-btn"></div>
@@ -347,52 +370,33 @@
         <div class="preview-area">
             <img id="final-img" class="preview-img photo-frame-shadow" style="height: 85%; width: auto; border: 8px solid #fff;" alt="Print">
         </div>
-
         <div class="control-panel">
             <div class="status-box">
                 <div class="result-title">Your Moment</div>
                 <div class="result-subtitle">Captured & Preserved</div>
-                
                 <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-top:10px;">
                     <span id="log-text">Processing...</span> <span id="pct" style="color:var(--gold-primary);">0%</span>
                 </div>
                 <div class="progress-line"><div class="progress-bar" id="load-fill"></div></div>
             </div>
-
-            <div id="qr-box">
-                <div id="qrcode"></div>
-            </div>
-
+            <div id="qr-box"><div id="qrcode"></div></div>
             <div class="action-list">
-                <button class="btn-action-gold btn-highlight" onclick="OS.printPhoto()">
-                    <span>🖨️ Print (4x6")</span>
-                </button>
+                <button class="btn-action-gold btn-highlight" onclick="OS.printPhoto()"><span>🖨️ Print (4x6")</span></button>
                 <div style="display:flex; gap:10px;">
-                    <button class="btn-action-gold" style="flex:1;" onclick="OS.download()">
-                        <span>Download</span>
-                    </button>
-                    <button class="btn-action-gold" style="flex:1;" onclick="OS.decorateStrip()">
-                        <span>✨ Decor</span>
-                    </button>
+                    <button class="btn-action-gold" style="flex:1;" onclick="OS.download()"><span>Download</span></button>
+                    <button class="btn-action-gold" style="flex:1;" onclick="OS.decorateStrip()"><span>✨ Decor</span></button>
                 </div>
-                <button class="btn-action-gold" onclick="OS.downloadVideo()">
-                    <span>🎥 Save Video</span>
-                </button>
-                <button class="btn-action-gold" onclick="OS.restart()" style="border:none; color:#666; margin-top:5px;">
-                    Tap to Restart
-                </button>
+                <button class="btn-action-gold" onclick="OS.downloadVideo()"><span>🎥 Save Video</span></button>
+                <button class="btn-action-gold" onclick="OS.restart()" style="border:none; color:#666; margin-top:5px;">Tap to Restart</button>
             </div>
         </div>
     </div>
 
     <div id="flash" style="position:fixed; inset:0; background:#fff; z-index:999; opacity:0; pointer-events:none; transition:opacity 0.1s;"></div>
-    
     <img id="print-only-img" src="" alt="Print Copy">
     <canvas id="hidden-canvas" style="display:none"></canvas>
 
     <script>
-        const FIXED_FRAME_URL = 'frame.png'; 
-
         function toggleFullscreen() {
             if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{});
             else if (document.exitFullscreen) document.exitFullscreen();
@@ -400,12 +404,15 @@
 
         const OS = (function() {
             const API_KEY = 'ffc90ad0bc5c7e0c056b68ef7430304a'; 
-            
-            // ปรับความละเอียดตรงนี้: stripW จาก 800 เป็น 1200 เพื่อให้ปริ้นชัดขึ้น
             const C = { w: 1280, h: 720, stripW: 1200, shots: 3 }; 
             let s = { filter: 'normal', frameImg: null, photos: [], stream: null, processing: false, timer: 3, flash: true, facingMode: 'user', mirror: true };
             const D = {
-                screens: { home: document.getElementById('screen-home'), cam: document.getElementById('screen-cam'), res: document.getElementById('screen-result') },
+                screens: { 
+                    home: document.getElementById('screen-home'), 
+                    select: document.getElementById('screen-select-frame'),
+                    cam: document.getElementById('screen-cam'), 
+                    res: document.getElementById('screen-result') 
+                },
                 video: document.getElementById('video-feed'), canvas: document.getElementById('hidden-canvas'), count: document.getElementById('countdown'),
                 flash: document.getElementById('flash'), final: document.getElementById('final-img'), btnTimer: document.getElementById('btn-timer'),
                 printImg: document.getElementById('print-only-img')
@@ -434,7 +441,6 @@
             };
 
             window.onload = async () => {
-                const img = new Image(); img.src = FIXED_FRAME_URL; img.onload = () => { s.frameImg = img; };
                 setInterval(() => { const d = new Date(); document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0'); }, 1000);
             };
 
@@ -443,7 +449,22 @@
                 D.screens[name].classList.add('active'); 
             }
             
-            async function start() { Aud.play('coin'); await initCamera(); switchScreen('cam'); }
+            function goToFrameSelect() {
+                Aud.play('coin');
+                switchScreen('select');
+            }
+
+            async function selectFrame(url) {
+                Aud.play('coin');
+                const img = new Image(); 
+                img.src = url; 
+                img.onload = () => { 
+                    s.frameImg = img; 
+                    startCam();
+                };
+            }
+
+            async function startCam() { await initCamera(); switchScreen('cam'); }
             
             async function initCamera() {
                 if(s.stream) { s.stream.getTracks().forEach(t=>t.stop()); }
@@ -511,16 +532,13 @@
                 D.final.classList.remove('animate-up');
                 void D.final.offsetWidth; 
                 D.final.classList.add('animate-up');
-                
                 confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors:['#D4AF37', '#ffffff', '#000000'], disableForReducedMotion: true, zIndex: 999 });
                 handleUpload(finalDataUrl);
             }
 
             function generateStripCanvas(shiftOrder = 0) {
-                // คำนวณ Ratio ให้เหมาะกับ 4x6 (2:3 aspect) แต่ที่นี่เราจะ fix ความกว้างแล้วปล่อยความสูง
-                // เพิ่มความละเอียดการวาด Canvas
                 let stripW = C.stripW; 
-                let photoW = stripW * 0.9; // รูปกว้าง 90% ของ strip
+                let photoW = stripW * 0.9;
                 let photoH = (photoW * 3) / 4;
                 let gap = 30 * (stripW/800), head = 200 * (stripW/800), foot = 120 * (stripW/800);
                 
@@ -530,7 +548,6 @@
                 const ctx = D.canvas.getContext('2d');
                 ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,stripW,H);
                 
-                // Draw Header Text if no frame
                 if(!s.frameImg) {
                     ctx.fillStyle = "#000"; ctx.font = `italic bold ${40 * (stripW/800)}px 'Playfair Display'`; ctx.textAlign = "center";
                     ctx.fillText("SENA 2024", stripW/2, 120 * (stripW/800));
@@ -587,10 +604,7 @@
             
             function printPhoto() {
                 D.printImg.src = D.final.src;
-                // เพิ่มเวลาหน่วงนิดหน่อย เผื่อรูปใหญ่โหลดช้า
-                setTimeout(() => {
-                    window.print();
-                }, 500);
+                setTimeout(() => { window.print(); }, 500);
             }
 
             async function downloadVideo() {
@@ -616,7 +630,7 @@
             }
 
             function restart() { location.reload(); }
-            return { start, toggleCamFlip, toggleTimer, toggleFlash, toggleMirror, filter, snap, download, restart, decorateStrip, downloadVideo, printPhoto };
+            return { goToFrameSelect, selectFrame, toggleCamFlip, toggleTimer, toggleFlash, toggleMirror, filter, snap, download, restart, decorateStrip, downloadVideo, printPhoto };
         })();
     </script>
 </body>
